@@ -3,18 +3,6 @@
     "list":[
         {
             "index": 30,
-            "deviceId": "000ec68e5099-4d0e26dcb3462f05",
-            "deviceName": "DESKTOP-9G9RUQQ",
-            "model": "BayTrail",
-            "os": "Windows",
-            "agentVer": "01.02.26",
-            "serialNumber": "Type2 - Board Serial Number",
-            "timestamp": 1680080922,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 31,
             "deviceId": "000ec68e6087-4d0e26dcb3462f05",
             "deviceName": "unknown (000ec68e6087) ",
             "model": "unknown",
@@ -26,7 +14,7 @@
             "aliasName": "test1"
         },
         {
-            "index": 32,
+            "index": 31,
             "deviceId": "000ec68ecf20-4d0e26dcb3462f05",
             "deviceName": "VITA K (000ec68ecf20) ",
             "model": "VITA K",
@@ -38,7 +26,7 @@
             "aliasName": "Ada&#039;s device"
         },
         {
-            "index": 33,
+            "index": 32,
             "deviceId": "001122334455-4d0e26dcb3462f05",
             "deviceName": "ubuntu_jerry",
             "model": "VMware Virtual Platform",
@@ -50,7 +38,7 @@
             "aliasName": ""
         },
         {
-            "index": 34,
+            "index": 33,
             "deviceId": "001f1f7e95ae-4d0e26dcb3462f05",
             "deviceName": "ubuntu1804_installation",
             "model": "ElkhartLake",
@@ -58,6 +46,18 @@
             "agentVer": "01.01.03",
             "serialNumber": "Type2 - Board Serial Number",
             "timestamp": 1677807723,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 34,
+            "deviceId": "00557bb57df7-4d0e26dcb3462f05",
+            "deviceName": "aiot8390p6_g17_bsp",
+            "model": "aiot8390p6_g17_bsp",
+            "os": "Android",
+            "agentVer": "1.1.4",
+            "serialNumber": "unknown",
+            "timestamp": 1701082690,
             "status": "DISCONNECTED",
             "aliasName": ""
         },

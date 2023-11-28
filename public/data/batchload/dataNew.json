@@ -183,18 +183,6 @@
         },
         {
             "index": 15,
-            "deviceId": "000c296ac540-4d0e26dcb3462f05",
-            "deviceName": "DESKTOP-5FVQQ0V",
-            "model": "VMware20,1",
-            "os": "Windows",
-            "agentVer": "UNKNOWN",
-            "serialNumber": "None",
-            "timestamp": 1700809411,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 16,
             "deviceId": "000c2973b25c-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "VMware Virtual Platform",
@@ -206,7 +194,7 @@
             "aliasName": ""
         },
         {
-            "index": 17,
+            "index": 16,
             "deviceId": "000c2978b675-4d0e26dcb3462f05",
             "deviceName": "centos8",
             "model": "VMware Virtual Platform",
@@ -218,7 +206,7 @@
             "aliasName": ""
         },
         {
-            "index": 18,
+            "index": 17,
             "deviceId": "000c297fc2ec-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "VMware Virtual Platform",
@@ -230,7 +218,7 @@
             "aliasName": ""
         },
         {
-            "index": 19,
+            "index": 18,
             "deviceId": "000c29850823-4d0e26dcb3462f05",
             "deviceName": "ubuntu2004",
             "model": "VMware Virtual Platform",
@@ -242,7 +230,7 @@
             "aliasName": ""
         },
         {
-            "index": 20,
+            "index": 19,
             "deviceId": "000c29a0fe7d-4d0e26dcb3462f05",
             "deviceName": "MyDev-00:0c:29:a0:fe:7d",
             "model": "VMware Virtual Platform",
@@ -254,7 +242,7 @@
             "aliasName": ""
         },
         {
-            "index": 21,
+            "index": 20,
             "deviceId": "000c29a5e9ee-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "VMware Virtual Platform",
@@ -266,7 +254,7 @@
             "aliasName": ""
         },
         {
-            "index": 22,
+            "index": 21,
             "deviceId": "000c29af1033-4d0e26dcb3462f05",
             "deviceName": "centos7-jerry",
             "model": "VMware Virtual Platform",
@@ -278,7 +266,7 @@
             "aliasName": ""
         },
         {
-            "index": 23,
+            "index": 22,
             "deviceId": "000c29b98e01-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-7SH2927",
             "model": "VMware7,1",
@@ -290,7 +278,7 @@
             "aliasName": ""
         },
         {
-            "index": 24,
+            "index": 23,
             "deviceId": "000c29d80906-4d0e26dcb3462f05",
             "deviceName": "11_ubuntu_jerry",
             "model": "VMware Virtual Platform",
@@ -302,7 +290,7 @@
             "aliasName": ""
         },
         {
-            "index": 25,
+            "index": 24,
             "deviceId": "000c29e87d30-4d0e26dcb3462f05",
             "deviceName": "ubuntu2004-0908",
             "model": "VMware Virtual Platform",
@@ -314,7 +302,7 @@
             "aliasName": ""
         },
         {
-            "index": 26,
+            "index": 25,
             "deviceId": "000c29e9cfb2-4d0e26dcb3462f05",
             "deviceName": "CentOS7VM-Ethan",
             "model": "VMware Virtual Platform",
@@ -326,7 +314,7 @@
             "aliasName": ""
         },
         {
-            "index": 27,
+            "index": 26,
             "deviceId": "000e8e8e829f-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-ECIAHA8",
             "model": "WhiskeyLake",
@@ -338,7 +326,7 @@
             "aliasName": ""
         },
         {
-            "index": 28,
+            "index": 27,
             "deviceId": "000ec68e2d51-4d0e26dcb3462f05",
             "deviceName": "F14M (000ec68e2d51) ",
             "model": "F14M",
@@ -350,7 +338,7 @@
             "aliasName": ""
         },
         {
-            "index": 29,
+            "index": 28,
             "deviceId": "000ec68e5099-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-9G9RUQQ",
             "model": "BayTrail",
@@ -362,7 +350,7 @@
             "aliasName": ""
         },
         {
-            "index": 30,
+            "index": 29,
             "deviceId": "000ec68e6087-4d0e26dcb3462f05",
             "deviceName": "unknown (000ec68e6087) ",
             "model": "unknown",
@@ -374,7 +362,7 @@
             "aliasName": "test1"
         },
         {
-            "index": 31,
+            "index": 30,
             "deviceId": "000ec68ecf20-4d0e26dcb3462f05",
             "deviceName": "VITA K (000ec68ecf20) ",
             "model": "VITA K",
@@ -386,7 +374,7 @@
             "aliasName": "Ada&#039;s device"
         },
         {
-            "index": 32,
+            "index": 31,
             "deviceId": "001122334455-4d0e26dcb3462f05",
             "deviceName": "ubuntu_jerry",
             "model": "VMware Virtual Platform",
@@ -398,7 +386,7 @@
             "aliasName": ""
         },
         {
-            "index": 33,
+            "index": 32,
             "deviceId": "001f1f7e95ae-4d0e26dcb3462f05",
             "deviceName": "ubuntu1804_installation",
             "model": "ElkhartLake",
@@ -410,19 +398,19 @@
             "aliasName": ""
         },
         {
-            "index": 34,
+            "index": 33,
             "deviceId": "00557bb57df7-4d0e26dcb3462f05",
             "deviceName": "aiot8390p6_g17_bsp",
             "model": "aiot8390p6_g17_bsp",
             "os": "Android",
             "agentVer": "1.1.4",
             "serialNumber": "unknown",
-            "timestamp": 1701063411,
+            "timestamp": 1701082690,
             "status": "DISCONNECTED",
             "aliasName": ""
         },
         {
-            "index": 35,
+            "index": 34,
             "deviceId": "006011223355-4d0e26dcb3462f05",
             "deviceName": "AURA TABLET (006011223355) ",
             "model": "AURA TABLET",
@@ -434,7 +422,7 @@
             "aliasName": ""
         },
         {
-            "index": 36,
+            "index": 35,
             "deviceId": "0060ef28ade1-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -446,7 +434,7 @@
             "aliasName": "jaytest_f14_sdm450"
         },
         {
-            "index": 37,
+            "index": 36,
             "deviceId": "0060ef28b000-4d0e26dcb3462f05",
             "deviceName": "Razor (0060ef28b000) ",
             "model": "Razor",
@@ -458,7 +446,7 @@
             "aliasName": "k736"
         },
         {
-            "index": 38,
+            "index": 37,
             "deviceId": "0060ef2f5686-4d0e26dcb3462f05",
             "deviceName": "Device-1",
             "model": "POS667",
@@ -470,7 +458,7 @@
             "aliasName": ""
         },
         {
-            "index": 39,
+            "index": 38,
             "deviceId": "0060ef2fd6a6-4d0e26dcb3462f05",
             "deviceName": "unknown (0060ef2fd6a6) ",
             "model": "unknown",
@@ -482,7 +470,7 @@
             "aliasName": ""
         },
         {
-            "index": 40,
+            "index": 39,
             "deviceId": "0060ef30620a-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -494,7 +482,7 @@
             "aliasName": ""
         },
         {
-            "index": 41,
+            "index": 40,
             "deviceId": "0060ef310840-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -506,7 +494,7 @@
             "aliasName": ""
         },
         {
-            "index": 42,
+            "index": 41,
             "deviceId": "0060ef34d549-4d0e26dcb3462f05",
             "deviceName": "unknown (0060ef34d549) ",
             "model": "unknown",
@@ -518,7 +506,7 @@
             "aliasName": "k737"
         },
         {
-            "index": 43,
+            "index": 42,
             "deviceId": "0060ef34d54b-4d0e26dcb3462f05",
             "deviceName": "Razor (0060ef34d54b) ",
             "model": "Razor",
@@ -530,7 +518,7 @@
             "aliasName": ""
         },
         {
-            "index": 44,
+            "index": 43,
             "deviceId": "0060ef350a6c-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "ElkhartLake",
@@ -542,7 +530,7 @@
             "aliasName": ""
         },
         {
-            "index": 45,
+            "index": 44,
             "deviceId": "0060ef35e1e3-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-H5I5QBK",
             "model": "TigerLake",
@@ -554,7 +542,7 @@
             "aliasName": ""
         },
         {
-            "index": 46,
+            "index": 45,
             "deviceId": "0060ef364630-4d0e26dcb3462f05",
             "deviceName": "Centos7",
             "model": "ElkhartLake",
@@ -566,7 +554,7 @@
             "aliasName": ""
         },
         {
-            "index": 47,
+            "index": 46,
             "deviceId": "0060ef3730fd-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "ElkhartLake",
@@ -578,7 +566,7 @@
             "aliasName": "inefi_test"
         },
         {
-            "index": 48,
+            "index": 47,
             "deviceId": "0060ef373178-4d0e26dcb3462f05",
             "deviceName": "Server",
             "model": "ElkhartLake",
@@ -590,7 +578,7 @@
             "aliasName": ""
         },
         {
-            "index": 49,
+            "index": 48,
             "deviceId": "0060ef38bac1-4d0e26dcb3462f05",
             "deviceName": "AURA DESKTOP (0060ef38bac1) ",
             "model": "AURA DESKTOP",
@@ -602,7 +590,7 @@
             "aliasName": ""
         },
         {
-            "index": 50,
+            "index": 49,
             "deviceId": "0060ef38dbf1-4d0e26dcb3462f05",
             "deviceName": "POS457",
             "model": "TigerLake",
@@ -614,7 +602,7 @@
             "aliasName": ""
         },
         {
-            "index": 51,
+            "index": 50,
             "deviceId": "0060ef38f08c-4d0e26dcb3462f05",
             "deviceName": "F14N (0060ef38f08c) ",
             "model": "F14N",
@@ -626,7 +614,7 @@
             "aliasName": ""
         },
         {
-            "index": 52,
+            "index": 51,
             "deviceId": "0060ef393609-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-L072CBL",
             "model": "Skylake Client platform",
@@ -638,7 +626,7 @@
             "aliasName": ""
         },
         {
-            "index": 53,
+            "index": 52,
             "deviceId": "0060ef3a3aa4-4d0e26dcb3462f05",
             "deviceName": "RemoteControl-Windows",
             "model": "ElkhartLake",
@@ -650,7 +638,7 @@
             "aliasName": "RemoteControl_Windows"
         },
         {
-            "index": 54,
+            "index": 53,
             "deviceId": "0060ef3aef11-4d0e26dcb3462f05",
             "deviceName": "TM-019815-01",
             "model": "CometLake",
@@ -662,7 +650,7 @@
             "aliasName": ""
         },
         {
-            "index": 55,
+            "index": 54,
             "deviceId": "0060ef3bedea-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-73U1A4P",
             "model": "ElkhartLake",
@@ -674,7 +662,7 @@
             "aliasName": ""
         },
         {
-            "index": 56,
+            "index": 55,
             "deviceId": "0060ef3bf508-4d0e26dcb3462f05",
             "deviceName": "F14N (0060ef3bf508) ",
             "model": "F14N",
@@ -686,7 +674,7 @@
             "aliasName": ""
         },
         {
-            "index": 57,
+            "index": 56,
             "deviceId": "0060ef3c1240-4d0e26dcb3462f05",
             "deviceName": "AURA TABLET",
             "model": "AURA TABLET",
@@ -698,7 +686,7 @@
             "aliasName": ""
         },
         {
-            "index": 58,
+            "index": 57,
             "deviceId": "0060ef3c1241-4d0e26dcb3462f05",
             "deviceName": "AURA DESKTOP",
             "model": "AURA DESKTOP",
@@ -710,7 +698,7 @@
             "aliasName": "jaytest_aura"
         },
         {
-            "index": 59,
+            "index": 58,
             "deviceId": "0060ef3c28cc-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-16LBGB0",
             "model": "ElkhartLake",
@@ -718,6 +706,366 @@
             "agentVer": "01.02.28",
             "serialNumber": "Type2 - Board Serial Number",
             "timestamp": 1690258909,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 59,
+            "deviceId": "0060ef40681a-4d0e26dcb3462f05",
+            "deviceName": "APOS (0060ef40681a) ",
+            "model": "APOS",
+            "os": "Android",
+            "agentVer": "01.00.6819",
+            "serialNumber": "unknown",
+            "timestamp": 1688365254,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 60,
+            "deviceId": "0060ef778899-4d0e26dcb3462f05",
+            "deviceName": "test-PC",
+            "model": "POS350",
+            "os": "Windows",
+            "agentVer": "01.02.28",
+            "serialNumber": "S303310045",
+            "timestamp": 1688638071,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 61,
+            "deviceId": "0060ef991002-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-1PKRGJA",
+            "model": "CometLake",
+            "os": "Windows",
+            "agentVer": "01.02.23",
+            "serialNumber": "Type2 - Board Serial Number",
+            "timestamp": 1666949401,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 62,
+            "deviceId": "0068eb401195-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-NQLI2PH",
+            "model": "HP 240 G7 Notebook PC",
+            "os": "Windows",
+            "agentVer": "1.2.31",
+            "serialNumber": "PHSJP00WBCU03F",
+            "timestamp": 1698222011,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 63,
+            "deviceId": "0522a848f221-4d0e26dcb3462f05",
+            "deviceName": "Pixel 4 (0522a848f221) ",
+            "model": "Pixel 4",
+            "os": "Android",
+            "agentVer": "01.01.04",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1692004118,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 64,
+            "deviceId": "0800271e247c-4d0e26dcb3462f05",
+            "deviceName": "Vbox-010",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.27",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1685001704,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 65,
+            "deviceId": "0800274a07e5-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-EBT31DU",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.28",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1684998141,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 66,
+            "deviceId": "080027569241-4d0e26dcb3462f05",
+            "deviceName": "Vbox-009",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.26",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1681814914,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 67,
+            "deviceId": "080027a137a2-4d0e26dcb3462f05",
+            "deviceName": "windows10",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.27",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1683872422,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 68,
+            "deviceId": "080027b2f860-4d0e26dcb3462f05",
+            "deviceName": "Vbox-005",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.27",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1684390043,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 69,
+            "deviceId": "080027b7abd8-4d0e26dcb3462f05",
+            "deviceName": "Dave-Centos7",
+            "model": "VirtualBox",
+            "os": "Linux",
+            "agentVer": "01.03.11",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1683187908,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 70,
+            "deviceId": "080027bc54ac-4d0e26dcb3462f05",
+            "deviceName": "Vbox-008",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.26",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1685004282,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 71,
+            "deviceId": "080027d72134-4d0e26dcb3462f05",
+            "deviceName": "Vbox-007",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.26",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1680857690,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 72,
+            "deviceId": "080027e9111b-4d0e26dcb3462f05",
+            "deviceName": "Vbox-006",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.26",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1681178215,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 73,
+            "deviceId": "080027f7c8f4-4d0e26dcb3462f05",
+            "deviceName": "Vbox-004",
+            "model": "VirtualBox",
+            "os": "Windows",
+            "agentVer": "01.02.27",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1684390242,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 74,
+            "deviceId": "0866436b167b-4d0e26dcb3462f05",
+            "deviceName": "APOS DESKTOP (0866436b167b) ",
+            "model": "APOS DESKTOP",
+            "os": "Android",
+            "agentVer": "01.00.4443",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1679366700,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 75,
+            "deviceId": "086ac5633ff8-4d0e26dcb3462f05",
+            "deviceName": "LAPTOP-II52Q17I",
+            "model": "Nitro AN515-57",
+            "os": "Windows",
+            "agentVer": "01.02.29",
+            "serialNumber": "NBQET11003141524BA3400",
+            "timestamp": 1697498455,
+            "status": "DISCONNECTED",
+            "aliasName": "Aries PC"
+        },
+        {
+            "index": 76,
+            "deviceId": "0c7a15de43a1-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-O22RDSQ",
+            "model": "FZG1-5",
+            "os": "Windows",
+            "agentVer": "01.02.24",
+            "serialNumber": "1277AEA10A59890",
+            "timestamp": 1676883601,
+            "status": "DISCONNECTED",
+            "aliasName": "24_24_TEST"
+        },
+        {
+            "index": 77,
+            "deviceId": "1014c1d5fc23-4d0e26dcb3462f05",
+            "deviceName": "M2101K6G (1014c1d5fc23) ",
+            "model": "M2101K6G",
+            "os": "Android",
+            "agentVer": "01.00.4936",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1685954287,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 78,
+            "deviceId": "112b53e6fb9b-4d0e26dcb3462f05",
+            "deviceName": "M2101K6G (112b53e6fb9b) ",
+            "model": "M2101K6G",
+            "os": "Android",
+            "agentVer": "01.00.01",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1676344500,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 79,
+            "deviceId": "14dda94f6ece-4d0e26dcb3462f05",
+            "deviceName": "CentOS7",
+            "model": "BM1AF_BP1AF_BM6AF",
+            "os": "Linux",
+            "agentVer": "01.01.03",
+            "serialNumber": "150545101901114",
+            "timestamp": 1673873102,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 80,
+            "deviceId": "191b5fca7a5e-4d0e26dcb3462f05",
+            "deviceName": "M2101K6G (191b5fca7a5e) ",
+            "model": "M2101K6G",
+            "os": "Android",
+            "agentVer": "01.00.01",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1676016600,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 81,
+            "deviceId": "1f315d0867d2-4d0e26dcb3462f05",
+            "deviceName": "M2101K6G",
+            "model": "M2101K6G",
+            "os": "Android",
+            "agentVer": "UNKNOWN",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1700455084,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 82,
+            "deviceId": "20180ed97834-4d0e26dcb3462f05",
+            "deviceName": "X99-i (20180ed97834) ",
+            "model": "X99-i",
+            "os": "Android",
+            "agentVer": "01.01.00",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1691994295,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 83,
+            "deviceId": "239e18215385-4d0e26dcb3462f05",
+            "deviceName": "M2101K6G (239e18215385) ",
+            "model": "M2101K6G",
+            "os": "Android",
+            "agentVer": "01.00.01",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1675830602,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 84,
+            "deviceId": "2a6d6b0e05b3-4d0e26dcb3462f05",
+            "deviceName": "SM-X700 (2a6d6b0e05b3) ",
+            "model": "SM-X700",
+            "os": "Android",
+            "agentVer": "01.01.02",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1695636754,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 85,
+            "deviceId": "2c0da71e2a30-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-CAP9OE6",
+            "model": "TigerLake",
+            "os": "Windows",
+            "agentVer": "01.02.28",
+            "serialNumber": "Type2 - Board Serial Number",
+            "timestamp": 1692004412,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 86,
+            "deviceId": "2c0da71e3fcf-4d0e26dcb3462f05",
+            "deviceName": "DESKTOP-KQNI020",
+            "model": "Fusion",
+            "os": "Windows",
+            "agentVer": "01.02.30",
+            "serialNumber": "1000025730003",
+            "timestamp": 1700717903,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 87,
+            "deviceId": "2df2a1ab500a-4d0e26dcb3462f05",
+            "deviceName": "APOS DESKTOP (2df2a1ab500a) ",
+            "model": "APOS DESKTOP",
+            "os": "Android",
+            "agentVer": "01.00.4453",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1679904788,
+            "status": "DISCONNECTED",
+            "aliasName": ""
+        },
+        {
+            "index": 88,
+            "deviceId": "3362c8d1a2ce-4d0e26dcb3462f05",
+            "deviceName": "APOS DESKTOP (3362c8d1a2ce) ",
+            "model": "APOS DESKTOP",
+            "os": "Android",
+            "agentVer": "01.00.4453",
+            "serialNumber": "UNKNOWN",
+            "timestamp": 1679880502,
             "status": "DISCONNECTED",
             "aliasName": ""
         }

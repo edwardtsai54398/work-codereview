@@ -449,51 +449,23 @@ watch(addDeviceDialogOpen, (newVal) => {
 
 
 //批次加載
-const offset = ref(0)
 const getDataLen = ref(30)
-let dataLoadDone = false
-let prefixURL =`/data/batchload/`
+const URL =ref(`/data/batchload/`)
 const testResult = reactive([])
-let dataNum = 1
-const batchLoadData = async () => {
-    if (!dataLoadDone) {
-        let res = await axios.get(`${prefixURL}data${dataNum}.json`)
-        testResult.push(...res.data.list)
-        // 還要判斷是不是剛好最後一批
-        // if (res.data < getDataLen.value) {
-        if (dataNum == 2) {
-            dataLoadDone = true
-        } else {
-            offset.value = offset.value + getDataLen.value
-            dataNum += 1
-        }
-    }
-}
-const batchLoadScrollupCheck = async(payload)=>{
-    console.log(payload);
-    let res = await axios.get(`${prefixURL}dataNew.json`)
-    let startIndex=(payload-2)*getDataLen.value
-    let endIndex = (payload-1)*getDataLen.value-1
-    let getData = res.data.list.filter((data)=>{
-        return data.index>=startIndex && data.index<=endIndex
-    })
-    console.log(getData);
+function scrollGetNextData(data){
+    console.log(data.data.list);
 
-    if(testResult[startIndex].deviceId !== getData[endIndex].deviceId ||
-    testResult[endIndex].deviceId !== getData[endIndex].deviceId){
-        console.log('error');
-        for(let i=startIndex;i<=endIndex;i++){
-            let data = getData.find((data)=>data.index === i)
-            testResult[i] = data
-        }
-        testResult.splice(endIndex+1,1)
-        console.log(testResult);
+    for(let i=data.offset;i<data.offset+getDataLen.value;i++){
+        testResult[i]=data.data.list[i-data.offset]
     }
+    console.log(testResult);
+    
 }
-onMounted(()=>{
-    batchLoadData()
-
-})
+function scrollUpCorrectData(data){
+    console.log(data.list);
+    deviceTable.value.resetFormerZoneData(data.list, testResult)
+    console.log(testResult);
+}
 let testTableProps = [
     {
         columnName: "DeviceName",
@@ -509,10 +481,6 @@ let testTableProps = [
     },
 ]
 
-
-function deleteDataIndex() {
-    store.commit("scrollBatchLoad/deleteData", parseInt(searchAddDeviceText.value))
-}
 </script>
 <template>
     <div class="layout-content">
@@ -632,9 +600,9 @@ function deleteDataIndex() {
                                 :item-size="54" 
                                 :table-props="testTableProps" 
                                 :items="testResult" key-field="deviceId" 
-                                :getDataLen="getDataLen" 
-                                @scrollDownDataHalf="batchLoadData"
-                                @scrollUp="batchLoadScrollupCheck" />
+                                :getDataLen="getDataLen" :URL="URL" 
+                                @scrollDownDataHalf="scrollGetNextData"
+                                @scrollUpCheckErr="scrollUpCorrectData"/>
                             <!-- :table-props="tableProps" 
                                 :items="addDeviceSearchResult" 
                                 key-field="deviceId" -->

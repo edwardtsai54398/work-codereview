@@ -5,6 +5,7 @@ import { reactive } from 'vue'
 import { computed } from 'vue'
 import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
+import axios from "axios";
 const props = defineProps({
     items: Array,
     keyField: String,
@@ -18,7 +19,8 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    getDataLen: Number
+    getDataLen: Number,
+    URL: String
 })
 
 const tablePropsSorted = ref(sortTablePropsByIndex(props.tableProps))
@@ -157,7 +159,7 @@ function isRowChecked(item) {
 
 //被選取的資料傳到父層事件
 import { defineExpose, defineEmits } from 'vue'
-const emit = defineEmits(["haveCheckedData", "noCheckedData", "scrollDownDataHalf", "scrollUp"])
+const emit = defineEmits(["haveCheckedData", "noCheckedData", "scrollDownDataHalf", "scrollUpCheckErr"])
 watch(rowDataChecked, (newVal) => {
     if (newVal.length > 0) {
         emit("haveCheckedData")
@@ -174,7 +176,7 @@ function clearChecked() {
     selectAll.value = false
     isIndeterminate.value = false
 }
-defineExpose({ getCheckedData, clearChecked })
+defineExpose({ getCheckedData, clearChecked, resetFormerZoneData })
 
 //scrollbar
 //計算scrollbarY高度
@@ -288,7 +290,7 @@ onBeforeUnmount(() => {
 });
 
 
-function debounce(func, delay=250) {
+function debounce(func, delay = 250) {
     let timeoutId;
 
     return function () {
@@ -358,32 +360,32 @@ const DefaultSortColumn = ref(tablePropsSorted.value[0])
 const sortTableDataKey = ref(DefaultSortColumn.value.dataKey)
 const sortedData = computed(() => {
     let newData = [...props.items]
-        if (sortUp.value) {
-            //從小到大
-            for (let i = 0; i < newData.length; i++) {
-                for (let j = i + 1; j < newData.length; j++) {
-                    if (newData[i][sortTableDataKey.value] === "") {
-                        newData.push(newData[i])
-                        newData.splice(i, 1)
-                    } else if (newData[i][sortTableDataKey.value] > newData[j][sortTableDataKey.value] &&
-                        newData[j][sortTableDataKey.value] !== "") {
-                        let temp = { ...newData[i] }
-                        newData[i] = { ...newData[j] }
-                        newData[j] = { ...temp }
-                    }
-                }
-            }
-        } else if (!sortUp.value) {
-            for (let i = 0; i < newData.length; i++) {
-                for (let j = i + 1; j < newData.length; j++) {
-                    if (newData[i][sortTableDataKey.value] < newData[j][sortTableDataKey.value]) {
-                        let temp = { ...newData[i] }
-                        newData[i] = { ...newData[j] }
-                        newData[j] = { ...temp }
-                    }
+    if (sortUp.value) {
+        //從小到大
+        for (let i = 0; i < newData.length; i++) {
+            for (let j = i + 1; j < newData.length; j++) {
+                if (newData[i][sortTableDataKey.value] === "") {
+                    newData.push(newData[i])
+                    newData.splice(i, 1)
+                } else if (newData[i][sortTableDataKey.value] > newData[j][sortTableDataKey.value] &&
+                    newData[j][sortTableDataKey.value] !== "") {
+                    let temp = { ...newData[i] }
+                    newData[i] = { ...newData[j] }
+                    newData[j] = { ...temp }
                 }
             }
         }
+    } else if (!sortUp.value) {
+        for (let i = 0; i < newData.length; i++) {
+            for (let j = i + 1; j < newData.length; j++) {
+                if (newData[i][sortTableDataKey.value] < newData[j][sortTableDataKey.value]) {
+                    let temp = { ...newData[i] }
+                    newData[i] = { ...newData[j] }
+                    newData[j] = { ...temp }
+                }
+            }
+        }
+    }
     return newData
 })
 function setSortTableDataKey(dataKey) {
@@ -398,7 +400,7 @@ const magicKey = ref(0)
 // const renderDone = ref(true)
 
 watch(sortedData.value, () => {
-    if(sortable.value){
+    if (sortable.value) {
         magicKey.value = (magicKey.value > 0) ? -1 : 1
         // renderDone.value = false
         //重新掛載virtual-scroller
@@ -409,65 +411,122 @@ watch(sortedData.value, () => {
                 mainVirtualScrollY.addEventListener("scroll", Yscroll)
                 tableMain.value.addEventListener("scroll", Xscroll)
                 if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-        
+
                     fixedVirtualScrollY = document.querySelector('.inefi-table-v2__fixed-left .vue-recycle-scroller')
                     mainVirtualScrollY.addEventListener("scroll", mainConnectFixedScroll)
                     fixedVirtualScrollY.addEventListener("scroll", fixedConnectMainScroll)
                 }
-        
+
             })
         }, 500)
     }
 }, { deep: true })
 
 //批量加載
-const getForwardDataTrigger = ref(0)
+const getNextDataTrigger = ref(1)
+const getFormerDataTrigger = ref(1)
 const alreadyScrollTop = ref(0)
-const getFormerDataTrigger = ref(0)
 const scrollZone = ref(1)
-function scrollDownOrUp(){
-    let singleLenH = props.getDataLen * props.itemSize
-    let alreadyLoadH = (props.items.length - props.getDataLen) * props.itemSize
-    let getEventTrigScrollTop = alreadyLoadH + singleLenH/2
-    if(mainVirtualScrollY.scrollTop >= alreadyScrollTop.value){
-        if(mainVirtualScrollY.scrollTop>=getEventTrigScrollTop){
-            getForwardDataTrigger.value = 1
-        }
-    }else{
-        let scrollzone = Math.floor(mainVirtualScrollY.scrollTop/singleLenH)+1
-        if(scrollzone>1){
+const offset = ref(0)
 
-            scrollZone.value = scrollzone
+function scrollDownOrUp() {
+    let singleLenH = props.getDataLen * props.itemSize
+    let scrollzone = Math.floor(mainVirtualScrollY.scrollTop / singleLenH) + 1
+    if (scrollzone !== scrollZone.value) {
+        getNextDataTrigger.value = 1
+        getFormerDataTrigger.value = 1
+        scrollZone.value = scrollzone
+    }
+    if (mainVirtualScrollY.scrollTop >= alreadyScrollTop.value) {
+        offset.value = scrollZone.value*props.getDataLen
+        if (mainVirtualScrollY.scrollTop >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
+            getNextDataTrigger.value = 0
         }
-        // let scrollZoneOneThird = (scrollZone-1+0.333)*singleLenH
+    } else {
+        offset.value = ((scrollZone.value-2)*props.getDataLen<0) ? 0 : (scrollZone.value-2)*props.getDataLen
+        if (mainVirtualScrollY.scrollTop < scrollzone * singleLenH - singleLenH / 2 && getFormerDataTrigger.value) {
+            getFormerDataTrigger.value = 0
+
+        }
     }
     alreadyScrollTop.value = mainVirtualScrollY.scrollTop
 }
-watch(getForwardDataTrigger, (newVal)=>{
-    if(newVal){
-        emit("scrollDownDataHalf")
-        getForwardDataTrigger.value = 0
+
+let dataNum = 1
+let dataLoadDone = false
+const batchLoadData = async () => {
+    if (!dataLoadDone) {
+        let res
+        if (dataNum <= 3) {
+            res = await axios.get(`${props.URL}data${dataNum}.json`)
+            res = res.data
+            dataNum += 1
+        }else if (dataNum == 4) {
+            // dataLoadDone = true
+            res = await getDataAPI('dataNew.json', offset.value, props.getDataLen)
+            console.log(res);
+        }
+
+            emit("scrollDownDataHalf", {data:res,offset:offset.value})
     }
-},{deep:true})
-watch(scrollZone, (newVal)=>{
-    getFormerDataTrigger.value = 1
-    if(getFormerDataTrigger.value){
-        emit("scrollUp",newVal)
-        getFormerDataTrigger.value = 0
-        
+}
+watch(getNextDataTrigger, (newVal) => {
+    if (!newVal) {
+        batchLoadData()
     }
-},{deep:true})
-onMounted(()=>{
+}, { deep: true })
+
+
+const batchLoadScrollupCheck = async () => {
+    //若在第2區，抓第一區的資料
+    if(scrollZone.value>=2){
+
+        let startIndex = (scrollZone.value - 2) * props.getDataLen
+        let getData = await getDataAPI('dataNew.json', startIndex, props.getDataLen)
+        emit("scrollUpCheckErr", getData)
+    }
+}
+function resetFormerZoneData(getDataArr = [], items = []) {
+    for(let i=offset.value;i<offset.value+props.getDataLen;i++){
+        items[i]=getDataArr[i-offset.value]
+    }
+    // getDataArr.forEach((data) => {
+    //     items[data.index] = data
+    // })
+    items.forEach((data, index) => {
+        if (index + 1 < items.length) {
+            if (data[props.keyField] === items[index + 1][props.keyField]) {
+                items.splice([index + 1], 1)
+            }
+        }
+    })
+}
+watch(getFormerDataTrigger, (newVal) => {
+    if (!newVal) {
+        batchLoadScrollupCheck()
+    }
+}, { deep: true })
+
+onMounted(() => {
+    batchLoadData()
     mainVirtualScrollY.addEventListener("scroll", scrollDownOrUp)
 })
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
     mainVirtualScrollY.removeEventListener("scroll", scrollDownOrUp)
 })
+const getDataAPI = async (url, startIndex, dataLen) => {
+    //這裡只是模仿API抓index
+    let res = await axios.get(`${props.URL}${url}`)
+    let getData = res.data.list.filter((data) => {
+        return data.index >= startIndex && data.index < startIndex + dataLen
+    })
+    getData = { list: getData }
+    return getData
+}
 
-
-const finalData = computed(()=>{
+const finalData = computed(() => {
     let data = props.items
-    if(props.sortable){
+    if (props.sortable) {
         data = sortedData.value
     }
     return data
@@ -477,7 +536,7 @@ const finalData = computed(()=>{
     <div class="inefi-table-v2 layout-content">
         <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain">
             <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
-                <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" >
+                <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField">
                     <template #before>
                         <div class="table-columns py-2 px-3" :style="{ height: `${itemSize}px` }">
                             <div class="px-2" v-if="showCheckBox">
