@@ -1,0 +1,3316 @@
+{
+    "status": 1,
+    "result": [
+        {
+            "masterGroupId": 6,
+            "masterGroupName": "MAIN",
+            "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+            "level": 0,
+            "subgroup": [
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 7,
+                    "slaveGroupName": "SJE",
+                    "slaveGroupUUID": "C03FF8A7-C7A3-4AA5-B7EE-3D9B41289A91",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "6",
+                            "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                            "assignedProfileName": "Darwin_Test_Profile3",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 7,
+                            "masterGroupName": "SJE",
+                            "masterGroupUUID": "C03FF8A7-C7A3-4AA5-B7EE-3D9B41289A91",
+                            "slaveGroupId": 193,
+                            "slaveGroupName": "1",
+                            "slaveGroupUUID": "41AF2C0D-5F53-4C31-BB16-D24F183723A2",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "6",
+                                    "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                    "assignedProfileName": "Darwin_Test_Profile3",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 193,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 7,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 8,
+                    "slaveGroupName": "London",
+                    "slaveGroupUUID": "F18C44EC-B83E-4C5E-956A-3EA927991638",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 8,
+                            "masterGroupName": "London",
+                            "masterGroupUUID": "F18C44EC-B83E-4C5E-956A-3EA927991638",
+                            "slaveGroupId": 9,
+                            "slaveGroupName": "Store 0288",
+                            "slaveGroupUUID": "1D8500B1-C589-4321-A67B-04A9ECAFF66C",
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 9,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 9,
+                                    "packageId": 74,
+                                    "packageName": "mytestapp1.0",
+                                    "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 8,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 8,
+                            "packageId": 74,
+                            "packageName": "mytestapp1.0",
+                            "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 10,
+                    "slaveGroupName": "Dejan_Test",
+                    "slaveGroupUUID": "D0E22F0B-5047-4C81-B8EA-D023920E4866",
+                    "level": 1,
+                    "packages": [
+                        {
+                            "groupId": 10,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 13,
+                    "slaveGroupName": "Leonard's Test Group",
+                    "slaveGroupUUID": "742C811B-9732-4976-B90D-E2F85E134A88",
+                    "level": 1
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 14,
+                    "slaveGroupName": "Darwin",
+                    "slaveGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "6",
+                            "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                            "assignedProfileName": "Darwin_Test_Profile3",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 14,
+                            "masterGroupName": "Darwin",
+                            "masterGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                            "slaveGroupId": 17,
+                            "slaveGroupName": "Taipei city の紹介",
+                            "slaveGroupUUID": "289219CD-CDDE-492C-AC26-BDCE3CD6C31B",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "6",
+                                    "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                    "assignedProfileName": "Darwin_Test_Profile3",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 14,
+                            "masterGroupName": "Darwin",
+                            "masterGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                            "slaveGroupId": 33,
+                            "slaveGroupName": "testassignWindows",
+                            "slaveGroupUUID": "32D7B4A8-8913-4E13-BE8D-B3FE655D159A",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "6",
+                                    "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                    "assignedProfileName": "Darwin_Test_Profile3",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 33,
+                                    "masterGroupName": "testassignWindows",
+                                    "masterGroupUUID": "32D7B4A8-8913-4E13-BE8D-B3FE655D159A",
+                                    "slaveGroupId": 45,
+                                    "slaveGroupName": "POS617",
+                                    "slaveGroupUUID": "86A1C833-EEDF-4A36-9D88-499C4B0D7BAB",
+                                    "profiles": [
+                                        {
+                                            "assignedProfileId": "6",
+                                            "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                            "assignedProfileName": "Darwin_Test_Profile3",
+                                            "assignedProfileStatus": "VALID"
+                                        }
+                                    ],
+                                    "level": 3
+                                }
+                            ],
+                            "devices": [
+                                {
+                                    "groupId": 33,
+                                    "nodeId": 14391,
+                                    "deviceId": "0060ef3730fd-4d0e26dcb3462f05",
+                                    "deviceName": "ubuntu",
+                                    "aliasName": "inefi_test",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 14,
+                            "masterGroupName": "Darwin",
+                            "masterGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                            "slaveGroupId": 42,
+                            "slaveGroupName": "testRenameGroup",
+                            "slaveGroupUUID": "D87355B8-FE0F-41D1-B812-5B4386C4F6F9",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 42,
+                                    "masterGroupName": "testRenameGroup",
+                                    "masterGroupUUID": "D87355B8-FE0F-41D1-B812-5B4386C4F6F9",
+                                    "slaveGroupId": 43,
+                                    "slaveGroupName": "POS617",
+                                    "slaveGroupUUID": "1A5B36AC-6A9B-49EC-BAF2-E65C6577C794",
+                                    "level": 3
+                                },
+                                {
+                                    "masterGroupId": 42,
+                                    "masterGroupName": "testRenameGroup",
+                                    "masterGroupUUID": "D87355B8-FE0F-41D1-B812-5B4386C4F6F9",
+                                    "slaveGroupId": 48,
+                                    "slaveGroupName": "K736",
+                                    "slaveGroupUUID": "B3C5EA32-4EEE-4130-A61E-35E96AC7E079",
+                                    "profiles": [
+                                        {
+                                            "assignedProfileId": "6",
+                                            "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                            "assignedProfileName": "Darwin_Test_Profile3",
+                                            "assignedProfileStatus": "VALID"
+                                        }
+                                    ],
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 14,
+                            "masterGroupName": "Darwin",
+                            "masterGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                            "slaveGroupId": 194,
+                            "slaveGroupName": "testProfile_Darwin_Test_Profile_2",
+                            "slaveGroupUUID": "1FE01BED-03FC-45DF-84F5-22195E13E891",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "6",
+                                    "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                    "assignedProfileName": "Darwin_Test_Profile3",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 14,
+                            "masterGroupName": "Darwin",
+                            "masterGroupUUID": "527F9AB5-3656-4697-AD28-4EA9B30DD9D9",
+                            "slaveGroupId": 203,
+                            "slaveGroupName": "assignPackage_0221",
+                            "slaveGroupUUID": "BE16073D-54CD-4CF0-B9EB-E57FC2DE6179",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "6",
+                                    "assignedProfileUUID": "f09b9468-f3cd-43b8-bd55-9faf8e6c808e",
+                                    "assignedProfileName": "Darwin_Test_Profile3",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 15,
+                    "slaveGroupName": "ee23e32e",
+                    "slaveGroupUUID": "A6C1D771-60A2-42CD-8034-ACB43A820801",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 15,
+                            "masterGroupName": "ee23e32e",
+                            "masterGroupUUID": "A6C1D771-60A2-42CD-8034-ACB43A820801",
+                            "slaveGroupId": 16,
+                            "slaveGroupName": "child-group-1",
+                            "slaveGroupUUID": "24507C28-60BA-4B88-AAB7-449F95555D24",
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 18,
+                    "slaveGroupName": "David Jr.",
+                    "slaveGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 19,
+                            "slaveGroupName": "%3Cscript%3Ealert(%22test%22)%3C%2Fscript%3E",
+                            "slaveGroupUUID": "A1F281A9-5C30-4907-B38A-C5A5D15BFC56",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 19,
+                                    "masterGroupName": "%3Cscript%3Ealert(%22test%22)%3C%2Fscript%3E",
+                                    "masterGroupUUID": "A1F281A9-5C30-4907-B38A-C5A5D15BFC56",
+                                    "slaveGroupId": 20,
+                                    "slaveGroupName": "%3Cscript%3Ealert(%22t%22)%3C%2Fscript%3",
+                                    "slaveGroupUUID": "85DEA655-ABF5-43FE-905F-19038253E23C",
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 23,
+                            "slaveGroupName": "&lt;script&gt;alert&lt;\/script&gt;",
+                            "slaveGroupUUID": "392121E0-2205-4964-9BF2-117E4DD8990A",
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 24,
+                            "slaveGroupName": "test",
+                            "slaveGroupUUID": "8AFE72B6-16C4-428B-8EAA-98330FCF977E",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 24,
+                                    "masterGroupName": "test",
+                                    "masterGroupUUID": "8AFE72B6-16C4-428B-8EAA-98330FCF977E",
+                                    "slaveGroupId": 97,
+                                    "slaveGroupName": "test",
+                                    "slaveGroupUUID": "DCCCE246-9390-41EE-85FC-1262D7E86E88",
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 88,
+                            "slaveGroupName": "special char",
+                            "slaveGroupUUID": "E9FF420B-6FCD-4D06-A427-6B524118CD59",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 88,
+                                    "masterGroupName": "special char",
+                                    "masterGroupUUID": "E9FF420B-6FCD-4D06-A427-6B524118CD59",
+                                    "slaveGroupId": 90,
+                                    "slaveGroupName": "垚鱻猋麤犇羴槑贔",
+                                    "slaveGroupUUID": "388A2147-A366-4F72-9C23-3AEDB560290D",
+                                    "level": 3
+                                },
+                                {
+                                    "masterGroupId": 88,
+                                    "masterGroupName": "special char",
+                                    "masterGroupUUID": "E9FF420B-6FCD-4D06-A427-6B524118CD59",
+                                    "slaveGroupId": 91,
+                                    "slaveGroupName": "毳掱惢瞐畾孨囧舙龘",
+                                    "slaveGroupUUID": "ABAD03C7-F21E-4D77-8B03-E66B99C99B4D",
+                                    "level": 3
+                                },
+                                {
+                                    "masterGroupId": 88,
+                                    "masterGroupName": "special char",
+                                    "masterGroupUUID": "E9FF420B-6FCD-4D06-A427-6B524118CD59",
+                                    "slaveGroupId": 96,
+                                    "slaveGroupName": "'&amp;*($@!&quot;\/\\",
+                                    "slaveGroupUUID": "525E54F0-87F4-427C-8DA9-693EB77CD3EB",
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 92,
+                            "slaveGroupName": "emoji",
+                            "slaveGroupUUID": "6CEE1E6B-8701-4071-87F1-6B48747A2D87",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 92,
+                                    "masterGroupName": "emoji",
+                                    "masterGroupUUID": "6CEE1E6B-8701-4071-87F1-6B48747A2D87",
+                                    "slaveGroupId": 93,
+                                    "slaveGroupName": "🐶",
+                                    "slaveGroupUUID": "74E7E627-9CC1-42EC-BFEF-BCFD10062BD0",
+                                    "level": 3
+                                },
+                                {
+                                    "masterGroupId": 92,
+                                    "masterGroupName": "emoji",
+                                    "masterGroupUUID": "6CEE1E6B-8701-4071-87F1-6B48747A2D87",
+                                    "slaveGroupId": 94,
+                                    "slaveGroupName": "🐱",
+                                    "slaveGroupUUID": "3259C4CC-3B6D-4D6C-B834-14ED1C311BAF",
+                                    "level": 3
+                                },
+                                {
+                                    "masterGroupId": 92,
+                                    "masterGroupName": "emoji",
+                                    "masterGroupUUID": "6CEE1E6B-8701-4071-87F1-6B48747A2D87",
+                                    "slaveGroupId": 95,
+                                    "slaveGroupName": "🦊🦝🦄🐨",
+                                    "slaveGroupUUID": "B990C2B8-0E95-4BB4-8906-7A7E50223B16",
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 18,
+                            "masterGroupName": "David Jr.",
+                            "masterGroupUUID": "C6C98066-FDCD-4BEB-9A66-15C43E52334B",
+                            "slaveGroupId": 99,
+                            "slaveGroupName": "test2",
+                            "slaveGroupUUID": "60AEF551-9C2B-458A-9060-946C02C90E41",
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 21,
+                    "slaveGroupName": "Box Technology",
+                    "slaveGroupUUID": "0594637A-B66A-432E-881F-3FA32BD4DB29",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 21,
+                            "masterGroupName": "Box Technology",
+                            "masterGroupUUID": "0594637A-B66A-432E-881F-3FA32BD4DB29",
+                            "slaveGroupId": 32,
+                            "slaveGroupName": "Android",
+                            "slaveGroupUUID": "4D616490-1BBC-44F9-8810-6125A8CCBE00",
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 22,
+                    "slaveGroupName": "Jay's Test Group",
+                    "slaveGroupUUID": "4CD59C7D-0D3A-4312-9FFC-C6F4AE11D947",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "23",
+                            "assignedProfileUUID": "f8c1f682-7493-4718-a40e-010d02e6e8d4",
+                            "assignedProfileName": "JayTest_backNormal",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 22,
+                            "masterGroupName": "Jay's Test Group",
+                            "masterGroupUUID": "4CD59C7D-0D3A-4312-9FFC-C6F4AE11D947",
+                            "slaveGroupId": 162,
+                            "slaveGroupName": "&lt;script &quot;&#039;language&gt;&lt;&#039;&gt;",
+                            "slaveGroupUUID": "FE29CCB6-5FC6-4A7F-A75A-C74BB59450FB",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "23",
+                                    "assignedProfileUUID": "f8c1f682-7493-4718-a40e-010d02e6e8d4",
+                                    "assignedProfileName": "JayTest_backNormal",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 162,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 162,
+                                    "packageId": 74,
+                                    "packageName": "mytestapp1.0",
+                                    "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 162,
+                                    "packageId": 95,
+                                    "packageName": "jaytestapp_usbStatus",
+                                    "packageUUID": "pkgf51bc-45d0-4353-a742-0048447f55ce",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 162,
+                                    "packageId": 96,
+                                    "packageName": "jaytestapp_updateDeviceInfo",
+                                    "packageUUID": "pkgeb8b3-af15-4a71-9565-715d50cef32f",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 162,
+                                    "packageId": 97,
+                                    "packageName": "jaytestapp_BootOnOffTest",
+                                    "packageUUID": "pkg5ca10-c4ce-482b-9593-4a2549ef0311",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "devices": [
+                        {
+                            "groupId": 22,
+                            "nodeId": 16005,
+                            "deviceId": "0060ef38bac1-4d0e26dcb3462f05",
+                            "deviceName": "AURA DESKTOP (0060ef38bac1) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 22,
+                            "nodeId": 16045,
+                            "deviceId": "00050bb0b886-4d0e26dcb3462f05",
+                            "deviceName": "F14G (00050bb0b886) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 22,
+                            "nodeId": 16147,
+                            "deviceId": "20180ed97834-4d0e26dcb3462f05",
+                            "deviceName": "X99-i (20180ed97834) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 22,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 22,
+                            "packageId": 74,
+                            "packageName": "mytestapp1.0",
+                            "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 22,
+                            "packageId": 95,
+                            "packageName": "jaytestapp_usbStatus",
+                            "packageUUID": "pkgf51bc-45d0-4353-a742-0048447f55ce",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 22,
+                            "packageId": 96,
+                            "packageName": "jaytestapp_updateDeviceInfo",
+                            "packageUUID": "pkgeb8b3-af15-4a71-9565-715d50cef32f",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 22,
+                            "packageId": 97,
+                            "packageName": "jaytestapp_BootOnOffTest",
+                            "packageUUID": "pkg5ca10-c4ce-482b-9593-4a2549ef0311",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 25,
+                    "slaveGroupName": "5.06-Add Device To Group(fixed)",
+                    "slaveGroupUUID": "ECE997AE-5755-4FBC-948A-6CB611EC38C7",
+                    "level": 1
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 41,
+                    "slaveGroupName": "Aries Test",
+                    "slaveGroupUUID": "9E2B7560-4916-4F3B-9553-E29FB12744A8",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "76",
+                            "assignedProfileUUID": "fae6647c-9486-4350-9363-882f5255eb5e",
+                            "assignedProfileName": "Aries Google",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 41,
+                            "nodeId": 16310,
+                            "deviceId": "38ca84c087a2-4d0e26dcb3462f05",
+                            "deviceName": "aries-pc",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 46,
+                    "slaveGroupName": "James",
+                    "slaveGroupUUID": "27467524-6E92-4AE0-AE92-07B6B5A7C72E",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 46,
+                            "masterGroupName": "James",
+                            "masterGroupUUID": "27467524-6E92-4AE0-AE92-07B6B5A7C72E",
+                            "slaveGroupId": 161,
+                            "slaveGroupName": "test0908-1",
+                            "slaveGroupUUID": "E19E7BB3-6DD4-4C0D-AE52-A69F223A292B",
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 161,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 161,
+                                    "packageId": 74,
+                                    "packageName": "mytestapp1.0",
+                                    "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 161,
+                                    "packageId": 75,
+                                    "packageName": "testProjectFile_4123",
+                                    "packageUUID": "pkgb0c5e-7e2f-416a-8ff1-2fbde960e1e3",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 46,
+                            "masterGroupName": "James",
+                            "masterGroupUUID": "27467524-6E92-4AE0-AE92-07B6B5A7C72E",
+                            "slaveGroupId": 181,
+                            "slaveGroupName": "test1025",
+                            "slaveGroupUUID": "4779DA8F-90C0-4EDA-A29C-C03F2E313077",
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 181,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 181,
+                                    "packageId": 74,
+                                    "packageName": "mytestapp1.0",
+                                    "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 181,
+                                    "packageId": 75,
+                                    "packageName": "testProjectFile_4123",
+                                    "packageUUID": "pkgb0c5e-7e2f-416a-8ff1-2fbde960e1e3",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 46,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 46,
+                            "packageId": 74,
+                            "packageName": "mytestapp1.0",
+                            "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 46,
+                            "packageId": 75,
+                            "packageName": "testProjectFile_4123",
+                            "packageUUID": "pkgb0c5e-7e2f-416a-8ff1-2fbde960e1e3",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 47,
+                    "slaveGroupName": "Ada's testing group",
+                    "slaveGroupUUID": "760E5FD0-6EAB-44E5-913A-32C23EA1DD06",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "24",
+                            "assignedProfileUUID": "f2764f07-aa01-4c41-b45b-718e1f4b6c4a",
+                            "assignedProfileName": "AdaTest",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 47,
+                            "nodeId": 524,
+                            "deviceId": "000ec68e2d51-4d0e26dcb3462f05",
+                            "deviceName": "F14M (000ec68e2d51) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 47,
+                            "packageId": 74,
+                            "packageName": "mytestapp1.0",
+                            "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 47,
+                            "packageId": 121,
+                            "packageName": "DRMInfo",
+                            "packageUUID": "pkgaee72-af37-47a6-82f9-aa71897b7093",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 47,
+                            "packageId": 122,
+                            "packageName": "QR code reader",
+                            "packageUUID": "pkgef757-a184-4e91-9b95-2eb88b361f27",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 68,
+                    "slaveGroupName": "20211202",
+                    "slaveGroupUUID": "AE7F64B2-218D-4297-A4F9-92E1D72DFF9A",
+                    "level": 1
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 69,
+                    "slaveGroupName": "test1",
+                    "slaveGroupUUID": "B4DB02DC-35B9-4453-B819-B46AB9A974C8",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 69,
+                            "masterGroupName": "test1",
+                            "masterGroupUUID": "B4DB02DC-35B9-4453-B819-B46AB9A974C8",
+                            "slaveGroupId": 106,
+                            "slaveGroupName": "test2",
+                            "slaveGroupUUID": "A2670814-C549-49C5-9203-D1A3DF2B157D",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 106,
+                                    "masterGroupName": "test2",
+                                    "masterGroupUUID": "A2670814-C549-49C5-9203-D1A3DF2B157D",
+                                    "slaveGroupId": 160,
+                                    "slaveGroupName": "1233",
+                                    "slaveGroupUUID": "5A131B5B-FC1D-4891-A0AC-C2CE41BF5F97",
+                                    "level": 3,
+                                    "packages": [
+                                        {
+                                            "groupId": 160,
+                                            "packageId": 73,
+                                            "packageName": "mytestapp4.0",
+                                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                            "packageStatus": "VALID"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "packages": [
+                                {
+                                    "groupId": 106,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 69,
+                            "masterGroupName": "test1",
+                            "masterGroupUUID": "B4DB02DC-35B9-4453-B819-B46AB9A974C8",
+                            "slaveGroupId": 180,
+                            "slaveGroupName": "test1025",
+                            "slaveGroupUUID": "E7E61217-F476-4DD1-8C81-00C7EFD29A78",
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 180,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 69,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 98,
+                    "slaveGroupName": "MAIN1",
+                    "slaveGroupUUID": "16E85D6A-2844-4F8D-ABC9-D0FCA69D879F",
+                    "level": 1,
+                    "packages": [
+                        {
+                            "groupId": 98,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 105,
+                    "slaveGroupName": "Jay's Test Group(2)",
+                    "slaveGroupUUID": "779A6A56-6F61-40EA-9D26-472B77D96320",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "23",
+                            "assignedProfileUUID": "f8c1f682-7493-4718-a40e-010d02e6e8d4",
+                            "assignedProfileName": "JayTest_backNormal",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 105,
+                            "nodeId": 14579,
+                            "deviceId": "0060ef2fd6a6-4d0e26dcb3462f05",
+                            "deviceName": "unknown (0060ef2fd6a6) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 115,
+                    "slaveGroupName": "Testproject test",
+                    "slaveGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 116,
+                            "slaveGroupName": "【2-2】API-Add\/Move device to group",
+                            "slaveGroupUUID": "5075DEBA-6038-459F-ACA2-ECFE55F10DBD",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 116,
+                                    "nodeId": 14360,
+                                    "deviceId": "1122334455-4d0e26dcb3462f05",
+                                    "deviceName": "1122334455-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 117,
+                            "slaveGroupName": "【2-2】API-Add\/Rename\/Remove group",
+                            "slaveGroupUUID": "8E390085-4F33-4708-99AE-5396AEA1457D",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 117,
+                                    "masterGroupName": "【2-2】API-Add\/Rename\/Remove group",
+                                    "masterGroupUUID": "8E390085-4F33-4708-99AE-5396AEA1457D",
+                                    "slaveGroupId": 151,
+                                    "slaveGroupName": "【2-2】Rename group",
+                                    "slaveGroupUUID": "7A59F242-01C9-4BB9-B094-26EAD2B7EE46",
+                                    "level": 3
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 118,
+                            "slaveGroupName": "【2-2】API-Assign\/Remove package to group",
+                            "slaveGroupUUID": "45D79683-1F83-47CE-83B7-F25AA6C3D1B5",
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 120,
+                            "slaveGroupName": "【2-3】API-Package status",
+                            "slaveGroupUUID": "4F03A399-B11A-4DC5-AB73-1A10FBDA0863",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 120,
+                                    "masterGroupName": "【2-3】API-Package status",
+                                    "masterGroupUUID": "4F03A399-B11A-4DC5-AB73-1A10FBDA0863",
+                                    "slaveGroupId": 131,
+                                    "slaveGroupName": "【2-2】Device group",
+                                    "slaveGroupUUID": "948A2B0A-D918-4594-9CC1-40A2218C24D9",
+                                    "level": 3,
+                                    "packages": [
+                                        {
+                                            "groupId": 131,
+                                            "packageId": 92,
+                                            "packageName": "TP_testproject_fixed",
+                                            "packageUUID": "pkgc1fc5-9323-4095-b38a-6e04e44d072c",
+                                            "packageStatus": "VALID"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 129,
+                            "slaveGroupName": "【2-2】API-Assign profile to group",
+                            "slaveGroupUUID": "40EF113B-95CA-416B-ADBA-27F4B822CB5B",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "63",
+                                    "assignedProfileUUID": "ff36dc3f-9cb5-4998-983e-1a61da46e407",
+                                    "assignedProfileName": "test_profile",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 130,
+                            "slaveGroupName": "【2-5】API-Schedule assign package",
+                            "slaveGroupUUID": "80BE8E19-51A5-49DC-AFFD-B69EDA52E9EA",
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 130,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 144,
+                            "slaveGroupName": "【2-2】API-Remove device from group",
+                            "slaveGroupUUID": "D311F904-B055-422D-BC60-81F6DE6BBE27",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 144,
+                                    "nodeId": 14359,
+                                    "deviceId": "0060ef37556e-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef37556e-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 157,
+                            "slaveGroupName": "【2-4】API-Profile status",
+                            "slaveGroupUUID": "C98A1471-12CE-466A-80DB-A96A09DBFBFC",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "30",
+                                    "assignedProfileUUID": "f596968a-a259-4558-8770-ed278387bb72",
+                                    "assignedProfileName": "TP_testproject_fixed",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 157,
+                                    "nodeId": 341,
+                                    "deviceId": "000ec68ef115-4d0e26dcb3462f05",
+                                    "deviceName": "000ec68ef115-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 205,
+                            "slaveGroupName": "【2-6】API-Assign media group",
+                            "slaveGroupUUID": "EF231D8D-401D-4E62-BC51-7D603DB3021D",
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 115,
+                            "masterGroupName": "Testproject test",
+                            "masterGroupUUID": "4B254587-9074-4F7E-90C9-1906E3B33A8C",
+                            "slaveGroupId": 206,
+                            "slaveGroupName": "【2-2】Reboot group",
+                            "slaveGroupUUID": "806D2C8D-557C-4CC4-8A1B-FAA37B2F0F39",
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 158,
+                    "slaveGroupName": "testporject windows",
+                    "slaveGroupUUID": "98195BEA-9DB9-48A2-A518-F10DBAA5E8A9",
+                    "level": 1,
+                    "packages": [
+                        {
+                            "groupId": 158,
+                            "packageId": 92,
+                            "packageName": "TP_testproject_fixed",
+                            "packageUUID": "pkgc1fc5-9323-4095-b38a-6e04e44d072c",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 189,
+                    "slaveGroupName": "jerry_test",
+                    "slaveGroupUUID": "ED6116BA-2FE2-4F60-90FA-C6EF24D74C8B",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "44",
+                            "assignedProfileUUID": "fde3b9e4-ac91-4d78-8aad-8eb05a417dc0",
+                            "assignedProfileName": "linux_profile_jerry",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 189,
+                            "nodeId": 16262,
+                            "deviceId": "000c29af1033-4d0e26dcb3462f05",
+                            "deviceName": "centos7-jerry",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 190,
+                    "slaveGroupName": "cylin_test",
+                    "slaveGroupUUID": "8DD98A2C-37A6-491E-9C64-33A3EE88CA06",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "48",
+                            "assignedProfileUUID": "f87450d2-316f-44f5-8463-63f5fddee566",
+                            "assignedProfileName": "cy_test",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 190,
+                            "nodeId": 16192,
+                            "deviceId": "000c29e87d30-4d0e26dcb3462f05",
+                            "deviceName": "ubuntu2004-0908",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 191,
+                    "slaveGroupName": "WillyTest",
+                    "slaveGroupUUID": "5E30349C-C166-4713-97B4-B72EDFE51D2E",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "47",
+                            "assignedProfileUUID": "fca0d142-1a34-4c27-8b1d-d40a85642856",
+                            "assignedProfileName": "WillyTest2",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "packages": [
+                        {
+                            "groupId": 191,
+                            "packageId": 81,
+                            "packageName": "Notepad MSI",
+                            "packageUUID": "pkg43ac7-c242-48b8-a0e5-e0eb9998a912",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 196,
+                    "slaveGroupName": "00011",
+                    "slaveGroupUUID": "EE7426E9-203E-4EEC-9B55-BC001C6D3BBC",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "56",
+                            "assignedProfileUUID": "fbc1df3a-b514-429b-a4b3-bf66fe536f13",
+                            "assignedProfileName": "00011",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 201,
+                    "slaveGroupName": "derekltest",
+                    "slaveGroupUUID": "07E2C1A5-64D5-4D0E-B9E0-52846BFF1F62",
+                    "profiles": [
+                        {
+                            "assignedProfileId": "73",
+                            "assignedProfileUUID": "f6e7ea8e-1365-447a-8978-4bcd0eca25c0",
+                            "assignedProfileName": "derekTest",
+                            "assignedProfileStatus": "VALID"
+                        }
+                    ],
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 201,
+                            "masterGroupName": "derekltest",
+                            "masterGroupUUID": "07E2C1A5-64D5-4D0E-B9E0-52846BFF1F62",
+                            "slaveGroupId": 202,
+                            "slaveGroupName": "jaytest",
+                            "slaveGroupUUID": "ACD0A268-A7EB-43AE-A386-6F4A28C4ED78",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "73",
+                                    "assignedProfileUUID": "f6e7ea8e-1365-447a-8978-4bcd0eca25c0",
+                                    "assignedProfileName": "derekTest",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 202,
+                                    "packageId": 73,
+                                    "packageName": "mytestapp4.0",
+                                    "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 202,
+                                    "packageId": 121,
+                                    "packageName": "DRMInfo",
+                                    "packageUUID": "pkgaee72-af37-47a6-82f9-aa71897b7093",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 202,
+                                    "packageId": 122,
+                                    "packageName": "QR code reader",
+                                    "packageUUID": "pkgef757-a184-4e91-9b95-2eb88b361f27",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        }
+                    ],
+                    "devices": [
+                        {
+                            "groupId": 201,
+                            "nodeId": 15863,
+                            "deviceId": "0866436b167b-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (0866436b167b) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15867,
+                            "deviceId": "60b49ba3b8d7-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (60b49ba3b8d7) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15866,
+                            "deviceId": "78fa9548db54-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (78fa9548db54) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15914,
+                            "deviceId": "91b10cf5bbab-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (91b10cf5bbab) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15920,
+                            "deviceId": "a8f13d33ce02-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (a8f13d33ce02) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15865,
+                            "deviceId": "eb78c9510a0d-4d0e26dcb3462f05",
+                            "deviceName": "APOS DESKTOP (eb78c9510a0d) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15964,
+                            "deviceId": "006011223355-4d0e26dcb3462f05",
+                            "deviceName": "AURA TABLET (006011223355) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16329,
+                            "deviceId": "b629b81dcf51-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16340,
+                            "deviceId": "ba860c3037d8-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": true
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 14839,
+                            "deviceId": "724ad27da840-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G (724ad27da840) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16304,
+                            "deviceId": "a1dd98a8883f-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G (a1dd98a8883f) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16309,
+                            "deviceId": "b7d96b1533fe-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G (b7d96b1533fe) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16308,
+                            "deviceId": "ba337a55fe5d-4d0e26dcb3462f05",
+                            "deviceName": "M2101K6G (ba337a55fe5d) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 16041,
+                            "deviceId": "ac3743a0b23b-4d0e26dcb3462f05",
+                            "deviceName": "Pixel (ac3743a0b23b) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 15998,
+                            "deviceId": "0060ef30620a-4d0e26dcb3462f05",
+                            "deviceName": "unknown",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 14382,
+                            "deviceId": "000ec68e6087-4d0e26dcb3462f05",
+                            "deviceName": "unknown (000ec68e6087) ",
+                            "aliasName": "test1",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 522,
+                            "deviceId": "0060ef28ade1-4d0e26dcb3462f05",
+                            "deviceName": "unknown (0060ef28ade1) ",
+                            "aliasName": "RemoteControl_Android_ADE1",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        },
+                        {
+                            "groupId": 201,
+                            "nodeId": 519,
+                            "deviceId": "000ec68ecf20-4d0e26dcb3462f05",
+                            "deviceName": "VITA K (000ec68ecf20) ",
+                            "aliasName": "Ada&#039;s device",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ],
+                    "packages": [
+                        {
+                            "groupId": 201,
+                            "packageId": 73,
+                            "packageName": "mytestapp4.0",
+                            "packageUUID": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 201,
+                            "packageId": 121,
+                            "packageName": "DRMInfo",
+                            "packageUUID": "pkgaee72-af37-47a6-82f9-aa71897b7093",
+                            "packageStatus": "VALID"
+                        },
+                        {
+                            "groupId": 201,
+                            "packageId": 122,
+                            "packageName": "QR code reader",
+                            "packageUUID": "pkgef757-a184-4e91-9b95-2eb88b361f27",
+                            "packageStatus": "VALID"
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 210,
+                    "slaveGroupName": "Heize_test",
+                    "slaveGroupUUID": "B9AC15C4-CC0C-426D-AD48-575B3304F395",
+                    "level": 1
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 213,
+                    "slaveGroupName": "dave_test",
+                    "slaveGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 215,
+                            "slaveGroupName": "vbox",
+                            "slaveGroupUUID": "001FB6FD-62C8-4878-90EF-982C525AE699",
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 215,
+                                    "masterGroupName": "vbox",
+                                    "masterGroupUUID": "001FB6FD-62C8-4878-90EF-982C525AE699",
+                                    "slaveGroupId": 234,
+                                    "slaveGroupName": "Desktop_test",
+                                    "slaveGroupUUID": "54C7E2D5-D4B1-4C5E-9196-9144129BF154",
+                                    "level": 3
+                                }
+                            ],
+                            "devices": [
+                                {
+                                    "groupId": 215,
+                                    "nodeId": 15878,
+                                    "deviceId": "080027f7c8f4-4d0e26dcb3462f05",
+                                    "deviceName": "Vbox-004",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 215,
+                                    "nodeId": 15883,
+                                    "deviceId": "080027e9111b-4d0e26dcb3462f05",
+                                    "deviceName": "Vbox-006",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 215,
+                                    "nodeId": 15882,
+                                    "deviceId": "080027d72134-4d0e26dcb3462f05",
+                                    "deviceName": "Vbox-007",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 215,
+                                    "nodeId": 15884,
+                                    "deviceId": "080027bc54ac-4d0e26dcb3462f05",
+                                    "deviceName": "Vbox-008",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 215,
+                                    "nodeId": 15885,
+                                    "deviceId": "080027569241-4d0e26dcb3462f05",
+                                    "deviceName": "Vbox-009",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 227,
+                            "slaveGroupName": "k737",
+                            "slaveGroupUUID": "79F0D154-C10A-4272-BB4C-BB7FF17A3B0B",
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 229,
+                            "slaveGroupName": "android bug",
+                            "slaveGroupUUID": "90F715AA-18C3-4582-9342-ACF3568922A5",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 229,
+                                    "nodeId": 15927,
+                                    "deviceId": "0060ef28b000-4d0e26dcb3462f05",
+                                    "deviceName": "Razor (0060ef28b000) ",
+                                    "aliasName": "k736",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 231,
+                            "slaveGroupName": "Android_Universal",
+                            "slaveGroupUUID": "E88C0995-2561-4A79-8A3A-C7B751E53361",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "74",
+                                    "assignedProfileUUID": "fc6bf39d-22e6-46b5-9fff-efd374d76beb",
+                                    "assignedProfileName": "derekTest1",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "subgroup": [
+                                {
+                                    "masterGroupId": 231,
+                                    "masterGroupName": "Android_Universal",
+                                    "masterGroupUUID": "E88C0995-2561-4A79-8A3A-C7B751E53361",
+                                    "slaveGroupId": 232,
+                                    "slaveGroupName": "Universal_test",
+                                    "slaveGroupUUID": "56B8FA6A-869F-47D4-A7E3-05F59CEB2E17",
+                                    "profiles": [
+                                        {
+                                            "assignedProfileId": "74",
+                                            "assignedProfileUUID": "fc6bf39d-22e6-46b5-9fff-efd374d76beb",
+                                            "assignedProfileName": "derekTest1",
+                                            "assignedProfileStatus": "VALID"
+                                        }
+                                    ],
+                                    "level": 3,
+                                    "devices": [
+                                        {
+                                            "groupId": 232,
+                                            "nodeId": 16277,
+                                            "deviceId": "34991904a58e-4d0e26dcb3462f05",
+                                            "deviceName": "Pixel 4 (34991904a58e) ",
+                                            "aliasName": "",
+                                            "deviceState": "REGISTERED",
+                                            "healthStatus": "UNKNOWN",
+                                            "isConnected": false
+                                        }
+                                    ],
+                                    "packages": [
+                                        {
+                                            "groupId": 232,
+                                            "packageId": 74,
+                                            "packageName": "mytestapp1.0",
+                                            "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                            "packageStatus": "VALID"
+                                        },
+                                        {
+                                            "groupId": 232,
+                                            "packageId": 87,
+                                            "packageName": "TxtFileCreator",
+                                            "packageUUID": "pkgba227-7e81-4eeb-825f-967aada941c4",
+                                            "packageStatus": "VALID"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "devices": [
+                                {
+                                    "groupId": 231,
+                                    "nodeId": 16336,
+                                    "deviceId": "2a6d6b0e05b3-4d0e26dcb3462f05",
+                                    "deviceName": "SM-X700 (2a6d6b0e05b3) ",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 231,
+                                    "nodeId": 16299,
+                                    "deviceId": "e84e58100182-4d0e26dcb3462f05",
+                                    "deviceName": "SM-X700 (e84e58100182) ",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                }
+                            ],
+                            "packages": [
+                                {
+                                    "groupId": 231,
+                                    "packageId": 74,
+                                    "packageName": "mytestapp1.0",
+                                    "packageUUID": "pkga0473-967f-4e3e-8f9d-2397849a21fc",
+                                    "packageStatus": "VALID"
+                                },
+                                {
+                                    "groupId": 231,
+                                    "packageId": 87,
+                                    "packageName": "TxtFileCreator",
+                                    "packageUUID": "pkgba227-7e81-4eeb-825f-967aada941c4",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 233,
+                            "slaveGroupName": "linux_test",
+                            "slaveGroupUUID": "B5E88A39-6B00-484B-A946-CC41E892A685",
+                            "level": 2
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 242,
+                            "slaveGroupName": "profiles_test",
+                            "slaveGroupUUID": "77F76776-22E7-4A8F-9C07-51A0C56367C8",
+                            "profiles": [
+                                {
+                                    "assignedProfileId": "76",
+                                    "assignedProfileUUID": "fae6647c-9486-4350-9363-882f5255eb5e",
+                                    "assignedProfileName": "Aries Google",
+                                    "assignedProfileStatus": "VALID"
+                                }
+                            ],
+                            "level": 2,
+                            "packages": [
+                                {
+                                    "groupId": 242,
+                                    "packageId": 127,
+                                    "packageName": "chrome_exe",
+                                    "packageUUID": "pkge7ec2-700e-464f-a55f-7a56db9182fb",
+                                    "packageStatus": "VALID"
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 213,
+                            "masterGroupName": "dave_test",
+                            "masterGroupUUID": "983D7218-BC2D-4E87-A3A3-053F0DE8C954",
+                            "slaveGroupId": 244,
+                            "slaveGroupName": "win1.2.30 test",
+                            "slaveGroupUUID": "97E7B022-EFA4-48AD-89F0-CA2CE8E2D284",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 244,
+                                    "nodeId": 14834,
+                                    "deviceId": "0060ef33467c-4d0e26dcb3462f05",
+                                    "deviceName": "POS337N2",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "UNKNOWN",
+                                    "isConnected": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 235,
+                    "slaveGroupName": "group_health",
+                    "slaveGroupUUID": "A6724F5D-FF0E-4E68-A779-0DAC80DDF305",
+                    "level": 1,
+                    "devices": [
+                        {
+                            "groupId": 235,
+                            "nodeId": 16306,
+                            "deviceId": "5065f343af67-4d0e26dcb3462f05",
+                            "deviceName": "inefi-centos7",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "GOOD",
+                            "isConnected": true
+                        },
+                        {
+                            "groupId": 235,
+                            "nodeId": 16278,
+                            "deviceId": "4267bc2585ea-4d0e26dcb3462f05",
+                            "deviceName": "Pixel 4 (4267bc2585ea) ",
+                            "aliasName": "",
+                            "deviceState": "REGISTERED",
+                            "healthStatus": "UNKNOWN",
+                            "isConnected": false
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 236,
+                    "slaveGroupName": "China",
+                    "slaveGroupUUID": "CCFE29DB-3952-4369-8E63-98DD6A3106E4",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 236,
+                            "masterGroupName": "China",
+                            "masterGroupUUID": "CCFE29DB-3952-4369-8E63-98DD6A3106E4",
+                            "slaveGroupId": 237,
+                            "slaveGroupName": "Beijing",
+                            "slaveGroupUUID": "998A5377-FBAA-40E5-8F9F-BD9C5B4DBCFE",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14620,
+                                    "deviceId": "080027e6e559-4d0e26dcb3462f05",
+                                    "deviceName": "080027e6e559-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14708,
+                                    "deviceId": "0060ef255537-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef255537-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14752,
+                                    "deviceId": "0060ef3bb7ae-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7ae-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14759,
+                                    "deviceId": "000c292a0dc5-4d0e26dcb3462f05",
+                                    "deviceName": "000c292a0dc5-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14778,
+                                    "deviceId": "0060ef3bb790-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb790-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 14779,
+                                    "deviceId": "0060ef3bb7a2-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7a2-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 15872,
+                                    "deviceId": "0800279f043b-4d0e26dcb3462f05",
+                                    "deviceName": "0800279f043b-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 237,
+                                    "nodeId": 15881,
+                                    "deviceId": "000c2906857a-4d0e26dcb3462f05",
+                                    "deviceName": "000c2906857a-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 236,
+                            "masterGroupName": "China",
+                            "masterGroupUUID": "CCFE29DB-3952-4369-8E63-98DD6A3106E4",
+                            "slaveGroupId": 238,
+                            "slaveGroupName": "Shanghai",
+                            "slaveGroupUUID": "7CAB4119-1C2A-4450-ACC3-EAD9B28A97BF",
+                            "level": 2
+                        }
+                    ]
+                },
+                {
+                    "masterGroupId": 6,
+                    "masterGroupName": "MAIN",
+                    "masterGroupUUID": "3CECA15D-D1C6-44C5-B877-1CB4E19C1EB7",
+                    "slaveGroupId": 239,
+                    "slaveGroupName": "USA",
+                    "slaveGroupUUID": "01CF93AD-7C66-4C29-AD85-A7B43F682411",
+                    "level": 1,
+                    "subgroup": [
+                        {
+                            "masterGroupId": 239,
+                            "masterGroupName": "USA",
+                            "masterGroupUUID": "01CF93AD-7C66-4C29-AD85-A7B43F682411",
+                            "slaveGroupId": 240,
+                            "slaveGroupName": "NYC",
+                            "slaveGroupUUID": "26554352-A852-4A4C-A270-20715617BF2E",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 240,
+                                    "nodeId": 379,
+                                    "deviceId": "9cb6d0b9d3c9-4d0e26dcb3462f05",
+                                    "deviceName": "9cb6d0b9d3c9-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 240,
+                                    "nodeId": 14356,
+                                    "deviceId": "123456789-4d0e26dcb3462f05",
+                                    "deviceName": "123456789-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 240,
+                                    "nodeId": 14361,
+                                    "deviceId": "005056c00001-4d0e26dcb3462f05",
+                                    "deviceName": "005056c00001-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 240,
+                                    "nodeId": 14775,
+                                    "deviceId": "0060ef3bb7b0-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7b0-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 240,
+                                    "nodeId": 14776,
+                                    "deviceId": "0060ef3bb7aa-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7aa-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        },
+                        {
+                            "masterGroupId": 239,
+                            "masterGroupName": "USA",
+                            "masterGroupUUID": "01CF93AD-7C66-4C29-AD85-A7B43F682411",
+                            "slaveGroupId": 241,
+                            "slaveGroupName": "Chicago",
+                            "slaveGroupUUID": "C21BCAC2-31E5-48F5-B4BF-86CE56DFDF44",
+                            "level": 2,
+                            "devices": [
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14372,
+                                    "deviceId": "08002710b8d0-4d0e26dcb3462f05",
+                                    "deviceName": "08002710b8d0-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14538,
+                                    "deviceId": "0060ef3b8aec-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3b8aec-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14573,
+                                    "deviceId": "000c29f850b8-4d0e26dcb3462f05",
+                                    "deviceName": "000c29f850b8-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14772,
+                                    "deviceId": "0060ef3bb7a4-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7a4-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14773,
+                                    "deviceId": "0060ef3bb7a0-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb7a0-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                },
+                                {
+                                    "groupId": 241,
+                                    "nodeId": 14774,
+                                    "deviceId": "0060ef3bb79e-4d0e26dcb3462f05",
+                                    "deviceName": "0060ef3bb79e-4d0e26dcb3462f05",
+                                    "aliasName": "",
+                                    "deviceState": "REGISTERED",
+                                    "healthStatus": "DISCONNECTED",
+                                    "isConnected": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "masterGroupId": 5,
+            "masterGroupName": "UNASSIGNED",
+            "masterGroupUUID": "B6DB1DE6-76ED-4A4F-9BA0-2638ADCD0691",
+            "level": 0,
+            "devices": [
+                {
+                    "groupId": 5,
+                    "nodeId": 14768,
+                    "deviceId": "0060ef3bb7a8-4d0e26dcb3462f05",
+                    "deviceName": "0060ef3bb7a8-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14777,
+                    "deviceId": "0060ef3bb78c-4d0e26dcb3462f05",
+                    "deviceName": "0060ef3bb78c-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15928,
+                    "deviceId": "45a83339cba9-4d0e26dcb3462f05",
+                    "deviceName": "45a83339cba9-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15929,
+                    "deviceId": "17e1d7ad508d-4d0e26dcb3462f05",
+                    "deviceName": "17e1d7ad508d-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15933,
+                    "deviceId": "e6a932593aac-4d0e26dcb3462f05",
+                    "deviceName": "e6a932593aac-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16148,
+                    "deviceId": "0060ef376c38-4d0e26dcb3462f05",
+                    "deviceName": "0060ef376c38-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16161,
+                    "deviceId": "451449a5d085-4d0e26dcb3462f05",
+                    "deviceName": "451449a5d085-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16162,
+                    "deviceId": "c23978b95162-4d0e26dcb3462f05",
+                    "deviceName": "c23978b95162-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16260,
+                    "deviceId": "001122334455-4d0e26dcb3462f05",
+                    "deviceName": "001122334455-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16300,
+                    "deviceId": "bc25f01c4dd6-4d0e26dcb3462f05",
+                    "deviceName": "bc25f01c4dd6-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16301,
+                    "deviceId": "0060ef37dd33-4d0e26dcb3462f05",
+                    "deviceName": "0060ef37dd33-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16302,
+                    "deviceId": "000ec68e6088-4d0e26dcb3462f05",
+                    "deviceName": "000ec68e6088-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16303,
+                    "deviceId": "0060ef35e1e4-4d0e26dcb3462f05",
+                    "deviceName": "0060ef35e1e4-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16324,
+                    "deviceId": "000c29e626eb-4d0e26dcb3462f05",
+                    "deviceName": "11_ubuntu_jerry",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": true
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16000,
+                    "deviceId": "0060ef40681a-4d0e26dcb3462f05",
+                    "deviceName": "APOS (0060ef40681a) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15943,
+                    "deviceId": "0ec6af068dfe-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (0ec6af068dfe) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15936,
+                    "deviceId": "220ccb91bdb3-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (220ccb91bdb3) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15876,
+                    "deviceId": "2df2a1ab500a-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (2df2a1ab500a) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15869,
+                    "deviceId": "3362c8d1a2ce-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (3362c8d1a2ce) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15918,
+                    "deviceId": "53a752f49f51-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (53a752f49f51) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15891,
+                    "deviceId": "76b4d892a3e8-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (76b4d892a3e8) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15938,
+                    "deviceId": "7b68d326881a-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (7b68d326881a) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15861,
+                    "deviceId": "9259ee265c2b-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (9259ee265c2b) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15919,
+                    "deviceId": "a3db4b03b957-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (a3db4b03b957) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15917,
+                    "deviceId": "aae5ce24503c-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (aae5ce24503c) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15934,
+                    "deviceId": "ac35b2372004-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (ac35b2372004) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15864,
+                    "deviceId": "f8c89947006a-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (f8c89947006a) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15937,
+                    "deviceId": "ff56d96fa76e-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (ff56d96fa76e) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15924,
+                    "deviceId": "ffbc75f0856f-4d0e26dcb3462f05",
+                    "deviceName": "APOS DESKTOP (ffbc75f0856f) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15940,
+                    "deviceId": "b45739842d44-4d0e26dcb3462f05",
+                    "deviceName": "AURA DESKTOP (b45739842d44) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "ERROR",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16337,
+                    "deviceId": "0060ef3c1240-4d0e26dcb3462f05",
+                    "deviceName": "AURA TABLET",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16338,
+                    "deviceId": "0060ef3c1241-4d0e26dcb3462f05",
+                    "deviceName": "AURA TABLET",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16350,
+                    "deviceId": "9cebe83898b8-4d0e26dcb3462f05",
+                    "deviceName": "AURA TABLET",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15942,
+                    "deviceId": "a8ce34aa3294-4d0e26dcb3462f05",
+                    "deviceName": "AURA TABLET (a8ce34aa3294) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16296,
+                    "deviceId": "000c29081819-4d0e26dcb3462f05",
+                    "deviceName": "centos_1002",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15967,
+                    "deviceId": "000c291e5f2c-4d0e26dcb3462f05",
+                    "deviceName": "centos7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14698,
+                    "deviceId": "0060ef364630-4d0e26dcb3462f05",
+                    "deviceName": "Centos7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14402,
+                    "deviceId": "000c2957e13d-4d0e26dcb3462f05",
+                    "deviceName": "CentOS7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14651,
+                    "deviceId": "14dda94f6ece-4d0e26dcb3462f05",
+                    "deviceName": "CentOS7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15850,
+                    "deviceId": "000c2924b0e3-4d0e26dcb3462f05",
+                    "deviceName": "centos7 only for test release",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14534,
+                    "deviceId": "000c29e9cfb2-4d0e26dcb3462f05",
+                    "deviceName": "CentOS7VM-Ethan",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16026,
+                    "deviceId": "000c2978b675-4d0e26dcb3462f05",
+                    "deviceName": "centos8",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15892,
+                    "deviceId": "080027b7abd8-4d0e26dcb3462f05",
+                    "deviceName": "Dave-Centos7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16048,
+                    "deviceId": "0060ef3c28cc-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-16LBGB0",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 498,
+                    "deviceId": "0060ef991002-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-1PKRGJA",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16333,
+                    "deviceId": "68545a7af328-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-25VFMJB",
+                    "aliasName": "0920 Demo",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16052,
+                    "deviceId": "0060ef3bedea-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-73U1A4P",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16328,
+                    "deviceId": "000c29b98e01-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-7SH2927",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14922,
+                    "deviceId": "000ec68e5099-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-9G9RUQQ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15303,
+                    "deviceId": "2c0da71e2a30-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-CAP9OE6",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15868,
+                    "deviceId": "0800274a07e5-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-EBT31DU",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15950,
+                    "deviceId": "000e8e8e829f-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-ECIAHA8",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15900,
+                    "deviceId": "000c2919ca50-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-ETOL6P7",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14379,
+                    "deviceId": "0060ef35e1e3-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-H5I5QBK",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16313,
+                    "deviceId": "888888888788-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-H5I5QBK",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15963,
+                    "deviceId": "2c0da71e3fcf-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-KQNI020",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "GOOD",
+                    "isConnected": true
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16305,
+                    "deviceId": "a8a159da1c87-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-KUR5EN9",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15871,
+                    "deviceId": "0060ef393609-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-L072CBL",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16013,
+                    "deviceId": "485d605a51d6-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-LI2PC85",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15911,
+                    "deviceId": "0068eb401195-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-NQLI2PH",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14478,
+                    "deviceId": "0c7a15de43a1-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-O22RDSQ",
+                    "aliasName": "24_24_TEST",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15880,
+                    "deviceId": "000c2904649d-4d0e26dcb3462f05",
+                    "deviceName": "DESKTOP-P08510O",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14486,
+                    "deviceId": "0060ef2f5686-4d0e26dcb3462f05",
+                    "deviceName": "Device-1",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15889,
+                    "deviceId": "80c5f221ff03-4d0e26dcb3462f05",
+                    "deviceName": "Device-2",
+                    "aliasName": "A test2",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14584,
+                    "deviceId": "cc4b737678aa-4d0e26dcb3462f05",
+                    "deviceName": "Device-4",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16274,
+                    "deviceId": "000af5623884-4d0e26dcb3462f05",
+                    "deviceName": "F14G (000af5623884) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16011,
+                    "deviceId": "6f0bdc3c0ffa-4d0e26dcb3462f05",
+                    "deviceName": "F14M (6f0bdc3c0ffa) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15949,
+                    "deviceId": "0060ef38f08c-4d0e26dcb3462f05",
+                    "deviceName": "F14N (0060ef38f08c) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15948,
+                    "deviceId": "0060ef3bf508-4d0e26dcb3462f05",
+                    "deviceName": "F14N (0060ef3bf508) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16339,
+                    "deviceId": "e470b817abb0-4d0e26dcb3462f05",
+                    "deviceName": "inefi-centos7-jerry",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "GOOD",
+                    "isConnected": true
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14407,
+                    "deviceId": "8469932b2b3b-4d0e26dcb3462f05",
+                    "deviceName": "LAPTOP-DIKDIC65",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16314,
+                    "deviceId": "086ac5633ff8-4d0e26dcb3462f05",
+                    "deviceName": "LAPTOP-II52Q17I",
+                    "aliasName": "Aries PC",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15954,
+                    "deviceId": "1014c1d5fc23-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (1014c1d5fc23) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14813,
+                    "deviceId": "112b53e6fb9b-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (112b53e6fb9b) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14805,
+                    "deviceId": "191b5fca7a5e-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (191b5fca7a5e) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14720,
+                    "deviceId": "239e18215385-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (239e18215385) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14397,
+                    "deviceId": "342e7be2f9cf-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (342e7be2f9cf) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15935,
+                    "deviceId": "3f57a26fdef5-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (3f57a26fdef5) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15956,
+                    "deviceId": "4e7b7a79ca6c-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (4e7b7a79ca6c) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16307,
+                    "deviceId": "584f54f59142-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (584f54f59142) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14806,
+                    "deviceId": "d1556b8a5626-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (d1556b8a5626) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16272,
+                    "deviceId": "f144871848a7-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (f144871848a7) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15957,
+                    "deviceId": "f6ba85b2e48a-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (f6ba85b2e48a) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14400,
+                    "deviceId": "fdbfd67b66b4-4d0e26dcb3462f05",
+                    "deviceName": "M2101K6G (fdbfd67b66b4) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15952,
+                    "deviceId": "000c29a0fe7d-4d0e26dcb3462f05",
+                    "deviceName": "MyDev-00:0c:29:a0:fe:7d",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 428,
+                    "deviceId": "3065ec85da7e-4d0e26dcb3462f05",
+                    "deviceName": "OOB-3065ec85da7e",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14394,
+                    "deviceId": "50ebf63d729a-4d0e26dcb3462f05",
+                    "deviceName": "OOB-50ebf63d729a",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16273,
+                    "deviceId": "0522a848f221-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (0522a848f221) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15958,
+                    "deviceId": "574b4aad9d7d-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (574b4aad9d7d) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15959,
+                    "deviceId": "72eafbefbe0c-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (72eafbefbe0c) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15960,
+                    "deviceId": "992839e7fc0f-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (992839e7fc0f) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16263,
+                    "deviceId": "a46f337e7b0f-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (a46f337e7b0f) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16276,
+                    "deviceId": "c005c1055d94-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (c005c1055d94) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16275,
+                    "deviceId": "c0a6d7e9ab76-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (c0a6d7e9ab76) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16265,
+                    "deviceId": "f61aaf7218b1-4d0e26dcb3462f05",
+                    "deviceName": "Pixel 4 (f61aaf7218b1) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15913,
+                    "deviceId": "0060ef38dbf1-4d0e26dcb3462f05",
+                    "deviceName": "POS457",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14681,
+                    "deviceId": "0060ef34d54b-4d0e26dcb3462f05",
+                    "deviceName": "Razor (0060ef34d54b) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14696,
+                    "deviceId": "0060ef3a3aa4-4d0e26dcb3462f05",
+                    "deviceName": "RemoteControl-Windows",
+                    "aliasName": "RemoteControl_Windows",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16049,
+                    "deviceId": "0060ef373178-4d0e26dcb3462f05",
+                    "deviceName": "Server",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15995,
+                    "deviceId": "000001000001-4d0e26dcb3462f05",
+                    "deviceName": "Test1",
+                    "aliasName": "Test1$%^&amp;",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15990,
+                    "deviceId": "000002000002-4d0e26dcb3462f05",
+                    "deviceName": "Test2",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15991,
+                    "deviceId": "000003000003-4d0e26dcb3462f05",
+                    "deviceName": "Test3",
+                    "aliasName": "DO NOT TOUCH",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15997,
+                    "deviceId": "000004000004-4d0e26dcb3462f05",
+                    "deviceName": "Test4",
+                    "aliasName": "!@#$%^&amp;*()",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15955,
+                    "deviceId": "0060ef778899-4d0e26dcb3462f05",
+                    "deviceName": "test-PC",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15961,
+                    "deviceId": "0060ef3aef11-4d0e26dcb3462f05",
+                    "deviceName": "TM-019815-01",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15953,
+                    "deviceId": "000c29272180-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15907,
+                    "deviceId": "0060ef350a6c-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16003,
+                    "deviceId": "000c2973b25c-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16027,
+                    "deviceId": "000c29a5e9ee-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16016,
+                    "deviceId": "000c297fc2ec-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14682,
+                    "deviceId": "000c2916d4fd-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu 20.04 release test",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16327,
+                    "deviceId": "000c29205780-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu1804_0908",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14701,
+                    "deviceId": "001f1f7e95ae-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu1804_installation",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14734,
+                    "deviceId": "000c29850823-4d0e26dcb3462f05",
+                    "deviceName": "ubuntu2004",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14636,
+                    "deviceId": "0060ef310840-4d0e26dcb3462f05",
+                    "deviceName": "unknown (0060ef310840) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": true
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 501,
+                    "deviceId": "0060ef34d549-4d0e26dcb3462f05",
+                    "deviceName": "unknown (0060ef34d549) ",
+                    "aliasName": "k737",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 14586,
+                    "deviceId": "a4d4b2818745-4d0e26dcb3462f05",
+                    "deviceName": "unknown (a4d4b2818745) ",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15922,
+                    "deviceId": "080027b2f860-4d0e26dcb3462f05",
+                    "deviceName": "Vbox-005",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15886,
+                    "deviceId": "0800271e247c-4d0e26dcb3462f05",
+                    "deviceName": "Vbox-010",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 16348,
+                    "deviceId": "d8bbc1dc59b8-4d0e26dcb3462f05",
+                    "deviceName": "willyhuang1",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 5,
+                    "nodeId": 15912,
+                    "deviceId": "080027a137a2-4d0e26dcb3462f05",
+                    "deviceName": "windows10",
+                    "aliasName": "",
+                    "deviceState": "REGISTERED",
+                    "healthStatus": "UNKNOWN",
+                    "isConnected": false
+                }
+            ]
+        },
+        {
+            "masterGroupId": 159,
+            "masterGroupName": "INACTIVE",
+            "masterGroupUUID": "EA1D0F2A-8524-47C8-A4E9-C9789A0C1C1B",
+            "level": 0
+        }
+    ],
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1699602025
+}

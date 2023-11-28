@@ -1,0 +1,33 @@
+{
+    "status": 1,
+    "result": [
+        {
+            "idOfDeviceHealthGroup": 84,
+            "titleOfDeviceHealthGroup": "12121212",
+            "groupName": "James test",
+            "groupUUID": "ADA1A180-F5DC-41CA-B637-B0517DA9FB0A"
+        },
+        {
+            "idOfDeviceHealthGroup": 87,
+            "titleOfDeviceHealthGroup": "main",
+            "groupName": "MAIN",
+            "groupUUID": "756E3CD0-4F97-4C33-B35E-0CA1F55517C9"
+        },
+        {
+            "idOfDeviceHealthGroup": 112,
+            "titleOfDeviceHealthGroup": "edwardTest",
+            "groupName": "test_android",
+            "groupUUID": "21E60A16-CEE5-4DBA-8B2F-73D5E4118D46"
+        },
+        {
+            "idOfDeviceHealthGroup": 115,
+            "titleOfDeviceHealthGroup": "edwardTestGood",
+            "groupName": "123",
+            "groupUUID": "05F14E2A-5A1B-4D85-A4B2-C117692F7948"
+        }
+        
+    ],
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1698830398
+}

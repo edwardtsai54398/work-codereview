@@ -1,0 +1,35 @@
+.top_navbar{
+    background: linear-gradient(to right, $primary 30%, #75D6F4);
+}
+.topnav_item{
+    font-size: 30px;
+    color: #fff;
+
+}
+.topnav_plan{
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 4px;
+    color: $primary;
+    font-weight: 700; 
+}
+.hamburger{
+    width: 20px;
+    height: 20px;
+    &:hover{
+        cursor: pointer;
+    }
+    span{
+        display: block;
+        width: 100%;
+        height: 4px;
+        background-color: #fff;
+        border-radius: 2px;
+    }
+}
+.route_title{
+    color: #fff;
+    text-transform: capitalize;
+    font-weight: 700;
+}

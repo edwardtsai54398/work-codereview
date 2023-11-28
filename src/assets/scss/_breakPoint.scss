@@ -1,0 +1,14 @@
+@mixin pad-V{
+    @media screen and (min-width: 768px){@content;}
+}
+@mixin pad-H{
+    @media screen and (min-width: 1024px){@content;}
+}
+@mixin desktop{
+    @media screen and (min-width: 1200px){@content;}
+}
+//bootstrap
+@mixin bstrp($breakpoint){
+    $breakpoint-value: map-get($grid-breakpoints, $breakpoint);
+    @media screen and (min-width: $breakpoint-value){@content;}
+}
