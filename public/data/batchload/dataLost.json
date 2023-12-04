@@ -1,6 +1,6 @@
 
 {
-    "total":122,
+    "total":118,
     "list":[
         {
             "index": 0,
@@ -304,18 +304,6 @@
         },
         {
             "index": 25,
-            "deviceId": "000c29e626eb-4d0e26dcb3462f05",
-            "deviceName": "11_ubuntu_jerry",
-            "model": "VMware Virtual Platform",
-            "os": "Linux",
-            "agentVer": "1.07.47",
-            "serialNumber": "UNKNOWN",
-            "timestamp": 1700210319,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 26,
             "deviceId": "000c29e87d30-4d0e26dcb3462f05",
             "deviceName": "ubuntu2004-0908",
             "model": "VMware Virtual Platform",
@@ -327,7 +315,7 @@
             "aliasName": ""
         },
         {
-            "index": 27,
+            "index": 26,
             "deviceId": "000c29e9cfb2-4d0e26dcb3462f05",
             "deviceName": "CentOS7VM-Ethan",
             "model": "VMware Virtual Platform",
@@ -339,7 +327,7 @@
             "aliasName": ""
         },
         {
-            "index": 28,
+            "index": 27,
             "deviceId": "000e8e8e829f-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-ECIAHA8",
             "model": "WhiskeyLake",
@@ -351,7 +339,7 @@
             "aliasName": ""
         },
         {
-            "index": 29,
+            "index": 28,
             "deviceId": "000ec68e5099-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-9G9RUQQ",
             "model": "BayTrail",
@@ -363,7 +351,7 @@
             "aliasName": ""
         },
         {
-            "index": 30,
+            "index": 29,
             "deviceId": "000ec68e6087-4d0e26dcb3462f05",
             "deviceName": "unknown (000ec68e6087) ",
             "model": "unknown",
@@ -375,7 +363,7 @@
             "aliasName": "test1"
         },
         {
-            "index": 31,
+            "index": 30,
             "deviceId": "000ec68ecf20-4d0e26dcb3462f05",
             "deviceName": "VITA K (000ec68ecf20) ",
             "model": "VITA K",
@@ -387,7 +375,7 @@
             "aliasName": "Ada&#039;s device"
         },
         {
-            "index": 32,
+            "index": 31,
             "deviceId": "001122334455-4d0e26dcb3462f05",
             "deviceName": "ubuntu_jerry",
             "model": "VMware Virtual Platform",
@@ -399,7 +387,7 @@
             "aliasName": ""
         },
         {
-            "index": 33,
+            "index": 32,
             "deviceId": "001f1f7e95ae-4d0e26dcb3462f05",
             "deviceName": "ubuntu1804_installation",
             "model": "ElkhartLake",
@@ -411,7 +399,7 @@
             "aliasName": ""
         },
         {
-            "index": 34,
+            "index": 33,
             "deviceId": "00557bb57df7-4d0e26dcb3462f05",
             "deviceName": "aiot8390p6_g17_bsp",
             "model": "aiot8390p6_g17_bsp",
@@ -423,7 +411,7 @@
             "aliasName": ""
         },
         {
-            "index": 35,
+            "index": 34,
             "deviceId": "006011223355-4d0e26dcb3462f05",
             "deviceName": "AURA TABLET (006011223355) ",
             "model": "AURA TABLET",
@@ -435,7 +423,7 @@
             "aliasName": ""
         },
         {
-            "index": 36,
+            "index": 35,
             "deviceId": "0060ef28ade1-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -447,7 +435,7 @@
             "aliasName": "jaytest_f14_sdm450"
         },
         {
-            "index": 37,
+            "index": 36,
             "deviceId": "0060ef28b000-4d0e26dcb3462f05",
             "deviceName": "Razor (0060ef28b000) ",
             "model": "Razor",
@@ -459,7 +447,7 @@
             "aliasName": "k736"
         },
         {
-            "index": 38,
+            "index": 37,
             "deviceId": "0060ef2f5686-4d0e26dcb3462f05",
             "deviceName": "Device-1",
             "model": "POS667",
@@ -471,7 +459,7 @@
             "aliasName": ""
         },
         {
-            "index": 39,
+            "index": 38,
             "deviceId": "0060ef2fd6a6-4d0e26dcb3462f05",
             "deviceName": "unknown (0060ef2fd6a6) ",
             "model": "unknown",
@@ -483,7 +471,7 @@
             "aliasName": ""
         },
         {
-            "index": 40,
+            "index": 39,
             "deviceId": "0060ef30620a-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -495,19 +483,7 @@
             "aliasName": ""
         },
         {
-            "index": 41,
-            "deviceId": "eb78c9510a0d-4d0e26dcb3462f05",
-            "deviceName": "APOS DESKTOP (eb78c9510a0d) ",
-            "model": "APOS DESKTOP",
-            "os": "Android",
-            "agentVer": "01.00.4443",
-            "serialNumber": "UNKNOWN",
-            "timestamp": 1679394142,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 42,
+            "index": 40,
             "deviceId": "0060ef310840-4d0e26dcb3462f05",
             "deviceName": "unknown",
             "model": "unknown",
@@ -519,7 +495,7 @@
             "aliasName": ""
         },
         {
-            "index": 43,
+            "index": 41,
             "deviceId": "0060ef34d549-4d0e26dcb3462f05",
             "deviceName": "unknown (0060ef34d549) ",
             "model": "unknown",
@@ -531,7 +507,7 @@
             "aliasName": "k737"
         },
         {
-            "index": 44,
+            "index": 42,
             "deviceId": "0060ef34d54b-4d0e26dcb3462f05",
             "deviceName": "Razor (0060ef34d54b) ",
             "model": "Razor",
@@ -543,7 +519,7 @@
             "aliasName": ""
         },
         {
-            "index": 45,
+            "index": 43,
             "deviceId": "0060ef350a6c-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "ElkhartLake",
@@ -555,7 +531,7 @@
             "aliasName": ""
         },
         {
-            "index": 46,
+            "index": 44,
             "deviceId": "0060ef35e1e3-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-H5I5QBK",
             "model": "TigerLake",
@@ -567,7 +543,7 @@
             "aliasName": ""
         },
         {
-            "index": 47,
+            "index": 45,
             "deviceId": "0060ef364630-4d0e26dcb3462f05",
             "deviceName": "Centos7",
             "model": "ElkhartLake",
@@ -579,7 +555,7 @@
             "aliasName": ""
         },
         {
-            "index": 48,
+            "index": 46,
             "deviceId": "0060ef3730fd-4d0e26dcb3462f05",
             "deviceName": "ubuntu",
             "model": "ElkhartLake",
@@ -591,7 +567,7 @@
             "aliasName": "inefi_test"
         },
         {
-            "index": 49,
+            "index": 47,
             "deviceId": "0060ef373178-4d0e26dcb3462f05",
             "deviceName": "Server",
             "model": "ElkhartLake",
@@ -603,7 +579,7 @@
             "aliasName": ""
         },
         {
-            "index": 50,
+            "index": 48,
             "deviceId": "0060ef38bac1-4d0e26dcb3462f05",
             "deviceName": "AURA DESKTOP (0060ef38bac1) ",
             "model": "AURA DESKTOP",
@@ -615,7 +591,7 @@
             "aliasName": ""
         },
         {
-            "index": 51,
+            "index": 49,
             "deviceId": "0060ef38dbf1-4d0e26dcb3462f05",
             "deviceName": "POS457",
             "model": "TigerLake",
@@ -627,7 +603,7 @@
             "aliasName": ""
         },
         {
-            "index": 52,
+            "index": 50,
             "deviceId": "0060ef38f08c-4d0e26dcb3462f05",
             "deviceName": "F14N (0060ef38f08c) ",
             "model": "F14N",
@@ -639,7 +615,7 @@
             "aliasName": ""
         },
         {
-            "index": 53,
+            "index": 51,
             "deviceId": "0060ef393609-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-L072CBL",
             "model": "Skylake Client platform",
@@ -651,7 +627,7 @@
             "aliasName": ""
         },
         {
-            "index": 54,
+            "index": 52,
             "deviceId": "0060ef3a3aa4-4d0e26dcb3462f05",
             "deviceName": "RemoteControl-Windows",
             "model": "ElkhartLake",
@@ -663,7 +639,7 @@
             "aliasName": "RemoteControl_Windows"
         },
         {
-            "index": 55,
+            "index": 53,
             "deviceId": "0060ef3aef11-4d0e26dcb3462f05",
             "deviceName": "TM-019815-01",
             "model": "CometLake",
@@ -675,7 +651,7 @@
             "aliasName": ""
         },
         {
-            "index": 56,
+            "index": 54,
             "deviceId": "0060ef3bedea-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-73U1A4P",
             "model": "ElkhartLake",
@@ -687,7 +663,7 @@
             "aliasName": ""
         },
         {
-            "index": 57,
+            "index": 55,
             "deviceId": "0060ef3bf508-4d0e26dcb3462f05",
             "deviceName": "F14N (0060ef3bf508) ",
             "model": "F14N",
@@ -699,7 +675,7 @@
             "aliasName": ""
         },
         {
-            "index": 58,
+            "index": 56,
             "deviceId": "0060ef3c1240-4d0e26dcb3462f05",
             "deviceName": "AURA TABLET",
             "model": "AURA TABLET",
@@ -711,7 +687,7 @@
             "aliasName": ""
         },
         {
-            "index": 59,
+            "index": 57,
             "deviceId": "0060ef3c1241-4d0e26dcb3462f05",
             "deviceName": "AURA DESKTOP",
             "model": "AURA DESKTOP",
@@ -723,7 +699,7 @@
             "aliasName": "jaytest_aura"
         },
         {
-            "index": 60,
+            "index": 58,
             "deviceId": "0060ef3c28cc-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-16LBGB0",
             "model": "ElkhartLake",
@@ -735,7 +711,7 @@
             "aliasName": ""
         },
         {
-            "index": 61,
+            "index": 59,
             "deviceId": "0060ef40681a-4d0e26dcb3462f05",
             "deviceName": "APOS (0060ef40681a) ",
             "model": "APOS",
@@ -747,7 +723,7 @@
             "aliasName": ""
         },
         {
-            "index": 62,
+            "index": 60,
             "deviceId": "0060ef778899-4d0e26dcb3462f05",
             "deviceName": "test-PC",
             "model": "POS350",
@@ -759,7 +735,7 @@
             "aliasName": ""
         },
         {
-            "index": 63,
+            "index": 61,
             "deviceId": "0060ef991002-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-1PKRGJA",
             "model": "CometLake",
@@ -771,7 +747,7 @@
             "aliasName": ""
         },
         {
-            "index": 64,
+            "index": 62,
             "deviceId": "0068eb401195-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-NQLI2PH",
             "model": "HP 240 G7 Notebook PC",
@@ -783,7 +759,7 @@
             "aliasName": ""
         },
         {
-            "index": 65,
+            "index": 63,
             "deviceId": "0522a848f221-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (0522a848f221) ",
             "model": "Pixel 4",
@@ -795,7 +771,7 @@
             "aliasName": ""
         },
         {
-            "index": 66,
+            "index": 64,
             "deviceId": "0800271e247c-4d0e26dcb3462f05",
             "deviceName": "Vbox-010",
             "model": "VirtualBox",
@@ -807,7 +783,7 @@
             "aliasName": ""
         },
         {
-            "index": 67,
+            "index": 65,
             "deviceId": "0800274a07e5-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-EBT31DU",
             "model": "VirtualBox",
@@ -819,7 +795,7 @@
             "aliasName": ""
         },
         {
-            "index": 68,
+            "index": 66,
             "deviceId": "080027569241-4d0e26dcb3462f05",
             "deviceName": "Vbox-009",
             "model": "VirtualBox",
@@ -831,7 +807,7 @@
             "aliasName": ""
         },
         {
-            "index": 69,
+            "index": 67,
             "deviceId": "080027a137a2-4d0e26dcb3462f05",
             "deviceName": "windows10",
             "model": "VirtualBox",
@@ -843,7 +819,7 @@
             "aliasName": ""
         },
         {
-            "index": 70,
+            "index": 68,
             "deviceId": "080027b2f860-4d0e26dcb3462f05",
             "deviceName": "Vbox-005",
             "model": "VirtualBox",
@@ -855,7 +831,7 @@
             "aliasName": ""
         },
         {
-            "index": 71,
+            "index": 69,
             "deviceId": "080027b7abd8-4d0e26dcb3462f05",
             "deviceName": "Dave-Centos7",
             "model": "VirtualBox",
@@ -867,19 +843,7 @@
             "aliasName": ""
         },
         {
-            "index": 72,
-            "deviceId": "e84e58100182-4d0e26dcb3462f05",
-            "deviceName": "SM-X700 (e84e58100182) ",
-            "model": "SM-X700",
-            "os": "Android",
-            "agentVer": "01.01.24",
-            "serialNumber": "R52W4034H1M",
-            "timestamp": 1695628286,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 73,
+            "index": 70,
             "deviceId": "080027bc54ac-4d0e26dcb3462f05",
             "deviceName": "Vbox-008",
             "model": "VirtualBox",
@@ -891,7 +855,7 @@
             "aliasName": ""
         },
         {
-            "index": 74,
+            "index": 71,
             "deviceId": "080027d72134-4d0e26dcb3462f05",
             "deviceName": "Vbox-007",
             "model": "VirtualBox",
@@ -903,19 +867,7 @@
             "aliasName": ""
         },
         {
-            "index": 75,
-            "deviceId": "080027e9111b-4d0e26dcb3462f05",
-            "deviceName": "Vbox-006",
-            "model": "VirtualBox",
-            "os": "Windows",
-            "agentVer": "01.02.26",
-            "serialNumber": "UNKNOWN",
-            "timestamp": 1681178215,
-            "status": "DISCONNECTED",
-            "aliasName": ""
-        },
-        {
-            "index": 76,
+            "index": 72,
             "deviceId": "080027f7c8f4-4d0e26dcb3462f05",
             "deviceName": "Vbox-004",
             "model": "VirtualBox",
@@ -927,7 +879,7 @@
             "aliasName": ""
         },
         {
-            "index": 77,
+            "index": 73,
             "deviceId": "0866436b167b-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (0866436b167b) ",
             "model": "APOS DESKTOP",
@@ -939,7 +891,7 @@
             "aliasName": ""
         },
         {
-            "index": 78,
+            "index": 74,
             "deviceId": "086ac5633ff8-4d0e26dcb3462f05",
             "deviceName": "LAPTOP-II52Q17I",
             "model": "Nitro AN515-57",
@@ -951,7 +903,7 @@
             "aliasName": "Aries PC"
         },
         {
-            "index": 79,
+            "index": 75,
             "deviceId": "09c451912cc8-4d0e26dcb3462f05",
             "deviceName": "PP-9132WLMFYN",
             "model": "PP-9132WLMFYN",
@@ -963,7 +915,7 @@
             "aliasName": ""
         },
         {
-            "index": 80,
+            "index": 76,
             "deviceId": "0c7a15de43a1-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-O22RDSQ",
             "model": "FZG1-5",
@@ -975,7 +927,7 @@
             "aliasName": "24_24_TEST"
         },
         {
-            "index": 81,
+            "index": 77,
             "deviceId": "1014c1d5fc23-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (1014c1d5fc23) ",
             "model": "M2101K6G",
@@ -987,7 +939,7 @@
             "aliasName": ""
         },
         {
-            "index": 82,
+            "index": 78,
             "deviceId": "112b53e6fb9b-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (112b53e6fb9b) ",
             "model": "M2101K6G",
@@ -999,7 +951,7 @@
             "aliasName": ""
         },
         {
-            "index": 83,
+            "index": 79,
             "deviceId": "14dda94f6ece-4d0e26dcb3462f05",
             "deviceName": "CentOS7",
             "model": "BM1AF_BP1AF_BM6AF",
@@ -1011,7 +963,7 @@
             "aliasName": ""
         },
         {
-            "index": 84,
+            "index": 80,
             "deviceId": "191b5fca7a5e-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (191b5fca7a5e) ",
             "model": "M2101K6G",
@@ -1023,7 +975,7 @@
             "aliasName": ""
         },
         {
-            "index": 85,
+            "index": 81,
             "deviceId": "1f315d0867d2-4d0e26dcb3462f05",
             "deviceName": "M2101K6G",
             "model": "M2101K6G",
@@ -1035,7 +987,7 @@
             "aliasName": ""
         },
         {
-            "index": 86,
+            "index": 82,
             "deviceId": "20180ed97834-4d0e26dcb3462f05",
             "deviceName": "X99-i (20180ed97834) ",
             "model": "X99-i",
@@ -1047,7 +999,7 @@
             "aliasName": ""
         },
         {
-            "index": 87,
+            "index": 83,
             "deviceId": "239e18215385-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (239e18215385) ",
             "model": "M2101K6G",
@@ -1059,7 +1011,7 @@
             "aliasName": ""
         },
         {
-            "index": 88,
+            "index": 84,
             "deviceId": "2a6d6b0e05b3-4d0e26dcb3462f05",
             "deviceName": "SM-X700 (2a6d6b0e05b3) ",
             "model": "SM-X700",
@@ -1071,7 +1023,7 @@
             "aliasName": ""
         },
         {
-            "index": 89,
+            "index": 85,
             "deviceId": "2c0da71e2a30-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-CAP9OE6",
             "model": "TigerLake",
@@ -1083,7 +1035,7 @@
             "aliasName": ""
         },
         {
-            "index": 90,
+            "index": 86,
             "deviceId": "2c0da71e3fcf-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-KQNI020",
             "model": "Fusion",
@@ -1095,7 +1047,7 @@
             "aliasName": ""
         },
         {
-            "index": 91,
+            "index": 87,
             "deviceId": "2df2a1ab500a-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (2df2a1ab500a) ",
             "model": "APOS DESKTOP",
@@ -1107,7 +1059,7 @@
             "aliasName": ""
         },
         {
-            "index": 92,
+            "index": 88,
             "deviceId": "3362c8d1a2ce-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (3362c8d1a2ce) ",
             "model": "APOS DESKTOP",
@@ -1119,7 +1071,7 @@
             "aliasName": ""
         },
         {
-            "index": 93,
+            "index": 89,
             "deviceId": "342e7be2f9cf-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (342e7be2f9cf) ",
             "model": "M2101K6G",
@@ -1131,7 +1083,7 @@
             "aliasName": ""
         },
         {
-            "index": 94,
+            "index": 90,
             "deviceId": "34991904a58e-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (34991904a58e) ",
             "model": "Pixel 4",
@@ -1143,7 +1095,7 @@
             "aliasName": ""
         },
         {
-            "index": 95,
+            "index": 91,
             "deviceId": "38ca84c087a2-4d0e26dcb3462f05",
             "deviceName": "aries-pc",
             "model": "Victus by HP Laptop 16-d1xxx",
@@ -1155,7 +1107,7 @@
             "aliasName": ""
         },
         {
-            "index": 96,
+            "index": 92,
             "deviceId": "3f57a26fdef5-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (3f57a26fdef5) ",
             "model": "M2101K6G",
@@ -1167,7 +1119,7 @@
             "aliasName": ""
         },
         {
-            "index": 97,
+            "index": 93,
             "deviceId": "4267bc2585ea-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (4267bc2585ea) ",
             "model": "Pixel 4",
@@ -1179,7 +1131,7 @@
             "aliasName": ""
         },
         {
-            "index": 98,
+            "index": 94,
             "deviceId": "485d605a51d6-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-LI2PC85",
             "model": "K52Jc",
@@ -1191,7 +1143,7 @@
             "aliasName": ""
         },
         {
-            "index": 99,
+            "index": 95,
             "deviceId": "4e7b7a79ca6c-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (4e7b7a79ca6c) ",
             "model": "M2101K6G",
@@ -1203,7 +1155,7 @@
             "aliasName": ""
         },
         {
-            "index": 100,
+            "index": 96,
             "deviceId": "5065f343af67-4d0e26dcb3462f05",
             "deviceName": "inefi-centos7",
             "model": "HP ProDesk 600 G2 MT",
@@ -1215,7 +1167,7 @@
             "aliasName": ""
         },
         {
-            "index": 101,
+            "index": 97,
             "deviceId": "53a752f49f51-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (53a752f49f51) ",
             "model": "APOS DESKTOP",
@@ -1227,7 +1179,7 @@
             "aliasName": ""
         },
         {
-            "index": 102,
+            "index": 98,
             "deviceId": "574b4aad9d7d-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (574b4aad9d7d) ",
             "model": "Pixel 4",
@@ -1239,7 +1191,7 @@
             "aliasName": ""
         },
         {
-            "index": 103,
+            "index": 99,
             "deviceId": "584f54f59142-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (584f54f59142) ",
             "model": "M2101K6G",
@@ -1251,7 +1203,7 @@
             "aliasName": ""
         },
         {
-            "index": 104,
+            "index": 100,
             "deviceId": "60b49ba3b8d7-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (60b49ba3b8d7) ",
             "model": "APOS DESKTOP",
@@ -1263,7 +1215,7 @@
             "aliasName": ""
         },
         {
-            "index": 105,
+            "index": 101,
             "deviceId": "68545a7af328-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-25VFMJB",
             "model": "VivoBook_ASUSLaptop X415EA_X415EA",
@@ -1275,7 +1227,7 @@
             "aliasName": "0920 Demo"
         },
         {
-            "index": 106,
+            "index": 102,
             "deviceId": "6f0bdc3c0ffa-4d0e26dcb3462f05",
             "deviceName": "F14M (6f0bdc3c0ffa) ",
             "model": "F14M",
@@ -1287,7 +1239,7 @@
             "aliasName": ""
         },
         {
-            "index": 107,
+            "index": 103,
             "deviceId": "724ad27da840-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (724ad27da840) ",
             "model": "M2101K6G",
@@ -1299,7 +1251,7 @@
             "aliasName": ""
         },
         {
-            "index": 108,
+            "index": 104,
             "deviceId": "72eafbefbe0c-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (72eafbefbe0c) ",
             "model": "Pixel 4",
@@ -1311,7 +1263,7 @@
             "aliasName": ""
         },
         {
-            "index": 109,
+            "index": 105,
             "deviceId": "76b4d892a3e8-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (76b4d892a3e8) ",
             "model": "APOS DESKTOP",
@@ -1323,7 +1275,7 @@
             "aliasName": ""
         },
         {
-            "index": 110,
+            "index": 106,
             "deviceId": "78fa9548db54-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (78fa9548db54) ",
             "model": "APOS DESKTOP",
@@ -1335,7 +1287,7 @@
             "aliasName": ""
         },
         {
-            "index": 111,
+            "index": 107,
             "deviceId": "80c5f221ff03-4d0e26dcb3462f05",
             "deviceName": "Device-2",
             "model": "KPC6 D36",
@@ -1347,7 +1299,7 @@
             "aliasName": "A test2"
         },
         {
-            "index": 112,
+            "index": 108,
             "deviceId": "8469932b2b3b-4d0e26dcb3462f05",
             "deviceName": "LAPTOP-DIKDIC65",
             "model": "HP Pavilion Gaming Laptop 15-dk2xxx",
@@ -1359,7 +1311,7 @@
             "aliasName": ""
         },
         {
-            "index": 113,
+            "index": 109,
             "deviceId": "888888888788-4d0e26dcb3462f05",
             "deviceName": "DESKTOP-H5I5QBK",
             "model": "CoffeeLake",
@@ -1371,7 +1323,7 @@
             "aliasName": ""
         },
         {
-            "index": 114,
+            "index": 110,
             "deviceId": "91b10cf5bbab-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (91b10cf5bbab) ",
             "model": "APOS DESKTOP",
@@ -1383,7 +1335,7 @@
             "aliasName": ""
         },
         {
-            "index": 115,
+            "index": 111,
             "deviceId": "9259ee265c2b-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (9259ee265c2b) ",
             "model": "APOS DESKTOP",
@@ -1395,7 +1347,7 @@
             "aliasName": ""
         },
         {
-            "index": 116,
+            "index": 112,
             "deviceId": "940c539f5a87-4d0e26dcb3462f05",
             "deviceName": "M2101K6G",
             "model": "M2101K6G",
@@ -1407,7 +1359,7 @@
             "aliasName": ""
         },
         {
-            "index": 117,
+            "index": 113,
             "deviceId": "992839e7fc0f-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (992839e7fc0f) ",
             "model": "Pixel 4",
@@ -1419,7 +1371,7 @@
             "aliasName": ""
         },
         {
-            "index": 118,
+            "index": 114,
             "deviceId": "9cebe83898b8-4d0e26dcb3462f05",
             "deviceName": "AURA TABLET",
             "model": "AURA TABLET",
@@ -1431,7 +1383,7 @@
             "aliasName": ""
         },
         {
-            "index": 119,
+            "index": 115,
             "deviceId": "a1dd98a8883f-4d0e26dcb3462f05",
             "deviceName": "M2101K6G (a1dd98a8883f) ",
             "model": "M2101K6G",
@@ -1443,7 +1395,7 @@
             "aliasName": ""
         },
         {
-            "index": 120,
+            "index": 116,
             "deviceId": "a3db4b03b957-4d0e26dcb3462f05",
             "deviceName": "APOS DESKTOP (a3db4b03b957) ",
             "model": "APOS DESKTOP",
@@ -1455,7 +1407,7 @@
             "aliasName": ""
         },
         {
-            "index": 121,
+            "index": 117,
             "deviceId": "a46f337e7b0f-4d0e26dcb3462f05",
             "deviceName": "Pixel 4 (a46f337e7b0f) ",
             "model": "Pixel 4",

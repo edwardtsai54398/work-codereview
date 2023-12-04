@@ -5,12 +5,14 @@ import { reactive } from 'vue'
 import { computed } from 'vue'
 import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
-import axios from "axios";
+import {useStore} from 'vuex'
+const store = useStore()
 const props = defineProps({
     items: Array,
-    keyField: String,
-    itemSize: Number,
-    tableProps: Array,
+    keyField: String,//id key
+    itemSize: Number,//每列資料高度
+    tableProps: Array,//每個欄位設定
+    // {columnName欄位名稱,dataKey要綁的資料key,index欄位排序可選,width(Number:% String:px),minWidth(px),fixed(Boolean)}
     showCheckBox: {
         type: Boolean,
         default: false
@@ -19,9 +21,25 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    getDataLen: Number,
-    URL: String
+    getDataLen: Number,//batchload每次讀取筆數
 })
+import { defineExpose, defineEmits } from 'vue'
+const emit = defineEmits([
+    "haveCheckedData"/*當有一個以上的勾選資料*/, 
+    "noCheckedData"/*當沒有勾選資料*/, 
+    "scrollDownDataHalf"/*當往下滑到最後一批資料的一半*/, 
+    "scrollUpGetErr" /*當有資料有點變動且往上滑*/])
+
+defineExpose({ 
+    getCheckedData /*返回已勾選資料*/ , 
+    clearChecked/*清除全部勾選*/ 
+})
+
+store.commit("scrollBatchLoad/setProps",{
+    getDataLen:props.getDataLen,
+    keyField:props.keyField,
+})
+
 
 const tablePropsSorted = ref(sortTablePropsByIndex(props.tableProps))
 const tablePropsFixed = ref(tablePropsFiltFixed(tablePropsSorted.value, true))
@@ -158,8 +176,7 @@ function isRowChecked(item) {
 }
 
 //被選取的資料傳到父層事件
-import { defineExpose, defineEmits } from 'vue'
-const emit = defineEmits(["haveCheckedData", "noCheckedData", "scrollDownDataHalf", "scrollUpCheckErr"])
+
 watch(rowDataChecked, (newVal) => {
     if (newVal.length > 0) {
         emit("haveCheckedData")
@@ -176,7 +193,6 @@ function clearChecked() {
     selectAll.value = false
     isIndeterminate.value = false
 }
-defineExpose({ getCheckedData, clearChecked, resetFormerZoneData })
 
 //scrollbar
 //計算scrollbarY高度
@@ -329,7 +345,6 @@ function tooltipOpen(e) {
     else {
         tooltipIsOpen.value = false
     }
-    // console.log(tooltipIsOpen.value);
 }
 function tooltipClose() {
     tooltipIsOpen.value = false
@@ -397,15 +412,12 @@ function setSortTableDataKey(dataKey) {
     }
 }
 const magicKey = ref(0)
-// const renderDone = ref(true)
 
 watch(sortedData.value, () => {
     if (sortable.value) {
         magicKey.value = (magicKey.value > 0) ? -1 : 1
-        // renderDone.value = false
         //重新掛載virtual-scroller
         setTimeout(() => {
-            // renderDone.value = true
             nextTick(() => {
                 mainVirtualScrollY = document.querySelector('.inefi-table-v2__main .vue-recycle-scroller')
                 mainVirtualScrollY.addEventListener("scroll", Yscroll)
@@ -427,7 +439,6 @@ const getNextDataTrigger = ref(1)
 const getFormerDataTrigger = ref(1)
 const alreadyScrollTop = ref(0)
 const scrollZone = ref(1)
-const offset = ref(0)
 
 function scrollDownOrUp() {
     let singleLenH = props.getDataLen * props.itemSize
@@ -438,91 +449,47 @@ function scrollDownOrUp() {
         scrollZone.value = scrollzone
     }
     if (mainVirtualScrollY.scrollTop >= alreadyScrollTop.value) {
-        offset.value = scrollZone.value*props.getDataLen
+        store.commit("scrollBatchLoad/setOffset", scrollZone.value * props.getDataLen)
         if (mainVirtualScrollY.scrollTop >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
             getNextDataTrigger.value = 0
         }
     } else {
-        offset.value = ((scrollZone.value-2)*props.getDataLen<0) ? 0 : (scrollZone.value-2)*props.getDataLen
-        if (mainVirtualScrollY.scrollTop < scrollzone * singleLenH - singleLenH / 2 && getFormerDataTrigger.value) {
-            getFormerDataTrigger.value = 0
-
+        if (store.state.scrollBatchLoad.batchesTrustList.some((boolean)=> !boolean)) {
+            store.commit("scrollBatchLoad/setOffset", (scrollZone.value - 1) * props.getDataLen)
+            if (mainVirtualScrollY.scrollTop < scrollzone * singleLenH - props.itemSize*2 && getFormerDataTrigger.value) {
+                console.log("getFormerDataTrigger");
+                getFormerDataTrigger.value = 0
+            }
         }
     }
     alreadyScrollTop.value = mainVirtualScrollY.scrollTop
 }
 
-let dataNum = 1
-let dataLoadDone = false
-const batchLoadData = async () => {
-    if (!dataLoadDone) {
-        let res
-        if (dataNum <= 3) {
-            res = await axios.get(`${props.URL}data${dataNum}.json`)
-            res = res.data
-            dataNum += 1
-        }else if (dataNum == 4) {
-            // dataLoadDone = true
-            res = await getDataAPI('dataNew.json', offset.value, props.getDataLen)
-            console.log(res);
-        }
-
-            emit("scrollDownDataHalf", {data:res,offset:offset.value})
-    }
-}
 watch(getNextDataTrigger, (newVal) => {
     if (!newVal) {
-        batchLoadData()
+        emit("scrollDownDataHalf")
     }
 }, { deep: true })
 
-
-const batchLoadScrollupCheck = async () => {
-    //若在第2區，抓第一區的資料
-    if(scrollZone.value>=2){
-
-        let startIndex = (scrollZone.value - 2) * props.getDataLen
-        let getData = await getDataAPI('dataNew.json', startIndex, props.getDataLen)
-        emit("scrollUpCheckErr", getData)
-    }
-}
-function resetFormerZoneData(getDataArr = [], items = []) {
-    for(let i=offset.value;i<offset.value+props.getDataLen;i++){
-        items[i]=getDataArr[i-offset.value]
-    }
-    // getDataArr.forEach((data) => {
-    //     items[data.index] = data
-    // })
-    items.forEach((data, index) => {
-        if (index + 1 < items.length) {
-            if (data[props.keyField] === items[index + 1][props.keyField]) {
-                items.splice([index + 1], 1)
-            }
-        }
-    })
-}
 watch(getFormerDataTrigger, (newVal) => {
     if (!newVal) {
         batchLoadScrollupCheck()
     }
 }, { deep: true })
+const batchLoadScrollupCheck = () => {
+    //若在第2區，抓第2區的資料
+    if (!store.state.scrollBatchLoad.batchesTrustList[scrollZone.value-1]) {
+        emit("scrollUpGetErr")
+    }
+}
+
 
 onMounted(() => {
-    batchLoadData()
     mainVirtualScrollY.addEventListener("scroll", scrollDownOrUp)
 })
 onBeforeUnmount(() => {
     mainVirtualScrollY.removeEventListener("scroll", scrollDownOrUp)
 })
-const getDataAPI = async (url, startIndex, dataLen) => {
-    //這裡只是模仿API抓index
-    let res = await axios.get(`${props.URL}${url}`)
-    let getData = res.data.list.filter((data) => {
-        return data.index >= startIndex && data.index < startIndex + dataLen
-    })
-    getData = { list: getData }
-    return getData
-}
 
 const finalData = computed(() => {
     let data = props.items

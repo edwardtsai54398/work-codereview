@@ -15,8 +15,7 @@ import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
 // import { CTooltip } from '@coreui/vue';
 import { nextTick, ref, reactive, watch, onBeforeUnmount } from "vue";
 import { onMounted } from "vue";
-// import { onUpdated } from "vue";
-// import { computed } from "vue";
+import { computed } from "vue";
 import axios from "axios";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
@@ -451,20 +450,20 @@ watch(addDeviceDialogOpen, (newVal) => {
 //批次加載
 const getDataLen = ref(30)
 const URL =ref(`/data/batchload/`)
-const testResult = reactive([])
-function scrollGetNextData(data){
-    console.log(data.data.list);
+const testResult = computed(()=>{
+    let allData = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
+    let emptyLength = allData.filter((data)=>!data.deviceId).length
+    let emptyStartIndex = allData.findIndex((data)=>!data.deviceId)
+    allData.splice(emptyStartIndex,emptyLength)
+    return allData
+})
+store.dispatch("scrollBatchLoad/batchLoadData", URL.value)
 
-    for(let i=data.offset;i<data.offset+getDataLen.value;i++){
-        testResult[i]=data.data.list[i-data.offset]
-    }
-    console.log(testResult);
-    
+function scrollGetNextData(){
+    store.dispatch("scrollBatchLoad/batchLoadData", URL.value)
 }
-function scrollUpCorrectData(data){
-    console.log(data.list);
-    deviceTable.value.resetFormerZoneData(data.list, testResult)
-    console.log(testResult);
+function scrollUpCorrectData(){
+    store.dispatch("scrollBatchLoad/getFormerZoneData", URL.value)
 }
 let testTableProps = [
     {
@@ -602,7 +601,7 @@ let testTableProps = [
                                 :items="testResult" key-field="deviceId" 
                                 :getDataLen="getDataLen" :URL="URL" 
                                 @scrollDownDataHalf="scrollGetNextData"
-                                @scrollUpCheckErr="scrollUpCorrectData"/>
+                                @scrollUpGetErr="scrollUpCorrectData"/>
                             <!-- :table-props="tableProps" 
                                 :items="addDeviceSearchResult" 
                                 key-field="deviceId" -->
