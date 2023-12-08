@@ -10,9 +10,8 @@ import BigCard from "@/components/BigCard.vue";
 import BtnComponent from "@/components/BtnComponent.vue";
 import IconBtn from "@/components/IconBtn.vue";
 import IconCircleBtn from "@/components/IconCircleBtn.vue";
-// import FixedVirtualTable from "@/components/FixedVirtualTable.vue";
 import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
-// import { CTooltip } from '@coreui/vue';
+import ColumnController from "@/components/ColumnController.vue";
 import { nextTick, ref, reactive, watch, onBeforeUnmount } from "vue";
 import { onMounted } from "vue";
 import { computed } from "vue";
@@ -214,16 +213,6 @@ function clearResult() {
     currentNode.value = {};
 }
 
-function canEdit(event, id) {
-    let triggerDeviceDOM = document.getElementById(id);
-    let deviceDOMs = document.querySelectorAll(`.device`);
-    deviceDOMs.forEach((DOM) => {
-        DOM.classList.remove("can_edit");
-    });
-    if (event === "click") {
-        triggerDeviceDOM.classList.add("can_edit");
-    }
-}
 
 const breadCrumbScrollbar = ref();
 function scrollbarToRight() {
@@ -234,45 +223,158 @@ function scrollbarToRight() {
         breadCrumbScrollbar.value.scrollTo({ left: scrollLeft });
     });
 }
-//全選功能
-const selectAll = ref(false)
-const devicesChecked = reactive([])
-const isIndeterminate = ref(false)
-function selectAllChange(value) {
-    devicesChecked.length = 0
-    if (value) {
-        deviceResult.value.forEach((device) => {
-            devicesChecked.push(device)
-        })
-    }
-    isIndeterminate.value = false
+
+//device list
+// let deviceTableProps = [
+//     {
+//         columnName: "Status",
+//         dataKey: "status",
+//         width: 10,
+//         minWidth: '80px',
+//         fixed: true,
+//     },
+//     {
+//         columnName: "Device Name",
+//         dataKey: "deviceName",
+//         width: 40,
+//         minWidth: '200px',
+//     },
+//     {
+//         columnName: "Label",
+//         dataKey: "aliasName",
+//         width: 30,
+//         minWidth: '150px',
+//     },
+//     {
+//         columnName: "Enrolled Status",
+//         dataKey: "deviceState",
+//         width: 20,
+//         minWidth: '130px'
+//     }
+// ]
+let deviceTableProps = [
+    {
+        // columnName: "Status",
+        columnName: "1",
+        dataKey: "status",
+        width: 10,
+        // minWidth: '80px',
+        fixed: true,
+        show: true
+    },
+    {
+        // columnName: "Device Name",
+        columnName: "2",
+        dataKey: "deviceName",
+        // width: 40,
+        width: 10,
+        // minWidth: '200px',
+        fixed: true,
+        show: true
+    },
+    {
+        // columnName: "Label",
+        columnName: "3",
+        dataKey: "aliasName",
+        // width: 30,
+        width: 10,
+        // minWidth: '150px',
+        fixed: true,
+        show: true
+    },
+    {
+        // columnName: "Enrolled Status",
+        columnName: "4",
+        dataKey: "deviceState",
+        // width: 20,
+        width: 10,
+        // minWidth: '130px'
+        fixed: true,
+    },
+    {
+        columnName: "5",
+        dataKey: "deviceState",
+        width: 10,
+        show: true
+    },
+    {
+        columnName: "6",
+        dataKey: "deviceState",
+        width: 10,
+        show: true
+    },
+    {
+        columnName: "7",
+        dataKey: "deviceState",
+        width: 10,
+        show: false
+    },
+    {
+        columnName: "8",
+        dataKey: "deviceState",
+        width: 10,
+        show: true
+    },
+    {
+        columnName: "9",
+        dataKey: "deviceState",
+        width: 10,
+        show: false
+    },
+    {
+        columnName: "10",
+        dataKey: "deviceState",
+        width: 10,
+        show: true
+    },
+]
+const deviceListTableName = ref("deviceListTable")
+const deviceTooltipContent = ref('Double click to edit.')
+
+const devicesChecked = ref([])
+const deviceListTable = ref()
+function getDeviceCheckedData() {
+    devicesChecked.value = deviceListTable.value.getCheckedData()
 }
-function setDeviceIsCheck(item) {
-    if (isDeviceChecked(item)) {
-        devicesChecked.splice(devicesChecked.indexOf(item), 1)
-    } else {
-        devicesChecked.push(item)
-    }
-    if (devicesChecked.length === deviceResult.value.length) {
-        selectAll.value = true
-        isIndeterminate.value = false
-    } else if (devicesChecked.length === 0) {
-        selectAll.value = false
-        isIndeterminate.value = false
-    } else {
-        selectAll.value = false
-        isIndeterminate.value = true
+function canEdit(event, id) {
+    // console.log(event);
+    let triggerDeviceDOM = document.getElementById(id);
+    let deviceDOMs = document.querySelectorAll(`.label`);
+    deviceDOMs.forEach((DOM) => {
+        DOM.classList.remove("can_edit");
+    });
+    if (event === "click") {
+        triggerDeviceDOM.classList.add("can_edit");
     }
 }
-function isDeviceChecked(item) {
-    let devicesCheckedExistDevice = devicesChecked.some((device) => device.deviceId === item.deviceId)
-    return devicesCheckedExistDevice
+//手機版長按編輯標籤
+const touchTimer = ref(null);
+const touchTime = 800;
+function thisTouchStart(index) {
+    touchstart();
+    watch(touchTimer, (newVal) => {
+        if (newVal === "longpress") {
+            canEdit("click", index);
+        }
+    });
 }
+function touchstart() {
+    touchTimer.value = setTimeout(() => {
+        touchTimer.value = "longpress";
+    }, touchTime);
+}
+function clearTouchTimer() {
+    clearTimeout(touchTimer.value);
+    touchTimer.value = null;
+}
+
 
 //add device
 const addDeviceDialogOpen = ref(false)
 const searchAddDeviceText = ref("")
 const activeTab = ref(0)
+const addDeviceCheckedList = ref([])
+const hasNoDeviceChecked = computed(()=>{return addDeviceCheckedList.value.length==0})
 const addDeviceTabs = reactive([
     {
         name: "UNASSIGNED",
@@ -283,6 +385,9 @@ const addDeviceTabs = reactive([
         addAmount: 0
     }
 ])
+function addDeviceCheck(data){
+    addDeviceCheckedList.value = data
+}
 function addDeviceAllOrganize(groupdata = []) {
     let allResult = []
     if (groupdata.length > 0) {
@@ -311,6 +416,11 @@ function searchDevice() {
     })
 }
 const addDeviceSearchResult = ref(addDeviceAllResult)
+
+const addDeviceTooltipName = ref()
+function setTooltipName(e){
+    addDeviceTooltipName.value = e.target.innerText
+}
 
 //RWD
 const windowWidth = ref(window.innerWidth);
@@ -343,140 +453,30 @@ watch(windowWidth, () => {
         searchPopoverWidth.value = windowWidth.value - 20;
     }
 });
-//手機版長按編輯標籤
-const touchTimer = ref(null);
-const touchTime = 800;
-function thisTouchStart(index) {
-    touchstart();
-    watch(touchTimer, (newVal) => {
-        if (newVal === "longpress") {
-            canEdit("click", index);
-        }
-    });
-}
-function touchstart() {
-    touchTimer.value = setTimeout(() => {
-        touchTimer.value = "longpress";
-    }, touchTime);
-}
-function clearTouchTimer() {
-    clearTimeout(touchTimer.value);
-    touchTimer.value = null;
-}
-
-//名稱一起折行
-const deviceName = ref(null)
-const deviceNameWidth = ref(0)
-
-const setNameRectWidth = debounce((entries) => {
-    deviceNameWidth.value = entries[0].contentRect.width
-}, 5)
-const resizeObserver = new ResizeObserver(setNameRectWidth)
-onMounted(() => {
-    resizeObserver.observe(deviceName.value)
-})
-function debounce(func, delay) {
-    let timeoutId;
-
-    return function () {
-        const context = this;
-        const args = arguments;
-
-        clearTimeout(timeoutId);
-
-        timeoutId = setTimeout(function () {
-            func.apply(context, args);
-        }, delay);
-    };
-}
-
-//main, fixed滾動聯動
-let mainVirtualScroll
-let fixedVirtualScroll
-function mainConnectFixedScroll() {
-    fixedVirtualScroll.scrollTop = mainVirtualScroll.scrollTop;
-}
-function fixedConnectMainScroll() {
-    mainVirtualScroll.scrollTop = fixedVirtualScroll.scrollTop;
-}
-onMounted(() => {
-    mainVirtualScroll = document.querySelector('.main-body .vue-recycle-scroller')
-    fixedVirtualScroll = document.querySelector('.fixed-left .vue-recycle-scroller')
-    mainVirtualScroll.addEventListener("scroll", mainConnectFixedScroll)
-    fixedVirtualScroll.addEventListener("scroll", fixedConnectMainScroll)
-})
-onBeforeUnmount(() => {
-    mainVirtualScroll.removeEventListener("scroll", mainConnectFixedScroll);
-    fixedVirtualScroll.removeEventListener("scroll", fixedConnectMainScroll);
-});
-
-// let tableProps = [
-//     {
-//         columnName: "Device Name",
-//         dataKey: "deviceName",
-//         index: 1,
-//         width: 50,
-//         minWidth: "270px",
-//         // fixed: true,
-//     },
-//     {
-//         columnName: "Label",
-//         dataKey: "aliasName",
-//         index: 2,
-//         width: 30,
-//         minWidth: '150px',
-//     },
-//     {
-//         columnName: "Enrolled Status",
-//         dataKey: "Status",
-//         index: 3,
-//         width: 20,
-//         minWidth: '150px'
-//     },
-// ]
-const hasNoDeviceChecked = ref(true)
-const deviceTable = ref()
-function getDeviceCheckedData() {
-    console.log(deviceTable.value.getCheckedData());
-    addDeviceDialogOpen.value = false
-}
-watch(addDeviceDialogOpen, (newVal) => {
-    if (!newVal) {
-        deviceTable.value.clearChecked()
-    }
-})
 
 
-//批次加載
+//batchLoad
 const getDataLen = ref(30)
-const URL =ref(`/data/batchload/`)
-const testResult = computed(()=>{
+const URL = ref(`/data/batchload/`)
+const testResult = computed(() => {
     let allData = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
-    let emptyLength = allData.filter((data)=>!data.deviceId).length
-    let emptyStartIndex = allData.findIndex((data)=>!data.deviceId)
-    allData.splice(emptyStartIndex,emptyLength)
+    let emptyLength = allData.filter((data) => !data.deviceId).length
+    let emptyStartIndex = allData.findIndex((data) => !data.deviceId)
+    allData.splice(emptyStartIndex, emptyLength)
     return allData
 })
-store.dispatch("scrollBatchLoad/batchLoadData", URL.value)
 
-function scrollGetNextData(){
-    store.dispatch("scrollBatchLoad/batchLoadData", URL.value)
-}
-function scrollUpCorrectData(){
-    store.dispatch("scrollBatchLoad/getFormerZoneData", URL.value)
-}
+
 let testTableProps = [
     {
         columnName: "DeviceName",
         dataKey: "deviceName",
+        width: 50,
+        // fixed:true
     },
     {
         columnName: "ID",
         dataKey: "deviceId",
-    },
-    {
-        columnName: "INDEX",
-        dataKey: "index",
     },
 ]
 
@@ -582,7 +582,7 @@ let testTableProps = [
                             </div>
                             <div class="col-6 col-sm-4">
                                 <div class="d-flex align-items-center">
-                                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" @click="deleteDataIndex" />
+                                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                                     <el-input class="ms-3" v-model="searchAddDeviceText" placeholder="Search" @input="searchDevice" />
                                 </div>
                             </div>
@@ -594,17 +594,12 @@ let testTableProps = [
                             </li>
                         </ul>
                         <div class="device-result w-100 py-2 px-3 layout-content">
-                            <InefiVirtualTable 
-                                ref="deviceTable" 
-                                :item-size="54" 
-                                :table-props="testTableProps" 
-                                :items="testResult" key-field="deviceId" 
-                                :getDataLen="getDataLen" :URL="URL" 
-                                @scrollDownDataHalf="scrollGetNextData"
-                                @scrollUpGetErr="scrollUpCorrectData"/>
-                            <!-- :table-props="tableProps" 
-                                :items="addDeviceSearchResult" 
-                                key-field="deviceId" -->
+                            <InefiVirtualTable ref="deviceTable" :item-size="54" 
+                            :table-props="testTableProps" :items="testResult" key-field="deviceId" 
+                            :openIfEllipsis="true" tooltipRef="deviceName" :tooltipContent="addDeviceTooltipName" tooltipTrigger="click"
+                            @tooltipOpen="setTooltipName" :tooltipModel="addDeviceDialogOpen"
+                            :getDataLen="getDataLen" :batchLoad="true" :URL="URL" :showCheckBox="true"
+                            @haveCheckedData="addDeviceCheck"/>
                         </div>
                     </div>
 
@@ -721,7 +716,7 @@ let testTableProps = [
                                         <div class="layout-content">
                                             <div class="header border-b p-3 d-flex align-items-center justify-content-between">
                                                 <span class="d-sm-none fs-4">裝置</span>
-                                                <div class="operate d-flex align-items-center">
+                                                <div class="operate d-flex align-items-center flex-grow-1">
                                                     <div class="" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
                                                         <font-awesome-icon icon="fa-solid fa-folder" />
                                                         <span class="ms-2">移動</span>
@@ -730,77 +725,30 @@ let testTableProps = [
                                                         <font-awesome-icon icon="fa-solid fa-trash" />
                                                         <span class="ms-2">刪除</span>
                                                     </div>
+                                                    <div class="ms-auto">
+                                                        <ColumnController :tableNameRef="deviceListTableName"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="layout-content">
-                                                <div class="main layout-content overflow-auto scrollbar-style">
-                                                    <div class="main-body layout-content" style="min-width: 650px;">
-                                                        <DynamicScroller class="w-100 d-none" :items="deviceResult" :min-item-size="36" key-field="deviceId">
-                                                            <template #before>
-                                                                <div class="table-columns border-b d-flex align-items-center py-2 px-3">
-                                                                    <el-checkbox class="px-2" v-model="selectAll" :indeterminate="isIndeterminate" @change="selectAllChange" />
-                                                                    <span class="flex-1 ms-3">狀態</span>
-                                                                    <div class="flex-4" ref="deviceName">名稱</div>
-                                                                    <div class="flex-3">
-                                                                        <span class="me-2">標籤</span>
-                                                                        <el-tooltip content="Double click to edit." placement="top-start">
-                                                                            <font-awesome-icon icon="fa-solid fa-circle-info" style="color: #d6d6d6;" size="sm" />
-                                                                        </el-tooltip>
-                                                                    </div>
-                                                                    <div class="flex-2">註冊狀態</div>
-                                                                </div>
-                                                            </template>
-                                                            <template v-slot="{ item, index, active }">
-                                                                <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.deviceName]" :data-index="index">
-                                                                    <div class="device d-flex align-items-center py-2 px-3 border-b" :id="item.deviceId">
-                                                                        <el-checkbox class="px-2" @change="setDeviceIsCheck(item)" :id="item.deviceId" :model-value="isDeviceChecked(item)" />
-                                                                        <div class="flex-1 ms-3"><span></span></div>
-                                                                        <div class="flex-4">
-                                                                            <span class="mb-2">{{ item.deviceName }}</span>
-                                                                            <span class="d-flex d-sm-none">
-                                                                                <span class="me-2 fs-7">狀態</span>
-                                                                                <span class="me-2 fs-7">|</span>
-                                                                                <span class="fs-7">{{ item.deviceState === "REGISTERED" ? "已註冊" : "未註冊" }}</span>
-                                                                            </span>
-                                                                        </div>
-                                                                        <div class="flex-3 d-flex align-items-center" @dblclick="canEdit('click', item.deviceId)" @touchstart="thisTouchStart(item.deviceId)" @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
-                                                                            <div class="alias_name">
-                                                                                {{ item.aliasName }}
-                                                                            </div>
-                                                                            <div class="alias_input">
-                                                                                <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="flex-2">
-                                                                            <span>{{ item.deviceState === "REGISTERED" ? "已註冊" : "未註冊" }}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </DynamicScrollerItem>
-                                                            </template>
-                                                        </DynamicScroller>
-                                                    </div>
-                                                </div>
-
-                                                <div class="fixed-left layout-content scrollbar-none w-50" style="position: absolute;top: 0;right: 100%;transform: translateX(46px);z-index: 20;background-color: #fff;">
-                                                    <DynamicScroller class="w-100" :items="deviceResult" :min-item-size="50" key-field="deviceId">
-                                                        <template #before>
-                                                            <div class="table-columns border-b d-flex align-items-center justify-content-end py-2 ps-3">
-                                                                <el-checkbox class="px-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
+                                                <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" 
+                                                :items="deviceResult" key-field="deviceId" :showCheckBox="true"
+                                                tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" tooltipRef="aliasName"
+                                                @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []"
+                                                :table-name="deviceListTableName">
+                                                    <template #aliasName="{item}">
+                                                        <div class="label px-2" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" @touchstart="thisTouchStart(item.deviceId)" 
+                                                            @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
+                                                            <div class="alias_name">{{ item.aliasName }}</div>
+                                                            <div class="alias_input">
+                                                                <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
                                                             </div>
-                                                        </template>
-                                                        <template v-slot="{ item, active }">
-                                                            <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.deviceName]">
-                                                                <div class="d-flex align-items-center flex-row-reverse py-2 border-b" :id="item.deviceId">
-                                                                    <div class="ps-3">
-                                                                        <el-checkbox class="px-2" @change="setDeviceIsCheck(item)" :id="item.deviceId" :model-value="isDeviceChecked(item)" />
-                                                                    </div>
-                                                                    <div :style="{ width: `${deviceNameWidth}px` }">{{ item.deviceName }}</div>
-                                                                </div>
-                                                            </DynamicScrollerItem>
-                                                        </template>
-                                                    </DynamicScroller>
-
-                                                </div>
+                                                        </div>
+                                                    </template>
+                                                    <template #deviceState="{item}">
+                                                        {{ item.deviceState === "REGISTERED" ? "已註冊" : "未註冊" }}
+                                                    </template>
+                                                </InefiVirtualTable>
                                             </div>
                                         </div>
                                     </pane>
@@ -940,7 +888,11 @@ let testTableProps = [
     cursor: pointer;
 }
 
-.device {
+.label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
     .alias_name {
         display: block;
     }
