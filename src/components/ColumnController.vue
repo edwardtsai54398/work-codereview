@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { unref } from 'vue'
+import { onMounted } from 'vue'
 import { computed } from 'vue'
+// import { watch } from 'vue'
 import { defineProps } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
@@ -9,24 +10,30 @@ const props = defineProps({
     tableNameRef: {
         type: String,
         default: "inefiVirtualTable"
-    },
-    panel: {
+    },//對應要控制的tablem元件的字串
+    direction: {
         type: String,
-
+        default: "rtl"
+    },//drawer方向
+    panelSize: {
+        type: Number || String,
+        default: 300
     }
 })
 
-import { ClickOutside as vClickOutside } from 'element-plus';
-const panelTrigger = ref()
-const popoverPanel = ref()
-const onClickOutside = () => {
-    if (unref(popoverPanel).popoverPanel) {
-        unref(popoverPanel).popoverPanel.hide();
-    }
-};
+const panelOpen = ref(false)
+
+//切換頁面tab
+const activeTab = computed(() => {
+    return [props.tableNameRef] in store.state.columnControl.activeTab ? store.state.columnControl.activeTab[props.tableNameRef] : undefined
+})
 
 const columnList = computed(() => {
-    return store.state.columnControl.tables[props.tableNameRef] ? store.state.columnControl.tables[props.tableNameRef] : []
+    let columnListRefernce = store.state.columnControl.tables[props.tableNameRef] ? store.state.columnControl.tables[props.tableNameRef] : []
+    if (activeTab.value) {
+        columnListRefernce = store.state.columnControl.tables[props.tableNameRef][activeTab.value]
+    }
+    return columnListRefernce
 })
 
 const columnNoFixed = computed(() => {
@@ -38,10 +45,10 @@ const columnNoShow = computed(() => {
 function switchShow(columnName) {
     store.commit("columnControl/setColumnShow", {
         tableName: props.tableNameRef,
-        columnName
+        columnName,
     })
+    saveCustomColumnsSetting()
 }
-
 import draggable from 'vuedraggable'
 const drag = ref(false)
 const dragOptions = computed(() => {
@@ -51,90 +58,168 @@ const dragOptions = computed(() => {
         sort: true
     }
 })
-
-function onEnd() {
-    // store.commit("columnControl/setColumnNewOrder", {
-    //     tableName: props.tableNameRef,
-    //     e
-    // })
-    drag.value = false
-}
 function Onchange(e) {
-    if(e.moved){
+    if (e.moved) {
         store.commit("columnControl/setMovedNewOrder", {
             tableName: props.tableNameRef,
-            e:e.moved
+            e: e.moved
         })
 
-    }else if(e.added){
+    } else if (e.added) {
         store.commit("columnControl/setAddedNewOrder", {
             tableName: props.tableNameRef,
-            e:e.added
+            e: e.added
         })
     }
+    saveCustomColumnsSetting()
 }
+
+//欄位全部顯示
+function showAllColumns() {
+    store.commit("columnControl/setAllColumnsShow", {
+        tableName: props.tableNameRef
+    })
+    saveCustomColumnsSetting()
+}
+//欄位回到初始設定
+function resetColumn() {
+    store.commit("columnControl/resetColumn", {
+        tableName: props.tableNameRef
+    })
+    saveCustomColumnsSetting()
+}
+
+function saveCustomColumnsSetting() {
+    let data = [
+        { tables: store.state.columnControl.tables },
+        { oringinSetting: store.state.columnControl.oringinSetting }
+    ]
+    localStorage.setItem("customizeColumns", JSON.stringify(data))
+}
+onMounted(() => {
+    let storage = JSON.parse(localStorage.getItem("customizeColumns"))
+    if (storage) {
+        for (const [tableName, columns] of Object.entries(storage[1].oringinSetting)) {
+            if (!Array.isArray(columns)) {
+                for (const [tabName, subColumns] of Object.entries(columns)) {
+                    store.commit("columnControl/setActiveTab", {
+                        tableName,
+                        tab: tabName
+                    })
+                    store.commit("columnControl/saveColumnSortedOringinal", {
+                        tableName,
+                        columns: subColumns
+                    });
+                }
+            } else {
+                store.commit("columnControl/saveColumnSortedOringinal", {
+                    tableName,
+                    columns
+                });
+            }
+        }
+        for (const [tableName, columns] of Object.entries(storage[0].tables)) {
+            if (!Array.isArray(columns)) {
+                for (const [tabName, subColumns] of Object.entries(columns)) {
+                    store.commit("columnControl/setActiveTab", {
+                        tableName,
+                        tab: tabName
+                    })
+                    store.commit("columnControl/setColumnSortedByFixed", {
+                        tableName,
+                        columns: subColumns
+                    });
+                }
+                store.commit("columnControl/setActiveTab", {
+                        tableName,
+                        tab: Object.keys(columns)[0]
+                })
+            } else {
+                store.commit("columnControl/setColumnSortedByFixed", {
+                    tableName,
+                    columns
+                });
+            }
+        }
+
+    }
+
+})
+
 </script>
 <template>
     <span class="column-controller">
-        <span ref="panelTrigger" v-click-outside="onClickOutside">
-            <slot name="toggleBtn">
-                <el-button>Column Controller</el-button>
+        <span @click="panelOpen = !panelOpen">
+            <slot name="btn">
+                <el-button>
+                    <span class="d-sm-none">
+                        <font-awesome-icon icon="fa-solid fa-table-columns" />
+                    </span>
+                    <span class="d-none d-sm-inline-block">Customize Columns</span>
+                </el-button>
             </slot>
         </span>
-        <el-popover ref="popoverPanel" :virtual-ref="panelTrigger" virtual-triggering placement="bottom" 
-        :width="200" trigger="click" popper-class="popover-panel">
-            <div class="p-2 px-3 border-b">Fixed Columns</div>
-            <li class="column-controller__item-show py-4 px-3" v-if="!(columnList.some((column)=>column.fixed))"></li>
-            <draggable v-model="columnList" tag="ul" :group="{ name: 'show',put:true }" :item-key="`order`" @change="Onchange" :animation="250">
+        <el-drawer v-model="panelOpen" :direction="panelDirection" :size="size">
+            <div class="p-2 px-3 border-b fw-bold">Fixed Columns</div>
+            <div class="column-controller__item-show py-4 px-3" v-if="!(columnList.some((column) => column.fixed))"></div>
+            <draggable v-model="columnList" tag="ul" :group="{ name: 'show', put: true }" :item-key="`order`" @change="Onchange" :animation="250">
                 <template #item="{ element }">
-                    <li class="column-controller__item-show py-2 px-3" v-if="element.fixed">
-                        <button class="me-2 dragHandle">
-                            <font-awesome-icon icon="fa-solid fa-bars" color="#ccc"/>
-                        </button>
-                        <span class="me-auto">{{ element.columnName }}</span>
+                    <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse" v-if="element.fixed">
                         <button @click="switchShow(element.columnName)">
-                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red"/>
+                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red" />
                         </button>
-                    </li>
-                </template>
-            </draggable>
-            <div class="column-devide_line p-1"></div>
-            <draggable v-model="columnNoFixed" tag="ul" @start="drag = true" @end="onEnd" @change="Onchange" :item-key="`order`" 
-                v-bind="dragOptions" :group="{ name: 'show',put:true }">
-                <template #item="{ element }">
-                    <li class="column-controller__item-show py-2 px-3" v-if="element.show && !element.fixed">
-                        <button class="me-2 dragHandle">
+                        <span class="ms-auto me-sm-auto ms-sm-0">{{ element.columnName }}</span>
+                        <button class="ms-2 ms-sm-0 me-sm-2 dragHandle">
                             <font-awesome-icon icon="fa-solid fa-bars" color="#ccc" />
                         </button>
-                        <span class="me-auto">{{ element.columnName }}</span>
+                    </li>
+                </template>
+            </draggable>
+            <div class="p-2 border-b d-flex justify-content-between">
+                <span class="fw-bold">Shown Columns</span>
+                <button style="color:#29BFED" @click="showAllColumns">Show all</button>
+            </div>
+            <div class="column-controller__item-show py-4 px-3" v-if="!(columnList.some((column) => column.show && !column.fixed))"></div>
+            <draggable v-model="columnNoFixed" tag="ul" @start="drag = true" @end="drag = false" @change="Onchange" :item-key="`order`" v-bind="dragOptions" :group="{ name: 'show', put: true }">
+                <template #item="{ element }">
+                    <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse" v-if="element.show && !element.fixed">
                         <button @click="switchShow(element.columnName)">
-                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red"/>
+                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red" />
+                        </button>
+                        <span class="ms-auto me-sm-auto ms-sm-0">{{ element.columnName }}</span>
+                        <button class="ms-2 me-sm-2 ms-sm-0 dragHandle">
+                            <font-awesome-icon icon="fa-solid fa-bars" color="#ccc" />
                         </button>
                     </li>
                 </template>
             </draggable>
-            <div class="column-devide_line p-1"></div>
+            <div class="p-2 border-b fw-bold">Hidden Columns</div>
             <ul class="column-controller__hide-list">
-                <li class="column-controller__item-hide py-2 px-3" v-for="(column, index) in columnNoShow" :key="`${column.columnName}-${index}`">
-                    <span>{{ column.columnName }}</span>
+                <li class="column-controller__item-hide py-2 px-3 flex-sm-row-reverse" v-for="(column, index) in columnNoShow" :key="`${column.columnName}-${index}`">
                     <button @click="switchShow(column.columnName)">
-                        <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" color="#75FFE5"/>
+                        <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" color="rgb(35, 217, 151)" />
                     </button>
+                    <span>{{ column.columnName }}</span>
                 </li>
             </ul>
-        </el-popover>
+            <template #footer>
+                <el-button style="color:#29BFED" @click="resetColumn">
+                    <font-awesome-icon icon="fa-solid fa-rotate-right" />
+                    <span class="ms-2">Reset</span>
+                </el-button>
+            </template>
+        </el-drawer>
     </span>
 </template>
 <style lang="scss">
 @import "@/assets/scss/all.scss";
-.el-popover.popover-panel{
-    padding: 0;
-    border-radius: 12px;
+
+.column-controller {
+    .el-drawer__header {
+        margin-bottom: 0;
+    }
 }
-.column-devide_line{
-    border-bottom: 1px solid #bbb;
-    background-color: #eee;
-}
+
 .column-controller__item-show {
     display: flex;
     align-items: center;
@@ -148,8 +233,5 @@ function Onchange(e) {
     align-items: center;
     @extend .border-b;
 
-    &:last-child {
-        border-bottom: none;
-    }
 }
 </style>

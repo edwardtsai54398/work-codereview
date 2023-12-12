@@ -258,7 +258,7 @@ let deviceTableProps = [
         columnName: "1",
         dataKey: "status",
         width: 10,
-        // minWidth: '80px',
+        minWidth: '80px',
         fixed: true,
         show: true
     },
@@ -268,7 +268,7 @@ let deviceTableProps = [
         dataKey: "deviceName",
         // width: 40,
         width: 10,
-        // minWidth: '200px',
+        minWidth: '120px',
         fixed: true,
         show: true
     },
@@ -278,7 +278,7 @@ let deviceTableProps = [
         dataKey: "aliasName",
         // width: 30,
         width: 10,
-        // minWidth: '150px',
+        minWidth: '150px',
         fixed: true,
         show: true
     },
@@ -288,48 +288,69 @@ let deviceTableProps = [
         dataKey: "deviceState",
         // width: 20,
         width: 10,
-        // minWidth: '130px'
+        minWidth: '100px',
         fixed: true,
     },
     {
         columnName: "5",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: true
     },
     {
         columnName: "6",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: true
     },
     {
         columnName: "7",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: false
     },
     {
         columnName: "8",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: true
     },
     {
         columnName: "9",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: false
     },
     {
         columnName: "10",
         dataKey: "deviceState",
         width: 10,
+        minWidth: '200px',
         show: true
     },
 ]
 const deviceListTableName = ref("deviceListTable")
 const deviceTooltipContent = ref('Double click to edit.')
+let columnsExcept = [
+    {
+        tab: "MAIN",
+        except: ["1", "2"]
+    },
+    {
+        tab: "UNASSIGNED",
+        except: ["4","5", "6","7"]
+    },
+    {
+        tab: "INACTIVE",
+        except: ["8","9"]
+    }
+]
+const deviceListActiveTab = ref("MAIN")
 
 const devicesChecked = ref([])
 const deviceListTable = ref()
@@ -458,14 +479,6 @@ watch(windowWidth, () => {
 //batchLoad
 const getDataLen = ref(30)
 const URL = ref(`/data/batchload/`)
-const testResult = computed(() => {
-    let allData = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
-    let emptyLength = allData.filter((data) => !data.deviceId).length
-    let emptyStartIndex = allData.findIndex((data) => !data.deviceId)
-    allData.splice(emptyStartIndex, emptyLength)
-    return allData
-})
-
 
 let testTableProps = [
     {
@@ -595,7 +608,7 @@ let testTableProps = [
                         </ul>
                         <div class="device-result w-100 py-2 px-3 layout-content">
                             <InefiVirtualTable ref="deviceTable" :item-size="54" 
-                            :table-props="testTableProps" :items="testResult" key-field="deviceId" 
+                            :table-props="testTableProps" key-field="deviceId" 
                             :openIfEllipsis="true" tooltipRef="deviceName" :tooltipContent="addDeviceTooltipName" tooltipTrigger="click"
                             @tooltipOpen="setTooltipName" :tooltipModel="addDeviceDialogOpen"
                             :getDataLen="getDataLen" :batchLoad="true" :URL="URL" :showCheckBox="true"
@@ -725,7 +738,10 @@ let testTableProps = [
                                                         <font-awesome-icon icon="fa-solid fa-trash" />
                                                         <span class="ms-2">刪除</span>
                                                     </div>
-                                                    <div class="ms-auto">
+                                                    <div class="ms-auto d-flex">
+                                                        <el-button @click="deviceListActiveTab = 'MAIN'">MAIN</el-button>
+                                                        <el-button @click="deviceListActiveTab = 'UNASSIGNED'">UNASSIGNED</el-button>
+                                                        <el-button @click="deviceListActiveTab = 'INACTIVE'">INACTIVE</el-button>
                                                         <ColumnController :tableNameRef="deviceListTableName"/>
                                                     </div>
                                                 </div>
@@ -735,7 +751,7 @@ let testTableProps = [
                                                 :items="deviceResult" key-field="deviceId" :showCheckBox="true"
                                                 tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" tooltipRef="aliasName"
                                                 @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []"
-                                                :table-name="deviceListTableName">
+                                                :table-name="deviceListTableName" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab">
                                                     <template #aliasName="{item}">
                                                         <div class="label px-2" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" @touchstart="thisTouchStart(item.deviceId)" 
                                                             @touchmove="clearTouchTimer" @touchend="clearTouchTimer">

@@ -5,14 +5,14 @@ import { SortDown } from "@element-plus/icons-vue";
 import { useStore } from 'vuex'
 const store = useStore()
 const props = defineProps({
-    items: Array,
+    items: Array,//使用batchLoad則不用給，資料會從vuex抓
     keyField: String,//id key
     itemSize: Number,//每列資料高度
     tableProps: Array,//每個欄位設定
     // {columnName欄位名稱,
     //     dataKey要綁的資料key,
     //     width(Number(%) String(px)),
-    //     minWidth(String(px)),
+    //     minWidth(String(px)，fixed的話建議要寫),
     //     fixed(Boolean),
     //     show(Boolean),}
     showCheckBox: {
@@ -29,8 +29,8 @@ const props = defineProps({
         type: Boolean,
         default: false
     },//true的話，有ellipsis才會顯現tooltip
-    tooltipModel:{
-        type:Boolean,
+    tooltipModel: {
+        type: Boolean,
         defalut: true
     },//正常情況tooltip會依trigger開關，其他情況如:視窗關閉，可透過父組件把tooltip關掉
     sortable: {
@@ -47,6 +47,11 @@ const props = defineProps({
     },
     URL: String,//API網址
     tableName: String,//如果有column controller，要傳入相同的字串
+    columnsExcept: {
+        type: Array,
+        default: () => []
+    },//{tab:頁面名稱,except:[columnName...]該頁面不要的欄位名稱}
+    activeTab: String//現在的tab
 })
 import { defineExpose, defineEmits } from 'vue'
 const emit = defineEmits([
@@ -60,76 +65,118 @@ defineExpose({
     clearChecked/*清除全部勾選*/
 })
 
-store.commit("scrollBatchLoad/setProps", {
-    batchLoad: props.batchLoad,
-    getDataLen: props.getDataLen,
-    keyField: props.keyField,
+//過濾不要的欄位
+const activeTab = computed(() => { return props.activeTab })
+const useSwitchTab = computed(() => { return (props.columnsExcept.length > 0 && props.activeTab) })
+const tableProps = computed(() => {
+    let columnKeep = props.tableProps
+    if (useSwitchTab.value) {
+        columnKeep = props.tableProps.filter((column) => {
+            let tabExpectList = props.columnsExcept.find((except) => except.tab === activeTab.value)
+            return !tabExpectList.except.some((except) => except === column.columnName)
+        })
+    }
+    return columnKeep
+})
+//切換資料表格
+watch(activeTab, (newVal) => {
+    if (props.tableName) {
+        let columns = JSON.parse(JSON.stringify(tableProps.value))
+        store.commit("columnControl/setActiveTab", {
+            tableName: props.tableName,
+            tab: newVal
+        })
+        store.commit("columnControl/saveColumnSortedOringinal", {
+            tableName: props.tableName,
+            columns
+        })
+    }
+}, { deep: true, immediate: true })
+
+//整理表格
+import columnSortedByFixed from '@/store/columnControl/columnSortedByFixed.js'
+
+const tablePropsSorted = computed(() => {
+    let referenceTableProps = columnSortedByFixed(tableProps.value)
+    if (props.tableName) {
+        if (useSwitchTab.value) {
+            referenceTableProps = store.state.columnControl.tables[props.tableName][props.activeTab]
+        } else {
+            referenceTableProps = store.state.columnControl.tables[props.tableName]
+        }
+    }
+    return referenceTableProps
+})
+const tablePropsFixed = computed(() => {
+    return tablePropsSorted.value.filter((column) => { return column.fixed })
 })
 
-store.commit("columnControl/setColumnSortedByFixed", {
-    tableName: props.tableName, 
-    props: props.tableProps
-})
-const tablePropsSorted = computed(()=>{
-    return store.state.columnControl.tables[props.tableName]
-})
-const tablePropsFixed = computed(()=>{
-    return tablePropsSorted.value.filter((column) => {return column.fixed})
+const items = computed(() => {
+    let items = props.items
+    if (props.batchLoad) {
+        items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
+        let emptyLength = items.filter((data) => !data[props.keyField]).length
+        let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
+        items.splice(emptyStartIndex, emptyLength)
+    }
+    return items
 })
 
 function getColumnWidth(column) {
-    if(!column.show){
+    if (!column.show) {
         return '0px'
-    }else if (typeof column.width === 'string') {
+    } else if (typeof column.width === 'string') {
         return column.width
     } else if (typeof column.width === 'number') {
         if (column.fixed) {
-            let checkboxWidth = 46
-            if (("width" in column)) {
-                return `${(tableMainWidth.value - checkboxWidth) * column.width / 100}px`
-            } else if (!("width" in column)) {
-                console.log("Column with 'fixed:true' should have 'width' attribute")
-                console.error("Column with 'fixed:true' should have 'width' attribute")
-            }
+            return getColumnMinWidth(column)
+        } else if (ifWidthTotalNo100()) {
+            return `${column.width + ifWidthTotalNo100()}%`
         } else {
             return `${column.width}%`
         }
-        
-    } else if (!column.width) {
-        let columnsWithWidth = tablePropsSorted.value.filter((column) => {
-            return column.width
-        })
+    }
+}
+function getColumnMinWidth(column) {
+    if (!column.show) {
+        return '0px'
+    }
+    if ("minWidth" in column) {
+        return column.minWidth
+    } else if (column.fixed) {
+
+        if ("width" in column) {
+            return `${tableMainWidth.value * (column.width + ifWidthTotalNo100()) / 100}px`
+        } else {
+            return `${tableMainWidth.value * 0.1}px`
+        }
+    } else {
+        return '0px'
+    }
+}
+
+function ifWidthTotalNo100() {
+    let columnShowList = tablePropsSorted.value.filter((column) => column.show)
+    if (columnShowList.length < tablePropsSorted.value.length) {
         let sum = 0
-        columnsWithWidth.forEach((column) => {
+        columnShowList.forEach((column) => {
             sum += column.width
         })
         let widthRemain = 100 - sum
-        let widthRemainMinus = widthRemain / (tablePropsSorted.value.length - columnsWithWidth.length)
-        let widthRemainAverage = 100 / tablePropsSorted.value.length
+        let singleRemain = widthRemain / (columnShowList.length)
 
-        if (columnsWithWidth.length > 0) {
-            return `${widthRemainMinus}%`
-        } else {
+        return singleRemain
 
-            return `${widthRemainAverage}%`
-        }
-
+    } else {
+        return 0
     }
 }
 const calcMainMinWidth = computed(() => {
     let allWidth = ''
     tablePropsSorted.value.forEach((column) => {
-        if(column.show){
-            let str = ''
-            if ("minWidth" in column) {
-                str = column.minWidth
-            } else if (column.fixed) {
-                str = getColumnWidth(column)
-            } else {
-                str = '120px'
-            }
+        if (column.show) {
+            let str = getColumnMinWidth(column)
             allWidth += `${str} + `
-
         }
     })
     if (props.showCheckBox) {
@@ -146,7 +193,7 @@ const isIndeterminate = ref(false)
 function selectAllChange(value) {
     rowDataChecked.length = 0
     if (value) {
-        props.items.forEach((item) => {
+        items.value.forEach((item) => {
             rowDataChecked.push(item)
         })
     }
@@ -158,7 +205,7 @@ function setRowIsCheck(item) {
     } else {
         rowDataChecked.push(item)
     }
-    if (rowDataChecked.length === props.items.length) {
+    if (rowDataChecked.length === items.value.length) {
         selectAll.value = true
         isIndeterminate.value = false
     } else if (rowDataChecked.length === 0) {
@@ -194,80 +241,122 @@ function clearChecked() {
 }
 
 //scrollbar
+//監聽容器
+const tableMain = ref(null)
+const tableMainInner = ref(null)
+const fixedLeft = ref(null)
+const tableMainWidth = ref(0)
+const tableMainHeight = ref(0)
+const tableMainInnerWidth = ref(0)
+const fixedLeftWidth = ref(0)
+
+const watchTableMain = debounce((entries) => {
+    tableMainWidth.value = entries[0].contentRect.width
+    tableMainHeight.value = entries[0].contentRect.height
+}, 5)
+const getTableInnerWidth = debounce((entries) => {
+    tableMainInnerWidth.value = entries[0].contentRect.width
+    compareTableInnerWider()
+}, 5)
+const getfixedLeftWidth = debounce((entries) => {
+    fixedLeftWidth.value = entries[0].contentRect.width
+}, 5)
+
+const tableMainResizeObserver = new ResizeObserver(watchTableMain)
+const tableMainInnerResizeObserver = new ResizeObserver(getTableInnerWidth)
+const fixedLeftResizeObserver = new ResizeObserver(getfixedLeftWidth)
+
+onMounted(() => {
+    tableMainResizeObserver.observe(tableMain.value)
+    tableMainInnerResizeObserver.observe(tableMainInner.value)
+    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
+        fixedLeftResizeObserver.observe(fixedLeft.value)
+    }
+})
+
+//計算scrollX寬度
+const scrollXShow = ref(false)
+const scrollXWidth = computed(() => {
+    let width
+    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
+        width = tableMainWidth.value - fixedLeftWidth.value
+    } else {
+        width = tableMainWidth.value
+    }
+    return width
+})
+const scrollBarXWidth = computed(() => { return (tableMainWidth.value / tableMainInnerWidth.value) * scrollXWidth.value })
+nextTick(() => {
+    tableMainWidth.value = tableMain.value.offsetWidth
+    tableMainInnerWidth.value = tableMainInner.value.offsetWidth
+    compareTableInnerWider()
+})
+function compareTableInnerWider() {
+    if (tableMainWidth.value < tableMainInnerWidth.value) {
+        //內層比外層大了
+        scrollXShow.value = true
+    } else {
+        scrollXShow.value = false
+    }
+}
 //計算scrollbarY高度
 const scrollYTop = ref(props.itemSize)
-const tableMainHeight = ref(0)
-const scrollYHeight = computed(()=>{return tableMainHeight.value - scrollYTop.value})
+const scrollYHeight = computed(() => { return tableMainHeight.value - scrollYTop.value })
 const scrollYBarHeight = computed(() => {
-    return scrollYHeight.value / (props.itemSize * props.items.length) * scrollYHeight.value
+    return scrollYHeight.value / (props.itemSize * items.value.length) * scrollYHeight.value
 })
 setTimeout(() => {
     tableMainHeight.value = tableMain.value.offsetHeight
     scrollYHeight.value = tableMainHeight.value - scrollYTop.value
 }, 1)
-
-//計算scrollX寬度
-const tableMain = ref(null)
-const tableMainWidth = ref(null)
-const tableMainInner = ref(null)
-const tableMainInnerWidth = ref(null)
-const fixedLeft = ref(null)
-const fixedLeftWidth = ref(0)
-const scrollXShow = ref(false)
-const scrollXWidth = ref(0)
-const scrollBarXWidth = ref(0)
-
-nextTick(() => {
-    tableMainWidth.value = tableMain.value.offsetWidth
-    tableMainInnerWidth.value = tableMainInner.value.offsetWidth
-    if (tableMainWidth.value < tableMainInnerWidth.value) {
-        scrollXShow.value = true
-        calcScrollbarXSize()
-    }
-})
-
-const getfixedLeftWidth = debounce((entries) => {
-    fixedLeftWidth.value = entries[0].contentRect.width
-}, 5)
-const getTableInnerWidth = debounce((entries) => {
-    tableMainInnerWidth.value = entries[0].contentRect.width
-}, 5)
-const compareTableInnerWider = debounce((entries) => {
-    tableMainWidth.value = entries[0].contentRect.width
-    if (tableMainWidth.value < tableMainInnerWidth.value) {
-        //內層比外層大了
-        scrollXShow.value = true
-        calcScrollbarXSize()
-    } else {
-        scrollXShow.value = false
-    }
-}, 5)
-const fixedLeftResizeObserver = new ResizeObserver(getfixedLeftWidth)
-const tableMainInnerResizeObserver = new ResizeObserver(getTableInnerWidth)
-const tableMainResizeObserver = new ResizeObserver(compareTableInnerWider)
-
+//scrollbar 拖曳
+const scrollbarYTranslate = ref(0)
+const scrollbarXTranslate = ref(0)
+const mouseXDown = ref(false)
+const mouseYDown = ref(false)
+const mouseOriginal = reactive({ x: 0, y: 0 })
 onMounted(() => {
-    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-        fixedLeftResizeObserver.observe(fixedLeft.value)
-    }
-    tableMainInnerResizeObserver.observe(tableMainInner.value)
-    tableMainResizeObserver.observe(tableMain.value)
+    window.addEventListener("mouseup", mouseUp)
+    window.addEventListener("mousemove", mouseDragX)
+    window.addEventListener("mousemove", mouseDragY)
+})
+onBeforeUnmount(() => {
+    window.removeEventListener("mouseup", mouseUp)
+    window.removeEventListener("mousemove", mouseDragX)
+    window.removeEventListener("mousemove", mouseDragY)
 })
 
-function calcScrollbarXSize() {
-    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-        scrollXWidth.value = tableMainWidth.value - fixedLeftWidth.value
-    } else {
-        scrollXWidth.value = tableMainWidth.value
+function mouseUp() {
+    mouseXDown.value = false
+    mouseYDown.value = false
+}
+function mouseStartX(e) {
+    mouseXDown.value = true
+    mouseOriginal.x = e.clientX
+}
+function mouseDragX(e) {
+    if (mouseXDown.value) {
+        let move = e.clientX - mouseOriginal.x
+        mouseOriginal.x = e.clientX
+        tableMain.value.scrollLeft = (move + scrollbarXTranslate.value) / scrollXWidth.value * tableMainInnerWidth.value
     }
-    scrollBarXWidth.value = (tableMainWidth.value / tableMainInnerWidth.value) * scrollXWidth.value
+}
+function mouseStartY(e) {
+    mouseYDown.value = true
+    mouseOriginal.y = e.clientY
+}
+function mouseDragY(e) {
+    if (mouseYDown.value) {
+        let move = e.clientY - mouseOriginal.y
+        mouseOriginal.y = e.clientY
+        let scrollerWrapperHeight = props.itemSize * items.value.length
+        mainVirtualScrollY.scrollTop = (move + scrollbarYTranslate.value) / scrollYHeight.value * scrollerWrapperHeight
+    }
 }
 
 //main, fixed滾動聯動
 let mainVirtualScrollY
 let fixedVirtualScrollY
-const scrollbarYTranslate = ref(0)
-const scrollbarXTranslate = ref(0)
 function mainConnectFixedScroll() {
     fixedVirtualScrollY.scrollTop = mainVirtualScrollY.scrollTop;
 }
@@ -275,7 +364,7 @@ function fixedConnectMainScroll() {
     mainVirtualScrollY.scrollTop = fixedVirtualScrollY.scrollTop;
 }
 function Yscroll() {
-    let scrollerWrapperHeight = props.itemSize * props.items.length
+    let scrollerWrapperHeight = props.itemSize * items.value.length
     scrollbarYTranslate.value = (mainVirtualScrollY.scrollTop / scrollerWrapperHeight) * scrollYHeight.value
     tooltipScrollHide()
 }
@@ -322,7 +411,7 @@ function debounce(func, delay = 250) {
 
 // tootltip效能優化
 const tooltipToggle = ref(false)
-const tooltipIsOpen = computed(()=>{
+const tooltipIsOpen = computed(() => {
     return props.tooltipModel ? tooltipToggle.value : props.tooltipModel
 })
 const toolTiptriggerRef = ref(null)
@@ -332,12 +421,12 @@ function tooltipOpen(e) {
     emit("tooltipOpen", e)
     if (tooltipCanBeOpen(e)) {
         toolTiptriggerRef.value = e.target
-        if(e.type==="click"){
+        if (e.type === "click") {
             tooltipToggle.value = true
-        }else if(e.type==="mouseleave" || e.type==="mouseover"){
+        } else if (e.type === "mouseleave" || e.type === "mouseover") {
             tooltipToggle.value = !tooltipToggle.value
         }
-    }else{
+    } else {
         tooltipToggle.value = false
     }
 }
@@ -358,7 +447,7 @@ function tooltipCanBeOpen(e) {
 onMounted(() => {
     tableMain.value.addEventListener("click", tooltipClose)
 })
-watch(() => props.items, (newVal) => {
+watch(() => items.value, (newVal) => {
     if (newVal.length > 0 && props.tooltipRef) {
         setTimeout(() => {
             let refDOMs = document.querySelectorAll(`.${props.tooltipRef}`)
@@ -372,7 +461,7 @@ watch(() => props.items, (newVal) => {
                     dom.addEventListener("mouseleave", tooltipClose)
                 })
             }
-        },10)
+        }, 10)
 
     }
 })
@@ -398,7 +487,7 @@ const sortUp = ref(true)
 const DefaultSortColumn = ref(tablePropsSorted.value[0])
 const sortTableDataKey = ref(DefaultSortColumn.value.dataKey)
 const sortedData = computed(() => {
-    let newData = [...props.items]
+    let newData = [...items.value]
     if (sortUp.value) {
         //從小到大
         for (let i = 0; i < newData.length; i++) {
@@ -464,6 +553,12 @@ watch(sortedData.value, () => {
 }, { deep: true })
 
 //batchLoad
+store.commit("scrollBatchLoad/setProps", {
+    batchLoad: props.batchLoad,
+    getDataLen: props.getDataLen,
+    keyField: props.keyField,
+})
+
 const getNextDataTrigger = ref(1)
 const getFormerDataTrigger = ref(1)
 const alreadyScrollTop = ref(0)
@@ -528,7 +623,7 @@ onBeforeUnmount(() => {
 })
 
 const finalData = computed(() => {
-    let data = props.items
+    let data = items.value
     if (props.sortable) {
         data = sortedData.value
     }
@@ -536,9 +631,9 @@ const finalData = computed(() => {
 })
 </script>
 <template>
-    <div class="inefi-table-v2 layout-content">
+    <div class="inefi-table-v2 layout-content" :class="{ 'no-select': mouseYDown || mouseXDown }">
         <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain">
-            <div class="layout-content" ref="tableMainInner" :style="{ minWidth: !tableName ? `calc(${calcMainMinWidth})`: null}">
+            <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
                 <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField">
                     <template #before>
                         <div class="table-columns py-2" :style="{ height: `${itemSize}px` }">
@@ -546,8 +641,7 @@ const finalData = computed(() => {
                                 <el-checkbox class="p-2" />
                             </div>
                             <div class="column-name" v-for="(column, index) in tablePropsSorted" :key="index" :style="{
-                                width: getColumnWidth(column),
-                                minWidth: column.show ? (column.minWidth ? column.minWidth : (column.fixed ? getColumnWidth(column) : '')) : '0px'
+                                width: getColumnWidth(column), minWidth: getColumnMinWidth(column)
                             }" @click="setSortTableDataKey(column.dataKey)">
                                 <span class="px-2">{{ column.columnName }}</span>
                                 <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
@@ -566,14 +660,12 @@ const finalData = computed(() => {
                             <div class="px-2" v-if="showCheckBox">
                                 <el-checkbox class="p-2" />
                             </div>
-                            <div class="data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{
-                                width: `${getColumnWidth(column)}`,
-                                minWidth: column.show ? (column.minWidth ? column.minWidth : (column.fixed ? getColumnWidth(column) : '')) : '0px',
-                                height: (item[column.dataKey]==='')?'100%':''
-                            }" :class="column.dataKey">
-                                <slot :name="column.dataKey" :item="item">
-                                    <span class="px-2">{{ item[column.dataKey] }}</span>
-                                </slot>
+                            <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column), height: (item[column.dataKey] === '') ? '100%' : '' }" :class="[column.dataKey]">
+                                <span class="px-2">
+                                    <slot :name="column.dataKey" :item="item">
+                                        {{ item[column.dataKey] }}
+                                    </slot>
+                                </span>
                             </div>
                         </div>
                     </template>
@@ -588,10 +680,7 @@ const finalData = computed(() => {
                             <div class="px-2" v-if="showCheckBox">
                                 <el-checkbox class="p-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
                             </div>
-                            <div class="column-name" v-for="(column, index) in tablePropsFixed" :key="index" :style="{
-                                width: getColumnWidth(column),
-                                minWidth: column.show ? (column.minWidth ? column.minWidth : (column.fixed ? getColumnWidth(column) : '')) : '0px'
-                            }" @click="setSortTableDataKey(column.dataKey)">
+                            <div class="column-name" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" @click="setSortTableDataKey(column.dataKey)">
                                 <span class="px-2">{{ column.columnName }}</span>
                                 <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
                                     <el-icon v-show="sortUp">
@@ -609,24 +698,23 @@ const finalData = computed(() => {
                             <div class="px-2 " v-if="showCheckBox">
                                 <el-checkbox class="p-2" @change="setRowIsCheck(item)" :model-value="isRowChecked(item)" />
                             </div>
-                            <div class="data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{
-                                width: getColumnWidth(column),
-                                minWidth: column.show ? (column.minWidth ? column.minWidth : (column.fixed ? getColumnWidth(column) : '')) : '0px'
-                            }" :class="column.dataKey">
-                                <slot :name="column.dataKey" :item="item">
-                                    <span class="px-2">{{ item[column.dataKey] }}</span>
-                                </slot>
+                            <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
+                                <span class="px-2">
+                                    <slot :name="column.dataKey" :item="item">
+                                        {{ item[column.dataKey] }}
+                                    </slot>
+                                </span>
                             </div>
                         </div>
                     </template>
                 </RecycleScroller>
             </div>
         </div>
-        <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }">
-            <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)`}" v-show="scrollYBarHeight <= scrollYHeight"></div>
+        <div class="inefi-table-v2__scrolly ps-1" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }">
+            <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)` }" v-show="scrollYBarHeight <= scrollYHeight" @mousedown="mouseStartY"></div>
         </div>
-        <div class="inefi-table-v2__scrollx" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
-            <div class="scroll-thumb" :style="{ width: `${scrollBarXWidth}px`, transform: `translateX(${scrollbarXTranslate}px)` }"></div>
+        <div class="inefi-table-v2__scrollx pt-1" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
+            <div class="scroll-thumb" :style="{ width: `${scrollBarXWidth}px`, transform: `translateX(${scrollbarXTranslate}px)` }" @mousedown="mouseStartX"></div>
         </div>
         <template v-if="tooltipRef">
             <el-tooltip :content="tooltipContent" placement="top" effect="dark" :trigger="tooltipTrigger" :visible="tooltipIsOpen" virtual-triggering :virtual-ref="toolTiptriggerRef" :disabled="false" />
@@ -642,6 +730,7 @@ const finalData = computed(() => {
     @extend .border-b;
 
 }
+
 .column-name {
     display: flex;
     align-items: center;
@@ -652,11 +741,13 @@ const finalData = computed(() => {
 
 .table-row {
     @extend .table-columns;
-    .data {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+}
+
+.table-row_data {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: .5s;
 }
 
 .inefi-table-v2 {
@@ -671,12 +762,19 @@ const finalData = computed(() => {
         top: 0;
         background-color: #fff;
     }
-    .vue-recycle-scroller__item-view{
-        &:last-child{
-            .table-row, .fixed-left__table-row{
+
+    .vue-recycle-scroller__item-view {
+        &:last-child {
+
+            .table-row,
+            .fixed-left__table-row {
                 border-bottom: none;
             }
         }
+    }
+
+    &.no-select * {
+        user-select: none;
     }
 }
 
@@ -684,15 +782,15 @@ const finalData = computed(() => {
     @extend .scrollbar-none;
 
     &::-webkit-scrollbar {
-        display: none;
+        opacity: 1;
     }
 
     &::-webkit-scrollbar-track {
-        display: none;
+        opacity: 1;
     }
 
     &::-webkit-scrollbar-thumb {
-        display: none;
+        opacity: 1;
     }
 }
 
@@ -713,12 +811,6 @@ const finalData = computed(() => {
 
 .fixed-left__table-row {
     @extend .table-row;
-
-    .data {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
 }
 
 @for $i from 0 through 20 {
@@ -732,10 +824,10 @@ const finalData = computed(() => {
     top: 0;
     right: 0;
     height: 100%;
-    width: 6px;
+    width: 12px;
 
     .scroll-thumb {
-        width: 100%;
+        width: 6px;
     }
 }
 
@@ -743,10 +835,10 @@ const finalData = computed(() => {
     position: absolute;
     bottom: 0;
     right: 0;
-    height: 6px;
+    height: 12px;
 
     .scroll-thumb {
-        height: 100%;
+        height: 6px;
     }
 }
 
@@ -754,5 +846,10 @@ const finalData = computed(() => {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     opacity: 1;
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
 }
 </style>
