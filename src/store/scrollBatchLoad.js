@@ -14,7 +14,6 @@ export default {
         allData: [],
         batchesTrustList: [],
         totalDataCount: 0,
-        disconnectedDataCount: 0,
     },
     getters: {},
     mutations: {
@@ -22,12 +21,21 @@ export default {
             state.getDataLen = getDataLen;
             state.keyField = keyField;
         },
+        resetAllData(state){
+            state.offset = 0
+            state.allData = []
+            state.dataChangeCount = 0
+            state.dataLoadDone = false
+            state.dataNum = 1
+            state.batchesTrustList = []
+            state.loadStart = false
+            state.totalDataCount = 0
+        },
         setFirstBatch(state, data) {
             state.allData.push(...data.list);
             state.batchesTrustList.push(true);
             console.log(data.list);
             state.totalDataCount = data.total;
-            state.disconnectedDataCount = data.disconnected;
             state.loadStart = true;
         },
         setNewData(state, data) {

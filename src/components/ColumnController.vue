@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { computed } from 'vue'
-// import { watch } from 'vue'
+import { watch } from 'vue'
 import { defineProps } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
@@ -96,7 +97,7 @@ function saveCustomColumnsSetting() {
     ]
     localStorage.setItem("customizeColumns", JSON.stringify(data))
 }
-onMounted(() => {
+function setStorageColumnSetting() {
     let storage = JSON.parse(localStorage.getItem("customizeColumns"))
     if (storage) {
         for (const [tableName, columns] of Object.entries(storage[1].oringinSetting)) {
@@ -131,8 +132,8 @@ onMounted(() => {
                     });
                 }
                 store.commit("columnControl/setActiveTab", {
-                        tableName,
-                        tab: Object.keys(columns)[0]
+                    tableName,
+                    tab: Object.keys(columns)[0]
                 })
             } else {
                 store.commit("columnControl/setColumnSortedByFixed", {
@@ -143,20 +144,43 @@ onMounted(() => {
         }
 
     }
-
+}
+onMounted(() => {
+    setStorageColumnSetting()
 })
 
+
+//手機板欄位變成預設設定
+const windowW = ref(0)
+function getWindowW() {
+    windowW.value = window.innerWidth
+}
+onMounted(() => {
+    getWindowW()
+    window.addEventListener("resize", getWindowW)
+})
+onBeforeMount(() => {
+    window.removeEventListener("resize", getWindowW)
+})
+watch(windowW, (newVal) => {
+
+    if (newVal < 500) {
+        store.commit("columnControl/resetColumn", {
+            tableName: props.tableNameRef
+        })
+    }else{
+        setStorageColumnSetting()
+    }
+}, { deep: true })
 </script>
 <template>
-    <span class="column-controller">
+    <span class="d-none d-sm-inline-block column-controller">
         <span @click="panelOpen = !panelOpen">
             <slot name="btn">
-                <el-button>
-                    <span class="d-sm-none">
-                        <font-awesome-icon icon="fa-solid fa-table-columns" />
-                    </span>
-                    <span class="d-none d-sm-inline-block">Customize Columns</span>
-                </el-button>
+                <button class="table-expansion d-none d-sm-inline-block">
+                    <font-awesome-icon icon="fa-solid fa-table-columns" />
+                    <span class="ms-2">Customize Columns</span>
+                </button>
             </slot>
         </span>
         <el-drawer v-model="panelOpen" :direction="panelDirection" :size="size">
@@ -166,7 +190,7 @@ onMounted(() => {
                 <template #item="{ element }">
                     <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse" v-if="element.fixed">
                         <button @click="switchShow(element.columnName)">
-                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red" />
+                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="#FF3D00" />
                         </button>
                         <span class="ms-auto me-sm-auto ms-sm-0">{{ element.columnName }}</span>
                         <button class="ms-2 ms-sm-0 me-sm-2 dragHandle">
@@ -184,7 +208,7 @@ onMounted(() => {
                 <template #item="{ element }">
                     <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse" v-if="element.show && !element.fixed">
                         <button @click="switchShow(element.columnName)">
-                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="red" />
+                            <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="#FF3D00" />
                         </button>
                         <span class="ms-auto me-sm-auto ms-sm-0">{{ element.columnName }}</span>
                         <button class="ms-2 me-sm-2 ms-sm-0 dragHandle">
@@ -197,7 +221,7 @@ onMounted(() => {
             <ul class="column-controller__hide-list">
                 <li class="column-controller__item-hide py-2 px-3 flex-sm-row-reverse" v-for="(column, index) in columnNoShow" :key="`${column.columnName}-${index}`">
                     <button @click="switchShow(column.columnName)">
-                        <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" color="rgb(35, 217, 151)" />
+                        <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" color="#35C099" />
                     </button>
                     <span>{{ column.columnName }}</span>
                 </li>

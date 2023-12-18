@@ -2,6 +2,9 @@
 import { defineProps, nextTick, watch, computed, reactive, onMounted, onBeforeUnmount, ref } from 'vue'
 import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
+import { Search } from "@element-plus/icons-vue";
+import ColumnController from "@/components/ColumnController.vue";
+import IconCircleBtn from '@/components/IconCircleBtn.vue'
 import { useStore } from 'vuex'
 const store = useStore()
 const props = defineProps({
@@ -15,6 +18,14 @@ const props = defineProps({
     //     minWidth(String(px)，fixed的話建議要寫),
     //     fixed(Boolean),
     //     show(Boolean),}
+    hover: {
+        type: Boolean,
+        default: false
+    },
+    loading: {
+        type: Boolean,
+        default: false
+    },
     showCheckBox: {
         type: Boolean,
         default: false
@@ -27,13 +38,17 @@ const props = defineProps({
     tooltipRef: String,//tooltip作用的欄位的dataKey
     openIfEllipsis: {
         type: Boolean,
-        default: false
-    },//true的話，有ellipsis才會顯現tooltip
+        default: true
+    },//false的話，即使有ellipsisu也不會顯現tooltip
     tooltipModel: {
         type: Boolean,
-        defalut: true
+        default: true
     },//正常情況tooltip會依trigger開關，其他情況如:視窗關閉，可透過父組件把tooltip關掉
     sortable: {
+        type: Boolean,
+        default: false
+    },
+    batchLoad: {
         type: Boolean,
         default: false
     },
@@ -41,29 +56,68 @@ const props = defineProps({
         type: Number,
         default: 0
     },//batchload每次讀取筆數
-    batchLoad: {
-        type: Boolean,
-        default: false
-    },
-    URL: String,//API網址
-    tableName: String,//如果有column controller，要傳入相同的字串
+    URL: String,//batchload API網址
+    tableName: String,//如果有column controller，要設定名稱
     columnsExcept: {
         type: Array,
         default: () => []
     },//{tab:頁面名稱,except:[columnName...]該頁面不要的欄位名稱}
-    activeTab: String//現在的tab
+    activeTab: String,//現在的tab
+    searchShow: {
+        type: Boolean,
+        default: false
+    },
+    searchText: {
+        type: String,
+        default: ""
+    },//如果不要有search框但要有搜尋功能，可傳search文字
+    customColumns:{
+        type: Boolean,
+        default: false
+    },//是否要有欄位客製元件
+    filter:{
+        type:Boolean,
+        default: false
+    },//是否要有filter
+    darkMode: {
+        type: Boolean,
+        default: false
+    },
 })
 import { defineExpose, defineEmits } from 'vue'
 const emit = defineEmits([
-    "haveCheckedData"/*當有一個以上的勾選資料*/,
+    "reload"/*當reload按鈕被點擊時觸發*/,
+    "check"/*row被勾選，傳被勾選的資料*/,
+    "uncheck"/*row被取消勾選，傳被取消的資料*/,
+    "haveCheckedData"/*當有一個以上的勾選資料，傳所有被選取的資料*/,
     "noCheckedData"/*當沒有勾選資料*/,
-    "tooltipOpen"
 ])
 
 defineExpose({
     getCheckedData /*返回已勾選資料*/,
     clearChecked/*清除全部勾選*/
 })
+
+//網頁寬度
+const windowW = ref(0)
+const userDevice = ref("pc")
+function setWindowW(){
+    windowW.value = window.innerWidth
+}
+onMounted(()=>{
+    setWindowW()
+    window.addEventListener("resize", setWindowW)
+})
+
+watch(windowW,(newVal)=>{
+    if(newVal<500){
+        userDevice.value = "mobile"
+    }else if(newVal >=500 && newVal<1050){
+        userDevice.value = "pad"
+    }else{
+        userDevice.value = "pc"
+    }
+},{deep:true})
 
 //過濾不要的欄位
 const activeTab = computed(() => { return props.activeTab })
@@ -119,6 +173,9 @@ const items = computed(() => {
         let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
         items.splice(emptyStartIndex, emptyLength)
     }
+    if (searchText.value !== "") {
+        items = searchResult.value
+    }
     return items
 })
 
@@ -173,23 +230,32 @@ function ifWidthTotalNo100() {
 }
 const calcMainMinWidth = computed(() => {
     let allWidth = ''
-    tablePropsSorted.value.forEach((column) => {
-        if (column.show) {
-            let str = getColumnMinWidth(column)
-            allWidth += `${str} + `
-        }
-    })
     if (props.showCheckBox) {
-        let checkboxWidth = '46px'
+        let checkboxWidth = '46px + '
         allWidth += checkboxWidth
+    }
+    for (let i = 0; i < tablePropsSorted.value.length; i++) {
+        if (tablePropsSorted.value[i].show) {
+            let str = getColumnMinWidth(tablePropsSorted.value[i])
+            if (i == 0) {
+                allWidth += `${str}`
+            } else {
+                allWidth += ` + ${str}`
+            }
+        }
     }
     return allWidth
 })
 
 //全選功能
-const selectAll = ref(false)
 const rowDataChecked = reactive([])
-const isIndeterminate = ref(false)
+const selectAll = computed(() => {
+    return rowDataChecked.length === items.value.length && rowDataChecked.length !== 0
+})
+const isIndeterminate = computed(() => {
+    return rowDataChecked.length !== items.value.length && rowDataChecked.length !== 0
+})
+
 function selectAllChange(value) {
     rowDataChecked.length = 0
     if (value) {
@@ -202,18 +268,10 @@ function selectAllChange(value) {
 function setRowIsCheck(item) {
     if (isRowChecked(item)) {
         rowDataChecked.splice(rowDataChecked.indexOf(item), 1)
+        emit("uncheck", item)
     } else {
         rowDataChecked.push(item)
-    }
-    if (rowDataChecked.length === items.value.length) {
-        selectAll.value = true
-        isIndeterminate.value = false
-    } else if (rowDataChecked.length === 0) {
-        selectAll.value = false
-        isIndeterminate.value = false
-    } else {
-        selectAll.value = false
-        isIndeterminate.value = true
+        emit("check", item)
     }
 }
 function isRowChecked(item) {
@@ -238,6 +296,27 @@ function clearChecked() {
     rowDataChecked.length = 0
     selectAll.value = false
     isIndeterminate.value = false
+}
+
+//search
+const searchInputText = ref("")
+const searchText = computed(() => { return props.searchShow ? searchInputText.value : props.searchText })
+const columsDatakeys = reactive(tablePropsSorted.value.map((column) => column.dataKey))
+const searchResult = computed(() => {
+    return items.value.filter((item) => {
+        return columsDatakeys.some((key) => item[key].toUpperCase().includes(searchText.value.toUpperCase()))
+    })
+})
+function clearSearch() {
+    searchInputText.value = ""
+}
+//reload
+function reload() {
+    if (!props.batchLoad) {
+        emit('reload')
+    } else {
+        batchReloadData()
+    }
 }
 
 //scrollbar
@@ -305,12 +384,27 @@ const scrollYHeight = computed(() => { return tableMainHeight.value - scrollYTop
 const scrollYBarHeight = computed(() => {
     return scrollYHeight.value / (props.itemSize * items.value.length) * scrollYHeight.value
 })
+
 setTimeout(() => {
     tableMainHeight.value = tableMain.value.offsetHeight
     scrollYHeight.value = tableMainHeight.value - scrollYTop.value
 }, 1)
 //scrollbar 拖曳
-const scrollbarYTranslate = ref(0)
+const mainScroller = ref()
+const batchloadNotDoneShowText = computed(() => {
+    return props.batchLoad && !store.state.scrollBatchLoad.dataLoadDone && searchText.value !== ""
+})
+
+const mainScrollTop = ref(0)
+const scrollbarYTranslate = computed(() => {
+    let scrollerWrapperHeight = props.itemSize * items.value.length
+    if (batchloadNotDoneShowText.value) {
+        scrollerWrapperHeight += props.itemSize * 4
+    }
+    return (mainScrollTop.value / scrollerWrapperHeight) * scrollYHeight.value
+})
+
+
 const scrollbarXTranslate = ref(0)
 const mouseXDown = ref(false)
 const mouseYDown = ref(false)
@@ -350,48 +444,48 @@ function mouseDragY(e) {
         let move = e.clientY - mouseOriginal.y
         mouseOriginal.y = e.clientY
         let scrollerWrapperHeight = props.itemSize * items.value.length
-        mainVirtualScrollY.scrollTop = (move + scrollbarYTranslate.value) / scrollYHeight.value * scrollerWrapperHeight
+        if (batchloadNotDoneShowText.value) {
+            scrollerWrapperHeight += props.itemSize * 4
+        }
+        let translate = move + scrollbarYTranslate.value
+        if(translate<=0){
+            translate = 0
+        }
+        mainScrollTop.value = translate / scrollYHeight.value * scrollerWrapperHeight
     }
 }
 
+watch(mainScrollTop,(newVal)=>{
+    mainScroller.value.scrollToPosition(newVal)
+},{deep:true})
+
 //main, fixed滾動聯動
-let mainVirtualScrollY
-let fixedVirtualScrollY
-function mainConnectFixedScroll() {
-    fixedVirtualScrollY.scrollTop = mainVirtualScrollY.scrollTop;
+const fixedScroller = ref()
+const fixedScrollTop = ref(0)
+
+function scrollTop() {
+    mainScroller.value.scrollToPosition(0)
 }
-function fixedConnectMainScroll() {
-    mainVirtualScrollY.scrollTop = fixedVirtualScrollY.scrollTop;
+
+function setMainScrollTop() {
+    mainScrollTop.value = mainScroller.value.getScroll().start
 }
-function Yscroll() {
-    let scrollerWrapperHeight = props.itemSize * items.value.length
-    scrollbarYTranslate.value = (mainVirtualScrollY.scrollTop / scrollerWrapperHeight) * scrollYHeight.value
-    tooltipScrollHide()
+function setFixedScrollTop() {
+    fixedScrollTop.value = fixedScroller.value.getScroll().start
 }
+watch(mainScrollTop, (newVal) => {
+    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
+        fixedScroller.value.scrollToPosition(newVal)
+    }
+}, { deep: true })
+
+watch(fixedScrollTop, (newVal) => {
+    mainScroller.value.scrollToPosition(newVal)
+}, { deep: true })
+
 function Xscroll() {
     scrollbarXTranslate.value = (tableMain.value.scrollLeft / tableMainInnerWidth.value) * scrollXWidth.value
 }
-onMounted(() => {
-    mainVirtualScrollY = document.querySelector('.inefi-table-v2__main .vue-recycle-scroller')
-    mainVirtualScrollY.addEventListener("scroll", Yscroll)
-    tableMain.value.addEventListener("scroll", Xscroll)
-    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-
-        fixedVirtualScrollY = document.querySelector('.inefi-table-v2__fixed-left .vue-recycle-scroller')
-        mainVirtualScrollY.addEventListener("scroll", mainConnectFixedScroll)
-        fixedVirtualScrollY.addEventListener("scroll", fixedConnectMainScroll)
-    }
-})
-onBeforeUnmount(() => {
-    mainVirtualScrollY.removeEventListener("scroll", Yscroll);
-    tableMain.value.removeEventListener("scroll", Xscroll)
-    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-        mainVirtualScrollY.removeEventListener("scroll", mainConnectFixedScroll);
-        fixedVirtualScrollY.removeEventListener("scroll", fixedConnectMainScroll);
-
-        fixedVirtualScrollY.removeEventListener("scroll", fixedConnectMainScroll)
-    }
-});
 
 
 function debounce(func, delay = 250) {
@@ -409,7 +503,54 @@ function debounce(func, delay = 250) {
     };
 }
 
-// tootltip效能優化
+// tootltip
+//default
+const toolTiptriggerRefDefault = ref()
+const defaultTipToggle = ref(false)
+const tooltipIsOpenDefault =  computed(() => {
+    return props.tooltipModel ? defaultTipToggle.value : props.tooltipModel
+})
+const tooltipTriggerDefault = computed(()=>{return userDevice.value=="pc" ? "hover" : "click"})
+const tooltipContentDefault =  ref("")
+function tooltipCanBeOpen(e) {
+    let canOpen = true
+    if (props.openIfEllipsis && e.target.offsetWidth == e.target.scrollWidth) {
+        //判斷是否有ellipsis
+        canOpen = false
+    }
+    if (tooltipTriggerDefault.value == "click" && e.target == toolTiptriggerRefDefault.value && defaultTipToggle.value) {
+        canOpen = false
+    }
+    return canOpen
+}
+function defaultTipOpenMouse(e){
+    if(tooltipCanBeOpen(e) && tooltipTriggerDefault.value == "hover"){
+        
+        tooltipContentDefault.value = e.target.innerText
+        defaultTipToggle.value = true
+        toolTiptriggerRefDefault.value = e.target
+    }else {
+        defaultTipToggle.value = false
+    }
+}
+function defaultTipCloseMouse(){
+    defaultTipToggle.value = false
+}
+function defaultTipOpenClick(e){
+    e.stopPropagation()
+    if(tooltipCanBeOpen(e) && tooltipTriggerDefault.value == "click"){
+        tooltipContentDefault.value = e.target.innerText
+        defaultTipToggle.value = true
+        toolTiptriggerRefDefault.value = e.target
+    }else {
+        defaultTipToggle.value = false
+    }
+}
+function defaultTipClose(){
+    defaultTipToggle.value = false
+}
+
+//custom
 const tooltipToggle = ref(false)
 const tooltipIsOpen = computed(() => {
     return props.tooltipModel ? tooltipToggle.value : props.tooltipModel
@@ -418,65 +559,40 @@ const toolTiptriggerRef = ref(null)
 
 function tooltipOpen(e) {
     e.stopPropagation();
-    emit("tooltipOpen", e)
-    if (tooltipCanBeOpen(e)) {
-        toolTiptriggerRef.value = e.target
-        if (e.type === "click") {
-            tooltipToggle.value = true
-        } else if (e.type === "mouseleave" || e.type === "mouseover") {
-            tooltipToggle.value = !tooltipToggle.value
-        }
-    } else {
-        tooltipToggle.value = false
+    toolTiptriggerRef.value = e.target
+    if (e.type === "click") {
+        tooltipToggle.value = true
+    } else if (e.type === "mouseenter") {
+        tooltipToggle.value = true
     }
 }
 function tooltipClose() {
     tooltipToggle.value = false
 }
-function tooltipCanBeOpen(e) {
-    let canOpen = true
-    if (props.openIfEllipsis && e.target.parentNode.offsetWidth == e.target.parentNode.scrollWidth) {
-        //判斷是否有ellipsis
-        canOpen = false
-    }
-    if (e.target == toolTiptriggerRef.value && tooltipToggle.value) {
-        canOpen = false
-    }
-    return canOpen
-}
+
 onMounted(() => {
     tableMain.value.addEventListener("click", tooltipClose)
+    tableMain.value.addEventListener("click", defaultTipClose)
 })
-watch(() => items.value, (newVal) => {
-    if (newVal.length > 0 && props.tooltipRef) {
-        setTimeout(() => {
-            let refDOMs = document.querySelectorAll(`.${props.tooltipRef}`)
-            if (props.tooltipTrigger === "click") {
-                refDOMs.forEach((dom) => {
-                    dom.addEventListener("click", tooltipOpen)
-                })
-            } else if (props.tooltipTrigger === "hover" || !props.tooltipTrigger) {
-                refDOMs.forEach((dom) => {
-                    dom.addEventListener("mouseover", tooltipOpen)
-                    dom.addEventListener("mouseleave", tooltipClose)
-                })
-            }
-        }, 10)
 
-    }
-})
 //tooltip滾動超出消失
 function tooltipScrollHide() {
-    if (props.tooltipRef && tooltipToggle.value) {
-        let scrollerSlot = document.querySelector('.inefi-table-v2__main .vue-recycle-scroller__slot')
+    if (tooltipToggle.value || defaultTipToggle.value) {
+        let scrollerSlot = mainScroller.value.$refs.before
         let scrollerSlotBottom = scrollerSlot.getBoundingClientRect().top + props.itemSize
         let tablemainBottom = tableMain.value.getBoundingClientRect().bottom
-        let tooltip = document.querySelector('.el-popper.is-dark')
+        let tooltip
+        if(tooltipToggle.value){
+            tooltip = document.querySelector('.el-popper.VTtooltip')
+        }else if(defaultTipToggle.value){
+            tooltip = document.querySelector('.el-popper.VTDefaultTooltip')
+        }
         if (tooltip.getBoundingClientRect().top <= scrollerSlotBottom + 10) {
+            defaultTipToggle.value = false
             tooltipToggle.value = false
         } else if (tooltip.getBoundingClientRect().bottom + 10 >= tablemainBottom) {
+            defaultTipToggle.value = false
             tooltipToggle.value = false
-
         }
     }
 }
@@ -534,21 +650,20 @@ const magicKey = ref(0)
 watch(sortedData.value, () => {
     if (sortable.value) {
         magicKey.value = (magicKey.value > 0) ? -1 : 1
-        //重新掛載virtual-scroller
+    }
+}, { deep: true })
+
+//loading
+const loaded = computed(() => { return props.batchLoad ? store.state.scrollBatchLoad.loadStart : !props.loading })
+const loadingEnd = ref(false)
+if (loaded.value) {
+    loadingEnd.value = true
+}
+watch(loaded, (newVal) => {
+    if (newVal) {
         setTimeout(() => {
-            nextTick(() => {
-                mainVirtualScrollY = document.querySelector('.inefi-table-v2__main .vue-recycle-scroller')
-                mainVirtualScrollY.addEventListener("scroll", Yscroll)
-                tableMain.value.addEventListener("scroll", Xscroll)
-                if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-
-                    fixedVirtualScrollY = document.querySelector('.inefi-table-v2__fixed-left .vue-recycle-scroller')
-                    mainVirtualScrollY.addEventListener("scroll", mainConnectFixedScroll)
-                    fixedVirtualScrollY.addEventListener("scroll", fixedConnectMainScroll)
-                }
-
-            })
-        }, 500)
+            loadingEnd.value = true
+        }, 1000)
     }
 }, { deep: true })
 
@@ -572,26 +687,35 @@ if (props.batchLoad && props.getDataLen) {
 
 function scrollDownOrUp() {
     let singleLenH = props.getDataLen * props.itemSize
-    let scrollzone = Math.floor(mainVirtualScrollY.scrollTop / singleLenH) + 1
+    let scrollzone = Math.floor(mainScrollTop.value / singleLenH) + 1
     if (scrollzone !== scrollZone.value) {
         getNextDataTrigger.value = 1
         getFormerDataTrigger.value = 1
         scrollZone.value = scrollzone
     }
-    if (mainVirtualScrollY.scrollTop >= alreadyScrollTop.value) {
+    if (mainScrollTop.value >= alreadyScrollTop.value) {
         store.commit("scrollBatchLoad/setOffset", scrollZone.value * props.getDataLen)
-        if (mainVirtualScrollY.scrollTop >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
+        if (mainScrollTop.value >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
             getNextDataTrigger.value = 0
         }
     } else {
         if (store.state.scrollBatchLoad.batchesTrustList.some((boolean) => !boolean)) {
             store.commit("scrollBatchLoad/setOffset", (scrollZone.value - 1) * props.getDataLen)
-            if (mainVirtualScrollY.scrollTop < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
+            if (mainScrollTop.value < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
                 getFormerDataTrigger.value = 0
             }
         }
     }
-    alreadyScrollTop.value = mainVirtualScrollY.scrollTop
+    alreadyScrollTop.value = mainScrollTop.value
+}
+
+function mainScrollEvent() {
+    setMainScrollTop()
+    tooltipScrollHide()
+    scrollDownOrUp()
+}
+function fixedScrollEvent() {
+    setFixedScrollTop()
 }
 
 watch(getNextDataTrigger, (newVal) => {
@@ -605,22 +729,20 @@ watch(getFormerDataTrigger, (newVal) => {
         batchLoadScrollupCheck()
     }
 }, { deep: true })
-const batchLoadScrollupCheck = () => {
+function batchLoadScrollupCheck() {
     //若在第2區，抓第2區的資料
     if (!store.state.scrollBatchLoad.batchesTrustList[scrollZone.value - 1]) {
         store.dispatch("scrollBatchLoad/getFormerZoneData", props.URL)
     }
 }
-onMounted(() => {
-    if (props.batchLoad && props.getDataLen) {
-        mainVirtualScrollY.addEventListener("scroll", scrollDownOrUp)
-    }
-})
-onBeforeUnmount(() => {
-    if (props.batchLoad && props.getDataLen) {
-        mainVirtualScrollY.removeEventListener("scroll", scrollDownOrUp)
-    }
-})
+
+function batchReloadData() {
+    store.commit("scrollBatchLoad/resetAllData")
+    scrollTop()
+    getFormerDataTrigger.value = 1
+    getNextDataTrigger.value = 1
+    store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+}
 
 const finalData = computed(() => {
     let data = items.value
@@ -631,98 +753,190 @@ const finalData = computed(() => {
 })
 </script>
 <template>
-    <div class="inefi-table-v2 layout-content" :class="{ 'no-select': mouseYDown || mouseXDown }">
-        <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain">
-            <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
-                <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField">
-                    <template #before>
-                        <div class="table-columns py-2" :style="{ height: `${itemSize}px` }">
-                            <div class="px-2" v-if="showCheckBox">
-                                <el-checkbox class="p-2" />
+    <div class="inefi-table-v2 layout-content" :class="{ 'no-select': mouseYDown || mouseXDown, dark: darkMode, canHover: hover }">
+        <div class="table-func-header d-flex align-items-center justify-content-end">
+            <div class="py-2 px-3 d-flex me-auto" v-if="customColumns || filter">
+                <ColumnController :tableNameRef="tableName" v-if="customColumns" class="me-2"/>
+            </div>
+            <div v-if="searchShow" style="width: 350px;" class="d-flex align-items-center justify-content-end ms-auto">
+                <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="me-3 py-2 reload" @click="reload" :class="{ rotate: !loadingEnd }" />
+                <div class="py-2" style="width: 250px; position: relative;">
+                    <p class="load-notdone_hint" v-show="batchloadNotDoneShowText">
+                        <span class="me-2">Search in {{ store.state.scrollBatchLoad.allData.length }} of {{ store.state.scrollBatchLoad.totalDataCount }}</span>
+                        <el-tooltip popper-class="searchTooltip" placement="top-end" content="Search results are from devices that have been loaded. Scroll down to load more devices for complete search results." effect="dark">
+                            <font-awesome-icon icon="fa-solid fa-circle-info" />
+                        </el-tooltip>
+                    </p>
+                    <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable />
+                </div>
+            </div>
+
+        </div>
+        <div class="layout-content" v-loading="!loadingEnd" element-loading-background="#fff">
+            <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain" @scroll="Xscroll">
+                <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
+                    <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" ref="mainScroller" @scroll="mainScrollEvent">
+                        <template #before>
+                            <div class="table-columns py-2" :style="{ height: `${itemSize}px` }">
+                                <div class="px-2" v-if="showCheckBox">
+                                    <el-checkbox class="p-2" />
+                                </div>
+                                <div class="column-name" v-for="(column, index) in tablePropsSorted" :key="index" :style="{
+                                    width: getColumnWidth(column), minWidth: getColumnMinWidth(column)
+                                }" @click="setSortTableDataKey(column.dataKey)">
+                                    <span class="px-3">{{ column.columnName }}</span>
+                                    <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
+                                        <el-icon v-show="sortUp">
+                                            <SortUp />
+                                        </el-icon>
+                                        <el-icon v-show="!sortUp">
+                                            <SortDown />
+                                        </el-icon>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="column-name" v-for="(column, index) in tablePropsSorted" :key="index" :style="{
-                                width: getColumnWidth(column), minWidth: getColumnMinWidth(column)
-                            }" @click="setSortTableDataKey(column.dataKey)">
-                                <span class="px-2">{{ column.columnName }}</span>
-                                <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
-                                    <el-icon v-show="sortUp">
-                                        <SortUp />
-                                    </el-icon>
-                                    <el-icon v-show="!sortUp">
-                                        <SortDown />
-                                    </el-icon>
-                                </span>
+                        </template>
+                        <template v-slot="{ item }">
+                            <div class="table-row py-2" :style="{ height: `${itemSize}px` }" :class="{ 'highlight-row': rowDataChecked.some((row) => row[props.keyField] == item[props.keyField]) }">
+                                <div class="px-2" v-if="showCheckBox">
+                                    <el-checkbox class="p-2" />
+                                </div>
+                                <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" 
+                                :class="[column.dataKey]">
+                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) ? defaultTipOpenMouse($event) : tooltipOpen($event)" 
+                                    @mouseleave="(tooltipRef !== column.dataKey) ? defaultTipCloseMouse() : tooltipClose($event)" 
+                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
+                                        <slot :name="column.dataKey" :item="item">
+                                            {{ item[column.dataKey] }}
+                                        </slot>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                    <template v-slot="{ item }">
-                        <div class="table-row py-2" :style="{ height: `${itemSize}px` }">
-                            <div class="px-2" v-if="showCheckBox">
-                                <el-checkbox class="p-2" />
+                        </template>
+                        <template #after v-if="batchloadNotDoneShowText">
+                            <div class="load-notdone_clear">
+                                <button class="clear-search p-3 mb-2" @click="clearSearch">
+                                    <font-awesome-icon icon="fa-solid fa-circle-xmark" />
+                                    <span class="ms-2">Clear Search</span>
+                                </button>
+                                <p>Here shows the search results from loaded devices.<br>
+                                    Clear search and scroll down to load more devices for complete search results.
+                                </p>
                             </div>
-                            <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column), height: (item[column.dataKey] === '') ? '100%' : '' }" :class="[column.dataKey]">
-                                <span class="px-2">
-                                    <slot :name="column.dataKey" :item="item">
-                                        {{ item[column.dataKey] }}
-                                    </slot>
-                                </span>
+                            <el-skeleton animated v-if="batchloadNotDoneShowText">
+                                <template #template>
+                                    <el-skeketon-item variant="p">
+                                        <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
+                                            <div class="px-2" v-if="showCheckBox">
+                                                <el-skeleton-item style="width: 30px" />
+                                            </div>
+                                            <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
+                                                <div class="px-3">
+                                                    <el-skeleton-item style="width: 100%" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </el-skeketon-item>
+                                </template>
+
+                            </el-skeleton>
+                        </template>
+                    </RecycleScroller>
+                </div>
+            </div>
+            <div class="layout-content inefi-table-v2__fixed-left" ref="fixedLeft" style="position: absolute;" v-if="showCheckBox || tablePropsFixed.length > 0">
+                <div class="layout-content">
+                    <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" ref="fixedScroller" @scroll="fixedScrollEvent">
+                        <template #before>
+                            <div class="fixed-left__table-columns py-2" :style="{ height: `${itemSize}px` }">
+                                <div class="px-2" v-if="showCheckBox">
+                                    <el-checkbox class="p-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
+                                </div>
+                                <div class="column-name" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" @click="setSortTableDataKey(column.dataKey)">
+                                    <span class="px-3">{{ column.columnName }}</span>
+                                    <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
+                                        <el-icon v-show="sortUp">
+                                            <SortUp />
+                                        </el-icon>
+                                        <el-icon v-show="!sortUp">
+                                            <SortDown />
+                                        </el-icon>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                </RecycleScroller>
+                        </template>
+                        <template v-slot="{ item }">
+                            <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }" :class="{ 'highlight-row': rowDataChecked.some((row) => row[props.keyField] == item[props.keyField]) }">
+                                <div class="px-2 " v-if="showCheckBox">
+                                    <el-checkbox class="p-2" @change="setRowIsCheck(item)" :model-value="isRowChecked(item)" />
+                                </div>
+                                <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
+                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) && defaultTipOpen($event)" 
+                                    @mouseleave="(tooltipRef !== column.dataKey) && defaultTipClose($event)" 
+                                    @touchend="(tooltipRef !== column.dataKey) && defaultTipOpen($event)">
+                                        <slot :name="column.dataKey" :item="item">
+                                            {{ item[column.dataKey] }}
+                                        </slot>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template #after v-if="batchloadNotDoneShowText">
+                            <el-skeleton animated>
+                                <template #template>
+                                    <el-skeketon-item variant="p">
+                                        <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
+                                            <div class="px-2" v-if="showCheckBox">
+                                                <el-skeleton-item style="width: 30px" />
+                                            </div>
+                                            <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
+                                                <div class="px-3">
+                                                    <el-skeleton-item style="width: 100%" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </el-skeketon-item>
+                                </template>
+
+                            </el-skeleton>
+                        </template>
+                    </RecycleScroller>
+                </div>
+            </div>
+            <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }">
+                <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)` }" v-show="scrollYBarHeight <= scrollYHeight" @mousedown="mouseStartY"></div>
+            </div>
+            <div class="inefi-table-v2__scrollx" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
+                <div class="scroll-thumb" :style="{ width: `${scrollBarXWidth}px`, transform: `translateX(${scrollbarXTranslate}px)` }" @mousedown="mouseStartX"></div>
             </div>
         </div>
-        <div class="layout-content inefi-table-v2__fixed-left" ref="fixedLeft" style="position: absolute;" v-if="showCheckBox || tablePropsFixed.length > 0">
-            <div class="layout-content">
-                <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField">
-                    <template #before>
-                        <div class="fixed-left__table-columns py-2" :style="{ height: `${itemSize}px` }">
-                            <div class="px-2" v-if="showCheckBox">
-                                <el-checkbox class="p-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
-                            </div>
-                            <div class="column-name" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" @click="setSortTableDataKey(column.dataKey)">
-                                <span class="px-2">{{ column.columnName }}</span>
-                                <span class="ms-3" v-if="sortable && column.dataKey == sortTableDataKey">
-                                    <el-icon v-show="sortUp">
-                                        <SortUp />
-                                    </el-icon>
-                                    <el-icon v-show="!sortUp">
-                                        <SortDown />
-                                    </el-icon>
-                                </span>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-slot="{ item }">
-                        <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }">
-                            <div class="px-2 " v-if="showCheckBox">
-                                <el-checkbox class="p-2" @change="setRowIsCheck(item)" :model-value="isRowChecked(item)" />
-                            </div>
-                            <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
-                                <span class="px-2">
-                                    <slot :name="column.dataKey" :item="item">
-                                        {{ item[column.dataKey] }}
-                                    </slot>
-                                </span>
-                            </div>
-                        </div>
-                    </template>
-                </RecycleScroller>
-            </div>
-        </div>
-        <div class="inefi-table-v2__scrolly ps-1" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }">
-            <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)` }" v-show="scrollYBarHeight <= scrollYHeight" @mousedown="mouseStartY"></div>
-        </div>
-        <div class="inefi-table-v2__scrollx pt-1" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
-            <div class="scroll-thumb" :style="{ width: `${scrollBarXWidth}px`, transform: `translateX(${scrollbarXTranslate}px)` }" @mousedown="mouseStartX"></div>
-        </div>
+        <el-tooltip :content="tooltipContentDefault" placement="top" effect="dark" :trigger="tooltipTriggerDefault" :visible="tooltipIsOpenDefault" virtual-triggering :virtual-ref="toolTiptriggerRefDefault" popper-class="VTDefaultTooltip" />
         <template v-if="tooltipRef">
-            <el-tooltip :content="tooltipContent" placement="top" effect="dark" :trigger="tooltipTrigger" :visible="tooltipIsOpen" virtual-triggering :virtual-ref="toolTiptriggerRef" :disabled="false" />
+            <el-tooltip :content="tooltipContent" placement="top" effect="dark" :trigger="tooltipTrigger" :visible="tooltipIsOpen" virtual-triggering :virtual-ref="toolTiptriggerRef" popper-class="VTtooltip" />
         </template>
     </div>
 </template>
 <style lang="scss">
 @import "@/assets/scss/all.scss";
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.reload.rotate {
+    animation: rotate 1s linear infinite;
+}
+
+.canHover.inefi-table-v2 .vue-recycle-scroller__item-view.hover {
+    transition: .3s;
+    background-color: rgb(239, 239, 239);
+}
 
 .table-columns {
     display: flex;
@@ -741,13 +955,20 @@ const finalData = computed(() => {
 
 .table-row {
     @extend .table-columns;
+
+    &.highlight-row {
+        background-color: rgba(var(--prim-rgb), 0.2);
+    }
 }
 
 .table-row_data {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
     transition: .5s;
+    overflow: hidden;
+    * {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 }
 
 .inefi-table-v2 {
@@ -775,6 +996,12 @@ const finalData = computed(() => {
 
     &.no-select * {
         user-select: none;
+    }
+
+    &:hover {
+        .scroll-thumb {
+            opacity: 1;
+        }
     }
 }
 
@@ -811,6 +1038,20 @@ const finalData = computed(() => {
 
 .fixed-left__table-row {
     @extend .table-row;
+
+    &.highlight-row {
+        background-color: rgba(var(--prim-rgb), 0.2);
+    }
+}
+
+.darkMode {
+
+    .table-row,
+    .fixed-left__table-row {
+        &.highlight-row {
+            background-color: rgba(var(--prim-rgb), 0.2);
+        }
+    }
 }
 
 @for $i from 0 through 20 {
@@ -824,10 +1065,12 @@ const finalData = computed(() => {
     top: 0;
     right: 0;
     height: 100%;
-    width: 12px;
+    width: 6px;
+    z-index: 20;
 
+    // background-color: #faf;
     .scroll-thumb {
-        width: 6px;
+        width: 100%;
     }
 }
 
@@ -835,21 +1078,83 @@ const finalData = computed(() => {
     position: absolute;
     bottom: 0;
     right: 0;
-    height: 12px;
+    height: 6px;
 
     .scroll-thumb {
-        height: 6px;
+        height: 100%;
     }
 }
 
 .scroll-thumb {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 6px;
-    opacity: 1;
+    opacity: 0;
+    transition: opacity .5s;
     cursor: grab;
 
     &:active {
         cursor: grabbing;
+    }
+}
+
+.load-notdone_hint {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+
+    * {
+        color: #aaa;
+    }
+}
+
+.searchTooltip {
+    background: #828282;
+    width: 200px;
+}
+
+.load-notdone_clear {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .clear-search {
+        display: flex;
+        align-items: center;
+        border-radius: 12px;
+        border: 1px solid $primary;
+        background-color: #fff;
+
+        * {
+            font-size: 16px;
+            color: $primary;
+        }
+    }
+
+    p {
+        text-align: center;
+    }
+}
+.table-expansion{
+    padding: 8px;
+    border: 1px solid $primary;
+    border-radius: 8px;
+    color: $primary;
+    @extend .fw-bold;
+    &:hover{
+        background-color: #e7f9ff;
+    }
+    &:active{
+        border: 1px solid $primary;
     }
 }
 </style>

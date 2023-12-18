@@ -3307,7 +3307,91 @@
             "masterGroupId": 159,
             "masterGroupName": "INACTIVE",
             "masterGroupUUID": "EA1D0F2A-8524-47C8-A4E9-C9789A0C1C1B",
-            "level": 0
+            "level": 0,
+            "devices": [
+                {
+                    "groupId": 108,
+                    "nodeId": 47802,
+                    "deviceId": "0090cc112211-4d0e26dcb3462f05",
+                    "deviceName": "0090cc112211-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "GOOD",
+                    "isConnected": false,
+                    "sn": "JasonFakeMachine1",
+                    "macAddress": "00:90:CC:11:22:11"
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47803,
+                    "deviceId": "0090cc112212-4d0e26dcb3462f05",
+                    "deviceName": "0090cc112212-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "GOOD",
+                    "isConnected": false,
+                    "sn": "JasonFakeMachine2",
+                    "macAddress": "00:90:CC:11:22:12"
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47804,
+                    "deviceId": "0090cc112213-4d0e26dcb3462f05",
+                    "deviceName": "0090cc112213-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "GOOD",
+                    "isConnected": false,
+                    "sn": "JasonFakeMachine3",
+                    "macAddress": "00:90:CC:11:22:13"
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47884,
+                    "deviceId": "000ec68ecf20-4d0e26dcb3462f05",
+                    "deviceName": "000ec68ecf20-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47885,
+                    "deviceId": "000ec68e6087-4d0e26dcb3462f05",
+                    "deviceName": "000ec68e6087-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false,
+                    "sn": "JayF14Board2",
+                    "macAddress": "00:0E:C6:8E:60:87"
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47886,
+                    "deviceId": "0060ef364630-4d0e26dcb3462f05",
+                    "deviceName": "0060ef364630-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false,
+                    "sn": "EthanTest1",
+                    "macAddress": "00:60:EF:36:46:30"
+                },
+                {
+                    "groupId": 108,
+                    "nodeId": 47887,
+                    "deviceId": "0060ef343898-4d0e26dcb3462f05",
+                    "deviceName": "0060ef343898-4d0e26dcb3462f05",
+                    "aliasName": "",
+                    "deviceState": "INACTIVE",
+                    "healthStatus": "DISCONNECTED",
+                    "isConnected": false,
+                    "sn": "JasonTest1",
+                    "macAddress": "00:60:EF:34:38:98"
+                }
+            ]
         }
     ],
     "errorCode": null,

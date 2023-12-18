@@ -11,7 +11,6 @@ import BtnComponent from "@/components/BtnComponent.vue";
 import IconBtn from "@/components/IconBtn.vue";
 import IconCircleBtn from "@/components/IconCircleBtn.vue";
 import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
-import ColumnController from "@/components/ColumnController.vue";
 import { nextTick, ref, reactive, watch, onBeforeUnmount } from "vue";
 import { onMounted } from "vue";
 import { computed } from "vue";
@@ -49,7 +48,6 @@ function orgnizeTreeData(data) {
 }
 
 onMounted(() => {
-
     getTreeData();
 })
 const defaultProps = reactive({
@@ -60,8 +58,7 @@ const defaultProps = reactive({
 //一進來先抓store.state.checkSlaveGroupId
 //找不到群組跳通知
 import store from "@/store";
-// import {useRouter} from 'vue-router'
-// const router = useRouter()
+
 import { ElMessage } from "element-plus";
 
 const treeRef = ref();
@@ -142,6 +139,7 @@ function showNodeData(node, ref = "") {
         node = treeRefMobile.value.getNode(node.data.slaveGroupId);
     }
     expandTree(node);
+    switchNodeTab(node.data.slaveGroupName)
     currentNode.value = node.data;
     scrollbarToRight();
 }
@@ -225,132 +223,70 @@ function scrollbarToRight() {
 }
 
 //device list
-// let deviceTableProps = [
-//     {
-//         columnName: "Status",
-//         dataKey: "status",
-//         width: 10,
-//         minWidth: '80px',
-//         fixed: true,
-//     },
-//     {
-//         columnName: "Device Name",
-//         dataKey: "deviceName",
-//         width: 40,
-//         minWidth: '200px',
-//     },
-//     {
-//         columnName: "Label",
-//         dataKey: "aliasName",
-//         width: 30,
-//         minWidth: '150px',
-//     },
-//     {
-//         columnName: "Enrolled Status",
-//         dataKey: "deviceState",
-//         width: 20,
-//         minWidth: '130px'
-//     }
-// ]
 let deviceTableProps = [
     {
-        // columnName: "Status",
-        columnName: "1",
-        dataKey: "status",
+        columnName: "Status",
+        dataKey: "healthStatus",
         width: 10,
         minWidth: '80px',
-        fixed: true,
-        show: true
     },
     {
-        // columnName: "Device Name",
-        columnName: "2",
+        columnName: "Device Name",
         dataKey: "deviceName",
-        // width: 40,
-        width: 10,
-        minWidth: '120px',
-        fixed: true,
-        show: true
+        width: 30,
+        minWidth: '200px',
     },
     {
-        // columnName: "Label",
-        columnName: "3",
+        columnName: "Label",
         dataKey: "aliasName",
-        // width: 30,
-        width: 10,
+        width: 25,
         minWidth: '150px',
-        fixed: true,
-        show: true
     },
     {
-        // columnName: "Enrolled Status",
-        columnName: "4",
-        dataKey: "deviceState",
-        // width: 20,
-        width: 10,
-        minWidth: '100px',
-        fixed: true,
+        columnName: "SN",
+        dataKey: "sn",
+        width: 20,
+        minWidth: '140px'
     },
     {
-        columnName: "5",
-        dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: true
+        columnName: "Mac Addr",
+        dataKey: "macAddress",
+        width: 20,
+        minWidth: '140px'
     },
     {
-        columnName: "6",
+        columnName: "Enrolled Status",
         dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: true
-    },
-    {
-        columnName: "7",
-        dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: false
-    },
-    {
-        columnName: "8",
-        dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: true
-    },
-    {
-        columnName: "9",
-        dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: false
-    },
-    {
-        columnName: "10",
-        dataKey: "deviceState",
-        width: 10,
-        minWidth: '200px',
-        show: true
-    },
+        width: 20,
+        minWidth: '130px'
+    }
 ]
-const deviceListTableName = ref("deviceListTable")
+
 const deviceTooltipContent = ref('Double click to edit.')
 let columnsExcept = [
     {
         tab: "MAIN",
-        except: ["1", "2"]
+        except: ["SN", "Mac Addr"]
     },
     {
         tab: "UNASSIGNED",
-        except: ["4","5", "6","7"]
+        except: ["SN", "Mac Addr"]
     },
     {
         tab: "INACTIVE",
-        except: ["8","9"]
+        except: ["Status"]
     }
 ]
 const deviceListActiveTab = ref("MAIN")
+function switchNodeTab(nodeName) {
+    if (nodeName === "MAIN" && deviceListActiveTab.value !== "MAIN") {
+        deviceListActiveTab.value = "MAIN"
+    } else if (nodeName === "UNASSIGNED" && deviceListActiveTab.value !== "UNASSIGNED") {
+        deviceListActiveTab.value = "UNASSIGNED"
+    } else if (nodeName === "INACTIVE" && deviceListActiveTab.value !== "INACTIVE") {
+        deviceListActiveTab.value = "INACTIVE"
+    }
+}
 
 const devicesChecked = ref([])
 const deviceListTable = ref()
@@ -395,7 +331,7 @@ const addDeviceDialogOpen = ref(false)
 const searchAddDeviceText = ref("")
 const activeTab = ref(0)
 const addDeviceCheckedList = ref([])
-const hasNoDeviceChecked = computed(()=>{return addDeviceCheckedList.value.length==0})
+const hasNoDeviceChecked = computed(() => { return addDeviceCheckedList.value.length == 0 })
 const addDeviceTabs = reactive([
     {
         name: "UNASSIGNED",
@@ -406,7 +342,7 @@ const addDeviceTabs = reactive([
         addAmount: 0
     }
 ])
-function addDeviceCheck(data){
+function addDeviceCheck(data) {
     addDeviceCheckedList.value = data
 }
 function addDeviceAllOrganize(groupdata = []) {
@@ -437,11 +373,6 @@ function searchDevice() {
     })
 }
 const addDeviceSearchResult = ref(addDeviceAllResult)
-
-const addDeviceTooltipName = ref()
-function setTooltipName(e){
-    addDeviceTooltipName.value = e.target.innerText
-}
 
 //RWD
 const windowWidth = ref(window.innerWidth);
@@ -480,7 +411,7 @@ watch(windowWidth, () => {
 const getDataLen = ref(30)
 const URL = ref(`/data/batchload/`)
 
-let testTableProps = [
+let addDeviceTableProps = [
     {
         columnName: "DeviceName",
         dataKey: "deviceName",
@@ -488,8 +419,9 @@ let testTableProps = [
         // fixed:true
     },
     {
-        columnName: "ID",
-        dataKey: "deviceId",
+        columnName: "Label",
+        dataKey: "aliasName",
+        width: 50,
     },
 ]
 
@@ -607,12 +539,10 @@ let testTableProps = [
                             </li>
                         </ul>
                         <div class="device-result w-100 py-2 px-3 layout-content">
-                            <InefiVirtualTable ref="deviceTable" :item-size="54" 
-                            :table-props="testTableProps" key-field="deviceId" 
-                            :openIfEllipsis="true" tooltipRef="deviceName" :tooltipContent="addDeviceTooltipName" tooltipTrigger="click"
-                            @tooltipOpen="setTooltipName" :tooltipModel="addDeviceDialogOpen"
-                            :getDataLen="getDataLen" :batchLoad="true" :URL="URL" :showCheckBox="true"
-                            @haveCheckedData="addDeviceCheck"/>
+                            <InefiVirtualTable ref="deviceTable" :item-size="54" :table-props="addDeviceTableProps" 
+                            key-field="deviceId" :tooltipModel="addDeviceDialogOpen" 
+                            :getDataLen="getDataLen" :batchLoad="true" :URL="URL" :showCheckBox="true" 
+                            @haveCheckedData="addDeviceCheck" :searchShow="true"/>
                         </div>
                     </div>
 
@@ -679,7 +609,7 @@ let testTableProps = [
                             </div>
                             <div class="layout-content">
                                 <splitpanes horizontal>
-                                    <pane>
+                                    <pane v-if="deviceListActiveTab == 'MAIN'">
                                         <div class="layout-content">
                                             <div class="list-refresh border-b px-3 d-sm-none d-flex justify-content-end">
                                                 <IconBtn iconClass="fa-solid fa-list" active @click="
@@ -727,8 +657,7 @@ let testTableProps = [
                                     </pane>
                                     <pane>
                                         <div class="layout-content">
-                                            <div class="header border-b p-3 d-flex align-items-center justify-content-between">
-                                                <span class="d-sm-none fs-4">裝置</span>
+                                            <div class="header border-b p-3 d-flex align-items-center justify-content-between" v-if="deviceListActiveTab == 'MAIN'">
                                                 <div class="operate d-flex align-items-center flex-grow-1">
                                                     <div class="" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
                                                         <font-awesome-icon icon="fa-solid fa-folder" />
@@ -738,31 +667,34 @@ let testTableProps = [
                                                         <font-awesome-icon icon="fa-solid fa-trash" />
                                                         <span class="ms-2">刪除</span>
                                                     </div>
-                                                    <div class="ms-auto d-flex">
-                                                        <el-button @click="deviceListActiveTab = 'MAIN'">MAIN</el-button>
-                                                        <el-button @click="deviceListActiveTab = 'UNASSIGNED'">UNASSIGNED</el-button>
-                                                        <el-button @click="deviceListActiveTab = 'INACTIVE'">INACTIVE</el-button>
-                                                        <ColumnController :tableNameRef="deviceListTableName"/>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="layout-content">
-                                                <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" 
-                                                :items="deviceResult" key-field="deviceId" :showCheckBox="true"
-                                                tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" tooltipRef="aliasName"
-                                                @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []"
-                                                :table-name="deviceListTableName" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab">
-                                                    <template #aliasName="{item}">
-                                                        <div class="label px-2" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" @touchstart="thisTouchStart(item.deviceId)" 
-                                                            @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
-                                                            <div class="alias_name">{{ item.aliasName }}</div>
-                                                            <div class="alias_input">
-                                                                <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
-                                                            </div>
+                                                <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" :items="deviceResult" key-field="deviceId" 
+                                                :showCheckBox="deviceListActiveTab == 'MAIN'" tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" 
+                                                tooltipRef="aliasName" @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []" 
+                                                table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" :customColumns="true">
+                                                    <template #healthStatus="{item}">
+                                                        <div class="d-flex w-100 align-items-center justify-content-center">
+                                                            <div class="status_dot" :class="{
+                                                                err:item.healthStatus === 'ERROR',
+                                                                good:item.healthStatus === 'GOOD'}"></div>
                                                         </div>
                                                     </template>
-                                                    <template #deviceState="{item}">
-                                                        {{ item.deviceState === "REGISTERED" ? "已註冊" : "未註冊" }}
+                                                    <template #aliasName="{ item }">
+                                                        <div class="label" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" 
+                                                        @touchstart="thisTouchStart(item.deviceId)" @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
+                                                            <span class="alias_name">{{ item.aliasName }}</span>
+                                                            <span class="alias_input">
+                                                                <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
+                                                            </span>
+                                                        </div>
+                                                    </template>
+                                                    <template #deviceState="{ item }">
+                                                        <div class="enrolled_status py-1 px-2" :class="{ enrolled: item.deviceState === 'REGISTERED' }">
+                                                            <div class="dot me-2"></div>
+                                                            <span>{{ item.deviceState === "REGISTERED" ? "ENROLLED" : "INACTIVE" }}</span>
+                                                        </div>
                                                     </template>
                                                 </InefiVirtualTable>
                                             </div>
@@ -903,12 +835,24 @@ let testTableProps = [
     color: $primary;
     cursor: pointer;
 }
-
+.status_dot{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    &.err{
+        background-color: $danger;
+    }
+    &.good{
+        background-color: $success;
+    }
+    
+}
 .label {
     width: 100%;
-    height: 100%;
+    min-height: 24px;
     display: flex;
     align-items: center;
+
     .alias_name {
         display: block;
     }
@@ -924,6 +868,36 @@ let testTableProps = [
 
         .alias_input {
             display: block;
+        }
+    }
+}
+
+.enrolled_status {
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    background-color: #eee;
+    width: fit-content;
+    span {
+        @extend .fw-bold;
+        font-size: 12px;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #aaa;
+    }
+
+    &.enrolled {
+        background-color: lighten($primary, 30%);
+
+        span {
+            color:$primary;
+        }
+        .dot {
+            background-color: $primary;
         }
     }
 }
@@ -993,12 +967,5 @@ let testTableProps = [
             min-height: 6px;
         }
     }
-}
-
-.vue-recycle-scroller__slot {
-    position: sticky;
-    z-index: 10;
-    top: 0;
-    background-color: #fff;
 }
 </style>

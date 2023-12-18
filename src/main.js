@@ -43,13 +43,16 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { faCircleMinus } from '@fortawesome/free-solid-svg-icons'
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons'
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { faTableColumns } from '@fortawesome/free-solid-svg-icons'
+import { faFilter } from '@fortawesome/free-solid-svg-icons'
 library.add(faChartSimple, faHardDrive, faArrowTrendUp, faFolder, faFolderOpen, 
     faGear, faHeadphones, faCircleUser, faEarthAmericas, faCircleQuestion,
     faArrowRight, faHouse, faTrash, faArtstation, faEllipsisVertical, faArrowsRotate,
     faRotateRight,faChevronRight, faChevronLeft, faMagnifyingGlass, faList, faCaretRight, faPlus,
-    faXmark, faCircleInfo, faCircleMinus, faCirclePlus, faBars, faTableColumns)
+    faXmark, faCircleInfo, faCircleMinus, faCirclePlus,faCircleXmark, faBars, faTableColumns,
+    faFilter)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 //圖表套件
