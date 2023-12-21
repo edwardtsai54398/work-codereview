@@ -5,11 +5,11 @@ import store from './store'
 const app = createApp(App)
 app.use(router).use(store)
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 //element-plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 app.use(ElementPlus).component(ElementPlusIconsVue)
 
@@ -63,11 +63,6 @@ app.use(VueApexCharts)
 import i18n from '@/lang/i18n'
 app.use(i18n)
 
-//全域引入axios
-// import axios from 'axios';
-// import VueAxios from 'vue-axios'
-// app.provide('axios', app.config.globalProperties.axios)
-// app.use(VueAxios, axios)
 
 //vuetify
 import 'vuetify/styles'

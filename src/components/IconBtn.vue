@@ -3,8 +3,8 @@ import { defineProps } from "vue";
 defineProps({
     iconClass: String,
     size: {
-        type: String,
-        default: "",
+        type: String || null,
+        default: null,
     },
     active: {
         type: Boolean,

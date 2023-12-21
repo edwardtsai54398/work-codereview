@@ -8,6 +8,20 @@
 body {
     color: #737373;
     font-family: Open Sans, sans-serif;
+    ::-webkit-scrollbar { 
+        display: none !important;
+    }
+    &::-webkit-scrollbar { 
+       display: none;
+    }
+    
+    &::-webkit-scrollbar-track {
+        display: none;
+    }
+    
+    &::-webkit-scrollbar-thumb { 
+       display: none;
+    }
 }
 * {
     margin: 0;
@@ -73,6 +87,9 @@ a {
 .layout-overflow {
     overflow: auto;
 }
+.color_prim{
+    color: $primary;
+}
 .active_folder {
     svg {
         fill: $primary;
@@ -133,6 +150,11 @@ a {
       flex: $i;
     }
   }
+.el-select-dropdown__item{
+    &.selected span{
+        color: $primary;
+    }
+}
 .absolute-0{
     position: absolute;
     top: 0;

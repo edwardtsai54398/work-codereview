@@ -139,7 +139,6 @@ function showNodeData(node, ref = "") {
         node = treeRefMobile.value.getNode(node.data.slaveGroupId);
     }
     expandTree(node);
-    switchNodeTab(node.data.slaveGroupName)
     currentNode.value = node.data;
     scrollbarToRight();
 }
@@ -207,7 +206,7 @@ function searchGroupData(treeData, parentItem = []) {
 function clearResult() {
     searchResult.value = [];
     searchText.value = "";
-    deviceResult.value = [];
+    deviceResult.value = []
     currentNode.value = {};
 }
 
@@ -227,8 +226,9 @@ let deviceTableProps = [
     {
         columnName: "Status",
         dataKey: "healthStatus",
+        slotName:"status",
         width: 10,
-        minWidth: '80px',
+        minWidth: '80px'
     },
     {
         columnName: "Device Name",
@@ -239,6 +239,7 @@ let deviceTableProps = [
     {
         columnName: "Label",
         dataKey: "aliasName",
+        slotName:"label",
         width: 25,
         minWidth: '150px',
     },
@@ -257,9 +258,34 @@ let deviceTableProps = [
     {
         columnName: "Enrolled Status",
         dataKey: "deviceState",
+        slotName:"enroll",
         width: 20,
         minWidth: '130px'
     }
+]
+let filterOptions = [
+    {
+        dataKey: 'healthStatus',
+        typeName: 'Status',
+        options: [
+            {
+                value: 'GOOD',
+                valName: 'Good'
+            },
+            {
+                value: 'WARNING',
+                valName: 'Warning'
+            },
+            {
+                value: 'ERROR',
+                valName: 'Error'
+            },
+            {
+                value: 'UNKNOWN',
+                valName: 'Unknown'
+            },
+        ]
+    },
 ]
 
 const deviceTooltipContent = ref('Double click to edit.')
@@ -277,17 +303,12 @@ let columnsExcept = [
         except: ["Status"]
     }
 ]
-const deviceListActiveTab = ref("MAIN")
-function switchNodeTab(nodeName) {
-    if (nodeName === "MAIN" && deviceListActiveTab.value !== "MAIN") {
-        deviceListActiveTab.value = "MAIN"
-    } else if (nodeName === "UNASSIGNED" && deviceListActiveTab.value !== "UNASSIGNED") {
-        deviceListActiveTab.value = "UNASSIGNED"
-    } else if (nodeName === "INACTIVE" && deviceListActiveTab.value !== "INACTIVE") {
-        deviceListActiveTab.value = "INACTIVE"
-    }
-}
+const deviceListActiveTab = computed(()=>{return breadCrumbList.length?breadCrumbList[0].data.slaveGroupName:"MAIN"})
 
+
+function getFilterParam(param){
+    console.log(param);
+}
 const devicesChecked = ref([])
 const deviceListTable = ref()
 function getDeviceCheckedData() {
@@ -330,26 +351,33 @@ function clearTouchTimer() {
 const addDeviceDialogOpen = ref(false)
 const searchAddDeviceText = ref("")
 const activeTab = ref(0)
-const addDeviceCheckedList = ref([])
-const hasNoDeviceChecked = computed(() => { return addDeviceCheckedList.value.length == 0 })
+const adddeviceActiveTab = computed(()=>{return addDeviceTabs[activeTab.value].name})
+const checkedUnassignedList = ref([])
+const checkedInactiveList = ref([])
+const hasNoDeviceChecked = computed(() => { return checkedUnassignedList.value.length == 0  && checkedInactiveList.value.length == 0})
 const addDeviceTabs = reactive([
     {
         name: "UNASSIGNED",
-        addAmount: 0
+        addAmount: computed(()=>{return checkedUnassignedList.value.length})
     },
     {
         name: "INACTIVE",
-        addAmount: 0
+        addAmount: computed(()=>{return checkedInactiveList.value.length})
     }
 ])
+const addDeviceAllResult = ref([])
 function addDeviceCheck(data) {
-    addDeviceCheckedList.value = data
+    if(activeTab.value == 0){
+        checkedUnassignedList.value = data
+    }else if(activeTab.value == 1){
+        checkedInactiveList.value = data
+    }
 }
 function addDeviceAllOrganize(groupdata = []) {
     let allResult = []
     if (groupdata.length > 0) {
 
-        allResult = groupdata.find((group) => group.slaveGroupName === addDeviceTabs[activeTab.value].name)
+        allResult = groupdata.find((group) => group.slaveGroupName === adddeviceActiveTab.value)
     }
     if (allResult.devices) {
         allResult = allResult.devices
@@ -362,17 +390,21 @@ watch(groupTreeData, (newVal) => {
 })
 watch(activeTab, () => {
     addDeviceAllOrganize(groupTreeData.value)
-    if (searchAddDeviceText.value !== "") {
-        searchDevice()
-    }
 })
-const addDeviceAllResult = ref([])
-function searchDevice() {
-    addDeviceSearchResult.value = addDeviceAllResult.value.filter((device) => {
-        return searchAddDeviceText.value.toUpperCase().includes(device.deviceName.toUpperCase())
-    })
-}
-const addDeviceSearchResult = ref(addDeviceAllResult)
+
+let addDeviceTableProps = [
+    {
+        columnName: "Device Name",
+        dataKey: "deviceName",
+        width: 50,
+        // fixed:true
+    },
+    {
+        columnName: "Label",
+        dataKey: "aliasName",
+        width: 50,
+    },
+]
 
 //RWD
 const windowWidth = ref(window.innerWidth);
@@ -407,23 +439,7 @@ watch(windowWidth, () => {
 });
 
 
-//batchLoad
-const getDataLen = ref(30)
-const URL = ref(`/data/batchload/`)
 
-let addDeviceTableProps = [
-    {
-        columnName: "DeviceName",
-        dataKey: "deviceName",
-        width: 50,
-        // fixed:true
-    },
-    {
-        columnName: "Label",
-        dataKey: "aliasName",
-        width: 50,
-    },
-]
 
 </script>
 <template>
@@ -448,7 +464,8 @@ let addDeviceTableProps = [
                         <template #reference>
                             <el-input v-model="searchText" size="large" placeholder="Please Input" :prefix-icon="Search" @input="searchGroupData(groupTreeData)" @focus="searchInputFocus = true" @blur="searchInputFocus = false">
                                 <template #prepend>
-                                    <el-select v-model="searchType" placeholder="群組" style="width: 115px" @change="clearResult" size="large">
+                                    <el-select v-model="searchType" placeholder="群組" style="width: 115px" 
+                                    @change="searchResult=[];searchText = ''" size="large">
                                         <el-option label="群組" value="group" />
                                         <el-option label="裝置" value="device" />
                                     </el-select>
@@ -516,11 +533,11 @@ let addDeviceTableProps = [
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-                <el-dialog v-model="addDeviceDialogOpen" top="auto" width="60%" class="pop_dialog" :show-close="false">
+                <el-dialog v-model="addDeviceDialogOpen" top="5vh" width="60%" class="pop_dialog" :show-close="false">
                     <template #header>
                         <span class="fs-4">Add Device</span>
                     </template>
-                    <div class="layout-content" style="min-height:400px;max-height:700px">
+                    <div class="layout-content addDevice_dialog-body">
                         <div class="adddevice-searchbar row px-4">
                             <div class="col-6 col-sm-8">
                                 <p>Select device and add to <span class="fw-bold">{{ currentNode.slaveGroupName }}</span></p>
@@ -528,27 +545,29 @@ let addDeviceTableProps = [
                             <div class="col-6 col-sm-4">
                                 <div class="d-flex align-items-center">
                                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                                    <el-input class="ms-3" v-model="searchAddDeviceText" placeholder="Search" @input="searchDevice" />
+                                    <el-input class="ms-3" v-model="searchAddDeviceText" placeholder="Search" />
                                 </div>
                             </div>
                         </div>
                         <ul class="custom-tabs mb-2">
-                            <li class="custom-tab" v-for="(item, index) in addDeviceTabs" :key="index" :class="{ 'active': activeTab == index }" @click="activeTab = index">
+                            <li class="custom-tab" v-for="(item, index) in addDeviceTabs" :key="index" :class="{ 'active': activeTab == index }"
+                             @click="activeTab = index">
                                 <span class="me-2">{{ item.name }}</span>
                                 <span class="adddevice-tab__number py-2 px-1">{{ item.addAmount }}</span>
                             </li>
                         </ul>
                         <div class="device-result w-100 py-2 px-3 layout-content">
-                            <InefiVirtualTable ref="deviceTable" :item-size="54" :table-props="addDeviceTableProps" 
-                            key-field="deviceId" :tooltipModel="addDeviceDialogOpen" 
-                            :getDataLen="getDataLen" :batchLoad="true" :URL="URL" :showCheckBox="true" 
-                            @haveCheckedData="addDeviceCheck" :searchShow="true"/>
+                            <InefiVirtualTable ref="deviceTable" :item-size="54" :table-props="addDeviceTableProps"
+                            :items="addDeviceAllResult" :showCheckBox="true" :searchShow="false"
+                            key-field="deviceId" :tooltipModel="addDeviceDialogOpen"
+                            :searchText="searchAddDeviceText" @clearSearch="searchAddDeviceText=''"
+                            @haveCheckedData="addDeviceCheck" :activeTab="adddeviceActiveTab"/>
                         </div>
                     </div>
 
                     <template #footer>
                         <el-button @click="addDeviceDialogOpen = false">Cancel</el-button>
-                        <el-button class="ms-3" :type="!hasNoDeviceChecked ? 'primary' : 'info'" @click="getDeviceCheckedData" :disabled="hasNoDeviceChecked">
+                        <el-button class="ms-3" :type="!hasNoDeviceChecked ? 'primary' : 'info'" @click="addDeviceDialogOpen=false" :disabled="hasNoDeviceChecked">
                             Go
                         </el-button>
                     </template>
@@ -673,15 +692,16 @@ let addDeviceTableProps = [
                                                 <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" :items="deviceResult" key-field="deviceId" 
                                                 :showCheckBox="deviceListActiveTab == 'MAIN'" tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" 
                                                 tooltipRef="aliasName" @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []" 
-                                                table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" :customColumns="true">
-                                                    <template #healthStatus="{item}">
+                                                table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" :customColumns="false"
+                                                :filter="deviceListActiveTab == 'UNASSIGNED'" :filter-options="filterOptions" @filt="getFilterParam" :searchShow="false">
+                                                    <template #status="{item}">
                                                         <div class="d-flex w-100 align-items-center justify-content-center">
                                                             <div class="status_dot" :class="{
                                                                 err:item.healthStatus === 'ERROR',
                                                                 good:item.healthStatus === 'GOOD'}"></div>
                                                         </div>
                                                     </template>
-                                                    <template #aliasName="{ item }">
+                                                    <template #label="{ item }">
                                                         <div class="label" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" 
                                                         @touchstart="thisTouchStart(item.deviceId)" @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
                                                             <span class="alias_name">{{ item.aliasName }}</span>
@@ -690,7 +710,7 @@ let addDeviceTableProps = [
                                                             </span>
                                                         </div>
                                                     </template>
-                                                    <template #deviceState="{ item }">
+                                                    <template #enroll="{ item }">
                                                         <div class="enrolled_status py-1 px-2" :class="{ enrolled: item.deviceState === 'REGISTERED' }">
                                                             <div class="dot me-2"></div>
                                                             <span>{{ item.deviceState === "REGISTERED" ? "ENROLLED" : "INACTIVE" }}</span>
@@ -732,6 +752,11 @@ let addDeviceTableProps = [
         background-color: transparent;
         border-bottom: none;
     }
+}
+
+.addDevice_dialog-body{
+    min-height: 350px;
+    max-height: calc(90vh - 150px);
 }
 
 .custom-tabs {

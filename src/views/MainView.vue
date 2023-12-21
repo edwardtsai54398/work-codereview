@@ -19,10 +19,9 @@ import TopNavbar from "@/components/TopNavbar.vue";
 @import "@/assets/scss/all.scss";
 .web {
     display: flex;
-    height: 100vh;
+    height: 100vh; 
 }
 .router_page {
     background-color: #efefef;
-    // background-color: #000;
 }
 </style>

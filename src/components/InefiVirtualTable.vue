@@ -4,6 +4,7 @@ import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
 import { Search } from "@element-plus/icons-vue";
 import ColumnController from "@/components/ColumnController.vue";
+import FilterComponent from "@/components/FilterComponent.vue";
 import IconCircleBtn from '@/components/IconCircleBtn.vue'
 import { useStore } from 'vuex'
 const store = useStore()
@@ -16,6 +17,7 @@ const props = defineProps({
     //     dataKey要綁的資料key,
     //     width(Number(%) String(px)),
     //     minWidth(String(px)，fixed的話建議要寫),
+    //     slotName欄位若要自定義內容，slotName可自定義slot name屬性,
     //     fixed(Boolean),
     //     show(Boolean),}
     hover: {
@@ -62,10 +64,10 @@ const props = defineProps({
         type: Array,
         default: () => []
     },//{tab:頁面名稱,except:[columnName...]該頁面不要的欄位名稱}
-    activeTab: String,//現在的tab
+    activeTab: String,//現在的tab。若要使用tab切換，讓表格顯現不同欄位，或同時有checkbox功能時就必須有
     searchShow: {
         type: Boolean,
-        default: false
+        default: true
     },
     searchText: {
         type: String,
@@ -79,6 +81,16 @@ const props = defineProps({
         type:Boolean,
         default: false
     },//是否要有filter
+    filterOptions:{
+        type:Array,
+        default: ()=>[]
+    },//filter每個type設定
+    // [
+    // {dataKey篩選的kayname,
+    // typeName篩選的kayname要呈現的label,
+    // multi是否可多選,
+    // options:[{value資料會有的值,ex:"GOOD", valName選項要呈現的label}]}
+    // ]
     darkMode: {
         type: Boolean,
         default: false
@@ -87,10 +99,12 @@ const props = defineProps({
 import { defineExpose, defineEmits } from 'vue'
 const emit = defineEmits([
     "reload"/*當reload按鈕被點擊時觸發*/,
+    "clearSearch",//若使用父層傳入searchText，點擊claer search會觸發
     "check"/*row被勾選，傳被勾選的資料*/,
     "uncheck"/*row被取消勾選，傳被取消的資料*/,
     "haveCheckedData"/*當有一個以上的勾選資料，傳所有被選取的資料*/,
     "noCheckedData"/*當沒有勾選資料*/,
+    "filt"//filter傳出參數
 ])
 
 defineExpose({
@@ -121,10 +135,20 @@ watch(windowW,(newVal)=>{
 
 //過濾不要的欄位
 const activeTab = computed(() => { return props.activeTab })
-const useSwitchTab = computed(() => { return (props.columnsExcept.length > 0 && props.activeTab) })
-const tableProps = computed(() => {
+const useSwitchTab = computed(() => { return typeof props.activeTab !== "undefined" })
+const tablePropsFilted = computed(() => {
     let columnKeep = props.tableProps
-    if (useSwitchTab.value) {
+    columnKeep.forEach((column)=>{
+        if (!("show" in column)) {
+            column.show = true;
+        }
+        if (!("fixed" in column)) {
+            column.fixed = false;
+        } else if (column.fixed) {
+            column.show = true;
+        }
+    })
+    if (useSwitchTab.value && props.columnsExcept.length) {
         columnKeep = props.tableProps.filter((column) => {
             let tabExpectList = props.columnsExcept.find((except) => except.tab === activeTab.value)
             return !tabExpectList.except.some((except) => except === column.columnName)
@@ -133,52 +157,20 @@ const tableProps = computed(() => {
     return columnKeep
 })
 //切換資料表格
-watch(activeTab, (newVal) => {
-    if (props.tableName) {
-        let columns = JSON.parse(JSON.stringify(tableProps.value))
-        store.commit("columnControl/setActiveTab", {
-            tableName: props.tableName,
-            tab: newVal
-        })
-        store.commit("columnControl/saveColumnSortedOringinal", {
-            tableName: props.tableName,
-            columns
-        })
-    }
-}, { deep: true, immediate: true })
+const tableNameComputed = computed(()=>{return useSwitchTab.value ? activeTab.value : props.tableName})
 
 //整理表格
-import columnSortedByFixed from '@/store/columnControl/columnSortedByFixed.js'
 
-const tablePropsSorted = computed(() => {
-    let referenceTableProps = columnSortedByFixed(tableProps.value)
-    if (props.tableName) {
-        if (useSwitchTab.value) {
-            referenceTableProps = store.state.columnControl.tables[props.tableName][props.activeTab]
-        } else {
-            referenceTableProps = store.state.columnControl.tables[props.tableName]
-        }
-    }
-    return referenceTableProps
-})
+const tablePropsSorted = ref(tablePropsFilted.value)
+function setTableSorted(table){
+    tablePropsSorted.value = table
+}
+
 const tablePropsFixed = computed(() => {
     return tablePropsSorted.value.filter((column) => { return column.fixed })
 })
 
-const items = computed(() => {
-    let items = props.items
-    if (props.batchLoad) {
-        items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
-        let emptyLength = items.filter((data) => !data[props.keyField]).length
-        let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
-        items.splice(emptyStartIndex, emptyLength)
-    }
-    if (searchText.value !== "") {
-        items = searchResult.value
-    }
-    return items
-})
-
+//欄位寬度
 function getColumnWidth(column) {
     if (!column.show) {
         return '0px'
@@ -247,55 +239,9 @@ const calcMainMinWidth = computed(() => {
     return allWidth
 })
 
-//全選功能
-const rowDataChecked = reactive([])
-const selectAll = computed(() => {
-    return rowDataChecked.length === items.value.length && rowDataChecked.length !== 0
-})
-const isIndeterminate = computed(() => {
-    return rowDataChecked.length !== items.value.length && rowDataChecked.length !== 0
-})
-
-function selectAllChange(value) {
-    rowDataChecked.length = 0
-    if (value) {
-        items.value.forEach((item) => {
-            rowDataChecked.push(item)
-        })
-    }
-    isIndeterminate.value = false
-}
-function setRowIsCheck(item) {
-    if (isRowChecked(item)) {
-        rowDataChecked.splice(rowDataChecked.indexOf(item), 1)
-        emit("uncheck", item)
-    } else {
-        rowDataChecked.push(item)
-        emit("check", item)
-    }
-}
-function isRowChecked(item) {
-    let rowDataCheckedExistRow = rowDataChecked.some((row) => row[props.keyField] === item[props.keyField])
-    return rowDataCheckedExistRow
-}
-
-//被選取的資料傳到父層事件
-
-watch(rowDataChecked, (newVal) => {
-    if (newVal.length > 0) {
-        emit("haveCheckedData", newVal)
-    } else {
-        emit("noCheckedData")
-
-    }
-})
-function getCheckedData() {
-    return [...rowDataChecked]
-}
-function clearChecked() {
-    rowDataChecked.length = 0
-    selectAll.value = false
-    isIndeterminate.value = false
+//filter
+function emitFilterParam(param){
+    emit("filt",param)
 }
 
 //search
@@ -303,13 +249,122 @@ const searchInputText = ref("")
 const searchText = computed(() => { return props.searchShow ? searchInputText.value : props.searchText })
 const columsDatakeys = reactive(tablePropsSorted.value.map((column) => column.dataKey))
 const searchResult = computed(() => {
-    return items.value.filter((item) => {
+    return props.items.filter((item) => {
         return columsDatakeys.some((key) => item[key].toUpperCase().includes(searchText.value.toUpperCase()))
     })
 })
 function clearSearch() {
     searchInputText.value = ""
+    if(!props.searchShow && props.searchText !== ""){
+        emit("clearSearch")
+    }
 }
+
+const items = computed(() => {
+    let items = props.items
+    if (props.batchLoad) {
+        items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
+        let emptyLength = items.filter((data) => !data[props.keyField]).length
+        let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
+        items.splice(emptyStartIndex, emptyLength)
+    }
+    if (searchText.value !== "") {
+        items = searchResult.value
+    }
+    return items
+})
+
+//全選功能
+const rowDataChecked = reactive([])
+const rowDataCheckedUsetab = reactive({})
+const checkListRef = computed(()=>{return (useSwitchTab.value && props.activeTab in rowDataCheckedUsetab) ? rowDataCheckedUsetab[props.activeTab] : rowDataChecked})
+onMounted(()=>{
+    if(useSwitchTab.value && !(props.activeTab in rowDataCheckedUsetab)){
+        rowDataCheckedUsetab[props.activeTab] = []
+    }
+})
+watch(activeTab,()=>{
+    if(!(props.activeTab in rowDataCheckedUsetab)){
+        rowDataCheckedUsetab[props.activeTab] = []
+    }
+},{deep:true})
+
+const selectAll = computed(() => {
+    return checkListRef.value.length === items.value.length && checkListRef.value.length !== 0
+})
+const isIndeterminate = computed(() => {
+    return checkListRef.value.length !== items.value.length && checkListRef.value.length !== 0
+})
+
+function selectAllChange(value) {
+    let checkedList = rowDataChecked
+    if(useSwitchTab.value){
+        if(!(props.activeTab in rowDataCheckedUsetab)){
+            rowDataCheckedUsetab[props.activeTab]=[]
+        }
+        checkedList = rowDataCheckedUsetab[props.activeTab]
+    }
+
+    checkedList.length = 0
+    if (value) {
+        items.value.forEach((item) => {
+            checkedList.push(item)
+        })
+    }
+}
+function setRowIsCheck(item) {
+    let checkedList = rowDataChecked
+    if(useSwitchTab.value){
+        if(!(props.activeTab in rowDataCheckedUsetab)){
+            rowDataCheckedUsetab[props.activeTab]=[]
+        }
+        checkedList = rowDataCheckedUsetab[props.activeTab]
+    }
+    if (isRowChecked(item)) {
+        checkedList.splice(checkedList.indexOf(item), 1)
+        emit("uncheck", item)
+    } else {
+        checkedList.push(item)
+        emit("check", item)
+    }
+}
+function isRowChecked(item) {
+    let rowDataCheckedExistRow = checkListRef.value.some((row) => row[props.keyField] === item[props.keyField])
+    return rowDataCheckedExistRow
+}
+
+watch(items,()=>{
+    if(items.value.length == 0){
+        clearChecked()
+    }
+},{deep:true})
+
+//被選取的資料傳到父層事件
+
+watch(checkListRef, (newVal) => {
+    if (newVal.length > 0) {
+        emit("haveCheckedData", newVal)
+    } else {
+        emit("noCheckedData")
+
+    }
+},{deep:true})
+
+function getCheckedData() {
+    return [...checkListRef.value]
+}
+function clearChecked() {
+    let checkedList = rowDataChecked
+    if(useSwitchTab.value){
+        if(!(props.activeTab in rowDataCheckedUsetab)){
+            rowDataCheckedUsetab[props.activeTab]=[]
+        }
+        checkedList = rowDataCheckedUsetab[props.activeTab]
+    }
+    checkedList.length = 0
+}
+
+
 //reload
 function reload() {
     if (!props.batchLoad) {
@@ -337,7 +392,7 @@ const getTableInnerWidth = debounce((entries) => {
     tableMainInnerWidth.value = entries[0].contentRect.width
     compareTableInnerWider()
 }, 5)
-const getfixedLeftWidth = debounce((entries) => {
+const getfixedLeftWidth =  debounce((entries) => {
     fixedLeftWidth.value = entries[0].contentRect.width
 }, 5)
 
@@ -348,9 +403,7 @@ const fixedLeftResizeObserver = new ResizeObserver(getfixedLeftWidth)
 onMounted(() => {
     tableMainResizeObserver.observe(tableMain.value)
     tableMainInnerResizeObserver.observe(tableMainInner.value)
-    if (props.showCheckBox || tablePropsFixed.value.length > 0) {
-        fixedLeftResizeObserver.observe(fixedLeft.value)
-    }
+    fixedLeftResizeObserver.observe(fixedLeft.value)
 })
 
 //計算scrollX寬度
@@ -573,6 +626,7 @@ function tooltipClose() {
 onMounted(() => {
     tableMain.value.addEventListener("click", tooltipClose)
     tableMain.value.addEventListener("click", defaultTipClose)
+    tableMain.value.addEventListener("click", defaultTipClose)
 })
 
 //tooltip滾動超出消失
@@ -744,6 +798,11 @@ function batchReloadData() {
     store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
 }
 
+//右擊複製
+// function copyText(){
+//     navigator.clipboard.writeText(copyBoard.value)
+// }
+
 const finalData = computed(() => {
     let data = items.value
     if (props.sortable) {
@@ -755,8 +814,9 @@ const finalData = computed(() => {
 <template>
     <div class="inefi-table-v2 layout-content" :class="{ 'no-select': mouseYDown || mouseXDown, dark: darkMode, canHover: hover }">
         <div class="table-func-header d-flex align-items-center justify-content-end">
-            <div class="py-2 px-3 d-flex me-auto" v-if="customColumns || filter">
-                <ColumnController :tableNameRef="tableName" v-if="customColumns" class="me-2"/>
+            <div class="px-3 me-auto" v-if="customColumns || filter">
+                <ColumnController class="my-2 me-2" :tableName="tableNameComputed" :columns="tablePropsFilted" v-if="customColumns" @change="setTableSorted" :loading="loading"/>
+                <FilterComponent class="d-inline-block my-2" :options="filterOptions" :darkMode="darkMode" v-if="filter" @sentParam="emitFilterParam" :loading="loading"/>
             </div>
             <div v-if="searchShow" style="width: 350px;" class="d-flex align-items-center justify-content-end ms-auto">
                 <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="me-3 py-2 reload" @click="reload" :class="{ rotate: !loadingEnd }" />
@@ -770,14 +830,13 @@ const finalData = computed(() => {
                     <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable />
                 </div>
             </div>
-
         </div>
         <div class="layout-content" v-loading="!loadingEnd" element-loading-background="#fff">
             <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain" @scroll="Xscroll">
                 <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
                     <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" ref="mainScroller" @scroll="mainScrollEvent">
                         <template #before>
-                            <div class="table-columns py-2" :style="{ height: `${itemSize}px` }">
+                            <div class="table-columns py-2 border-b" :style="{ height: `${itemSize}px` }">
                                 <div class="px-2" v-if="showCheckBox">
                                     <el-checkbox class="p-2" />
                                 </div>
@@ -796,8 +855,9 @@ const finalData = computed(() => {
                                 </div>
                             </div>
                         </template>
-                        <template v-slot="{ item }">
-                            <div class="table-row py-2" :style="{ height: `${itemSize}px` }" :class="{ 'highlight-row': rowDataChecked.some((row) => row[props.keyField] == item[props.keyField]) }">
+                        <template v-slot="{ item, index }">
+                            <div class="table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent
+                            :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]), 'border-b':finalData.length-1 !== index}">
                                 <div class="px-2" v-if="showCheckBox">
                                     <el-checkbox class="p-2" />
                                 </div>
@@ -805,8 +865,9 @@ const finalData = computed(() => {
                                 :class="[column.dataKey]">
                                     <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) ? defaultTipOpenMouse($event) : tooltipOpen($event)" 
                                     @mouseleave="(tooltipRef !== column.dataKey) ? defaultTipCloseMouse() : tooltipClose($event)" 
-                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
-                                        <slot :name="column.dataKey" :item="item">
+                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)"
+                                    @mousedown="showCopyBtn($event)">
+                                        <slot :name="column.slotName" :item="item">
                                             {{ item[column.dataKey] }}
                                         </slot>
                                     </div>
@@ -825,7 +886,7 @@ const finalData = computed(() => {
                             </div>
                             <el-skeleton animated v-if="batchloadNotDoneShowText">
                                 <template #template>
-                                    <el-skeketon-item variant="p">
+                                    <el-skeleton-item variant="p">
                                         <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
                                             <div class="px-2" v-if="showCheckBox">
                                                 <el-skeleton-item style="width: 30px" />
@@ -836,7 +897,7 @@ const finalData = computed(() => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </el-skeketon-item>
+                                    </el-skeleton-item>
                                 </template>
 
                             </el-skeleton>
@@ -844,11 +905,11 @@ const finalData = computed(() => {
                     </RecycleScroller>
                 </div>
             </div>
-            <div class="layout-content inefi-table-v2__fixed-left" ref="fixedLeft" style="position: absolute;" v-if="showCheckBox || tablePropsFixed.length > 0">
-                <div class="layout-content">
+            <div class="layout-content inefi-table-v2__fixed-left" ref="fixedLeft" style="position: absolute;">
+                <div class="layout-content" v-if="showCheckBox || tablePropsFixed.length > 0">
                     <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" ref="fixedScroller" @scroll="fixedScrollEvent">
                         <template #before>
-                            <div class="fixed-left__table-columns py-2" :style="{ height: `${itemSize}px` }">
+                            <div class="fixed-left__table-columns py-2 border-b" :style="{ height: `${itemSize}px` }">
                                 <div class="px-2" v-if="showCheckBox">
                                     <el-checkbox class="p-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
                                 </div>
@@ -865,15 +926,16 @@ const finalData = computed(() => {
                                 </div>
                             </div>
                         </template>
-                        <template v-slot="{ item }">
-                            <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }" :class="{ 'highlight-row': rowDataChecked.some((row) => row[props.keyField] == item[props.keyField]) }">
+                        <template v-slot="{ item, index }">
+                            <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent
+                            :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]),'border-b':finalData.length-1 !== index }">
                                 <div class="px-2 " v-if="showCheckBox">
                                     <el-checkbox class="p-2" @change="setRowIsCheck(item)" :model-value="isRowChecked(item)" />
                                 </div>
                                 <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
-                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) && defaultTipOpen($event)" 
-                                    @mouseleave="(tooltipRef !== column.dataKey) && defaultTipClose($event)" 
-                                    @touchend="(tooltipRef !== column.dataKey) && defaultTipOpen($event)">
+                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) ? defaultTipOpenMouse($event) : tooltipOpen($event)" 
+                                    @mouseleave="(tooltipRef !== column.dataKey) ? defaultTipCloseMouse() : tooltipClose($event)" 
+                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
                                         <slot :name="column.dataKey" :item="item">
                                             {{ item[column.dataKey] }}
                                         </slot>
@@ -884,7 +946,7 @@ const finalData = computed(() => {
                         <template #after v-if="batchloadNotDoneShowText">
                             <el-skeleton animated>
                                 <template #template>
-                                    <el-skeketon-item variant="p">
+                                    <el-skeleton-item variant="p">
                                         <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
                                             <div class="px-2" v-if="showCheckBox">
                                                 <el-skeleton-item style="width: 30px" />
@@ -895,7 +957,7 @@ const finalData = computed(() => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </el-skeketon-item>
+                                    </el-skeleton-item>
                                 </template>
 
                             </el-skeleton>
@@ -903,7 +965,7 @@ const finalData = computed(() => {
                     </RecycleScroller>
                 </div>
             </div>
-            <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }">
+            <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }" v-show="scrollYHeight!==scrollYBarHeight">
                 <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)` }" v-show="scrollYBarHeight <= scrollYHeight" @mousedown="mouseStartY"></div>
             </div>
             <div class="inefi-table-v2__scrollx" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
@@ -941,7 +1003,6 @@ const finalData = computed(() => {
 .table-columns {
     display: flex;
     align-items: center;
-    @extend .border-b;
 
 }
 
@@ -1007,17 +1068,18 @@ const finalData = computed(() => {
 
 .inefi-table-v2__main {
     @extend .scrollbar-none;
+    scroll-padding-bottom: 0;
 
     &::-webkit-scrollbar {
-        opacity: 1;
+        display: none;;
     }
 
     &::-webkit-scrollbar-track {
-        opacity: 1;
+        display: none;;
     }
 
     &::-webkit-scrollbar-thumb {
-        opacity: 1;
+        display: none;;
     }
 }
 
@@ -1156,5 +1218,19 @@ const finalData = computed(() => {
     &:active{
         border: 1px solid $primary;
     }
+    &:focus{
+        border: 1px solid $primary;
+    }
+    &.disable{
+        border-color:#bbb;
+        background-color: #ddd;
+        span{
+            color: #bbb;
+        }
+    }
+}
+.el-popper.copyPopper{
+    padding: 8px;
+    width: 50px !important;
 }
 </style>

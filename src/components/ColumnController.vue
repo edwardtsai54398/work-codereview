@@ -5,13 +5,15 @@ import { onBeforeMount } from 'vue'
 import { computed } from 'vue'
 import { watch } from 'vue'
 import { defineProps } from 'vue'
-import { useStore } from 'vuex'
-const store = useStore()
+import { defineEmits } from 'vue'
+// import { useStore } from 'vuex'
+// const store = useStore()
 const props = defineProps({
-    tableNameRef: {
-        type: String,
-        default: "inefiVirtualTable"
-    },//對應要控制的tablem元件的字串
+    tableName: String,//對應要控制的tablem元件的字串
+    columns: {
+        type: Array,
+        default: () => []
+    },
     direction: {
         type: String,
         default: "rtl"
@@ -19,37 +21,105 @@ const props = defineProps({
     panelSize: {
         type: Number || String,
         default: 300
-    }
+    },
+    loading:{
+        type: Boolean,
+        default: false
+    },
 })
-
+const emit = defineEmits([
+    "change"
+])
 const panelOpen = ref(false)
 
-//切換頁面tab
-const activeTab = computed(() => {
-    return [props.tableNameRef] in store.state.columnControl.activeTab ? store.state.columnControl.activeTab[props.tableNameRef] : undefined
-})
+function deepcopy(obj) {
+    return JSON.parse(JSON.stringify(obj))
+}
 
-const columnList = computed(() => {
-    let columnListRefernce = store.state.columnControl.tables[props.tableNameRef] ? store.state.columnControl.tables[props.tableNameRef] : []
-    if (activeTab.value) {
-        columnListRefernce = store.state.columnControl.tables[props.tableNameRef][activeTab.value]
+function columnSortedByFixed(columns) {
+    let columnWithFixed = [];
+    let columnNoFixed = [];
+
+    columns.forEach((column) => {
+        if (column.fixed) {
+            columnWithFixed.push(column);
+        } else {
+            columnNoFixed.push(column);
+        }
+    });
+
+    columnWithFixed.forEach((column, index) => {
+        column.order = index + 1;
+    });
+    columnNoFixed.forEach((column, index) => {
+        column.order = index + 1 + columnWithFixed.length;
+    });
+    return [...columnWithFixed, ...columnNoFixed];
+}
+const storageSetting = ref([])
+const oringinSetting = computed(() => { return columnSortedByFixed(props.columns) })
+
+//localStorage
+function saveCustomColumnsSetting() {
+    let otherTable = {}
+    let otherTableOringinal = {}
+    if(storageSetting.value.length){
+        otherTable = Object.keys(storageSetting.value[0].tables).reduce((result, key) => {
+                if (key !== props.tableName) {
+                    result[key] = storageSetting.value[0].tables[key];
+                }
+                return result;
+            }, {})
+    
+        otherTableOringinal = Object.keys(storageSetting.value[1].oringinSetting).reduce((result, key) => {
+                if (key !== props.tableName) {
+                    result[key] = storageSetting.value[1].oringinSetting[key];
+                }
+                return result;
+            }, {})
     }
-    return columnListRefernce
-})
+    let data = [
+        { tables: { ...otherTable, [props.tableName]: columnList.value } },
+        { oringinSetting: { ...otherTableOringinal, [props.tableName]: oringinSetting.value } }
+    ]
+    localStorage.setItem("columnsSetting", JSON.stringify(data))
+}
+function getStorageColumnSetting() {
+    let storage = JSON.parse(localStorage.getItem("columnsSetting"))
+    if (storage) {
+        storageSetting.value = storage
+    }
+}
+getStorageColumnSetting()
 
+const columnList = computed(() => { 
+    return (storageSetting.value.length && storageSetting.value[0].tables[props.tableName]) ? storageSetting.value[0].tables[props.tableName] : deepcopy(oringinSetting.value) 
+})
+emit("change", columnList.value)
+
+const columnFixed = computed(() => {
+    return columnList.value.filter((column) => column.fixed)
+})
 const columnNoFixed = computed(() => {
     return columnList.value.filter((column) => !column.fixed)
 })
 const columnNoShow = computed(() => {
     return columnList.value.filter((column) => !column.show)
 })
+
+//客製設定
 function switchShow(columnName) {
-    store.commit("columnControl/setColumnShow", {
-        tableName: props.tableNameRef,
-        columnName,
-    })
+    let column = columnList.value.find((column) => columnName === column.columnName);
+    column.show = !column.show;
+    if (column.fixed) {
+        column.fixed = false;
+    }
+    columnList.value = columnSortedByFixed(columnList.value)
+    reorderColumn()
     saveCustomColumnsSetting()
+    getStorageColumnSetting()
 }
+
 import draggable from 'vuedraggable'
 const drag = ref(false)
 const dragOptions = computed(() => {
@@ -61,94 +131,109 @@ const dragOptions = computed(() => {
 })
 function Onchange(e) {
     if (e.moved) {
-        store.commit("columnControl/setMovedNewOrder", {
-            tableName: props.tableNameRef,
-            e: e.moved
-        })
+        setMovedNewOrder(e.moved)
 
     } else if (e.added) {
-        store.commit("columnControl/setAddedNewOrder", {
-            tableName: props.tableNameRef,
-            e: e.added
-        })
+        fixedShownSwitchNewOrder(e.added)
     }
     saveCustomColumnsSetting()
+    getStorageColumnSetting()
+}
+function setMovedNewOrder(e) {
+    let columnTarget = columnList.value
+    let groupStartOrder = 1;
+    if (!e.element.fixed) {
+        groupStartOrder = columnTarget.filter((column) => column.fixed).length + 1;
+    }
+    let moveColumn = columnTarget.find(
+        (column) => e.element.columnName === column.columnName
+    );
+
+    let newOrder = e.newIndex + groupStartOrder;
+    let oldOrder = e.oldIndex + groupStartOrder;
+    if (oldOrder > newOrder) {
+        columnTarget.forEach((column) => {
+            if (column.order < oldOrder && column.order >= newOrder) {
+                column.order += 1;
+            }
+        });
+    } else if (oldOrder < newOrder) {
+        columnTarget.forEach((column) => {
+            if (column.order > oldOrder && column.order <= newOrder) {
+                column.order -= 1;
+            }
+        });
+    }
+    moveColumn.order = newOrder;
+
+    reorderColumn()
+}
+
+function fixedShownSwitchNewOrder(e) {
+    let columnTarget = columnList.value
+    let moveColumn = columnTarget.find((column) => e.element.columnName === column.columnName);
+    let groupStartOrder = 1;
+    if (moveColumn.fixed) {
+        groupStartOrder = columnTarget.filter((column) => { return column.fixed; }).length;
+    }
+    let newOrder = e.newIndex + groupStartOrder;
+    let oldOrder = moveColumn.order;
+    if (oldOrder > newOrder) {
+        columnTarget.forEach((column) => {
+            if (column.order < oldOrder && column.order >= newOrder) {
+                column.order += 1;
+            }
+        });
+    } else if (oldOrder < newOrder) {
+        columnTarget.forEach((column) => {
+            if (column.order > oldOrder && column.order <= newOrder) {
+                column.order -= 1;
+            }
+        });
+    }
+    moveColumn.order = newOrder;
+    moveColumn.fixed = !moveColumn.fixed;
+    reorderColumn()
+    if (moveColumn.fixed) {
+        columnList.value = columnSortedByFixed(columnList.value)
+    }
+}
+function reorderColumn() {
+    let columnTarget = columnList.value
+    for (let i = 0; i < columnTarget.length; i++) {
+        for (let j = i + 1; j < columnTarget.length; j++) {
+            if (columnTarget[i].order > columnTarget[j].order) {
+                let temp = { ...columnTarget[i] };
+                columnTarget[i] = {
+                    ...columnTarget[j],
+                };
+                columnTarget[j] = { ...temp };
+            }
+        }
+    }
 }
 
 //欄位全部顯示
 function showAllColumns() {
-    store.commit("columnControl/setAllColumnsShow", {
-        tableName: props.tableNameRef
-    })
+    columnList.value.forEach((column) => { column.show = true; })
+    columnList.value = columnSortedByFixed(columnList.value)
+
     saveCustomColumnsSetting()
+    getStorageColumnSetting()
 }
 //欄位回到初始設定
 function resetColumn() {
-    store.commit("columnControl/resetColumn", {
-        tableName: props.tableNameRef
-    })
+    storageSetting.value[0].tables[props.tableName] = deepcopy(oringinSetting.value)
+
     saveCustomColumnsSetting()
+    getStorageColumnSetting()
 }
 
-function saveCustomColumnsSetting() {
-    let data = [
-        { tables: store.state.columnControl.tables },
-        { oringinSetting: store.state.columnControl.oringinSetting }
-    ]
-    localStorage.setItem("customizeColumns", JSON.stringify(data))
-}
-function setStorageColumnSetting() {
-    let storage = JSON.parse(localStorage.getItem("customizeColumns"))
-    if (storage) {
-        for (const [tableName, columns] of Object.entries(storage[1].oringinSetting)) {
-            if (!Array.isArray(columns)) {
-                for (const [tabName, subColumns] of Object.entries(columns)) {
-                    store.commit("columnControl/setActiveTab", {
-                        tableName,
-                        tab: tabName
-                    })
-                    store.commit("columnControl/saveColumnSortedOringinal", {
-                        tableName,
-                        columns: subColumns
-                    });
-                }
-            } else {
-                store.commit("columnControl/saveColumnSortedOringinal", {
-                    tableName,
-                    columns
-                });
-            }
-        }
-        for (const [tableName, columns] of Object.entries(storage[0].tables)) {
-            if (!Array.isArray(columns)) {
-                for (const [tabName, subColumns] of Object.entries(columns)) {
-                    store.commit("columnControl/setActiveTab", {
-                        tableName,
-                        tab: tabName
-                    })
-                    store.commit("columnControl/setColumnSortedByFixed", {
-                        tableName,
-                        columns: subColumns
-                    });
-                }
-                store.commit("columnControl/setActiveTab", {
-                    tableName,
-                    tab: Object.keys(columns)[0]
-                })
-            } else {
-                store.commit("columnControl/setColumnSortedByFixed", {
-                    tableName,
-                    columns
-                });
-            }
-        }
-
-    }
-}
-onMounted(() => {
-    setStorageColumnSetting()
-})
-
+//切換頁面
+// const tableName = computed(()=>{return props.tableName})
+watch(columnList,()=>{
+    emit("change", columnList.value)
+},{deep:true})
 
 //手機板欄位變成預設設定
 const windowW = ref(0)
@@ -163,13 +248,10 @@ onBeforeMount(() => {
     window.removeEventListener("resize", getWindowW)
 })
 watch(windowW, (newVal) => {
-
     if (newVal < 500) {
-        store.commit("columnControl/resetColumn", {
-            tableName: props.tableNameRef
-        })
-    }else{
-        setStorageColumnSetting()
+        storageSetting.value[0].tables[props.tableName] = null
+    } else {
+        getStorageColumnSetting()
     }
 }, { deep: true })
 </script>
@@ -179,16 +261,16 @@ watch(windowW, (newVal) => {
             <slot name="btn">
                 <button class="table-expansion d-none d-sm-inline-block">
                     <font-awesome-icon icon="fa-solid fa-table-columns" />
-                    <span class="ms-2">Customize Columns</span>
+                    <span class="ms-2">Columns Setting</span>
                 </button>
             </slot>
         </span>
-        <el-drawer v-model="panelOpen" :direction="panelDirection" :size="size">
+        <el-drawer v-model="panelOpen" :direction="direction" :size="panelSize">
             <div class="p-2 px-3 border-b fw-bold">Fixed Columns</div>
             <div class="column-controller__item-show py-4 px-3" v-if="!(columnList.some((column) => column.fixed))"></div>
-            <draggable v-model="columnList" tag="ul" :group="{ name: 'show', put: true }" :item-key="`order`" @change="Onchange" :animation="250">
+            <draggable v-model="columnFixed" tag="ul" :group="{ name: 'show', put: true }" :item-key="`order`" @change="Onchange" :animation="250">
                 <template #item="{ element }">
-                    <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse" v-if="element.fixed">
+                    <li class="column-controller__item-show py-2 px-3 flex-sm-row-reverse">
                         <button @click="switchShow(element.columnName)">
                             <font-awesome-icon icon="fa-solid fa-circle-minus" size="lg" color="#FF3D00" />
                         </button>

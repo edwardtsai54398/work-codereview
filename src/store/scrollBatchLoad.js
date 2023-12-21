@@ -21,15 +21,15 @@ export default {
             state.getDataLen = getDataLen;
             state.keyField = keyField;
         },
-        resetAllData(state){
-            state.offset = 0
-            state.allData = []
-            state.dataChangeCount = 0
-            state.dataLoadDone = false
-            state.dataNum = 1
-            state.batchesTrustList = []
-            state.loadStart = false
-            state.totalDataCount = 0
+        resetAllData(state) {
+            state.offset = 0;
+            state.allData = [];
+            state.dataChangeCount = 0;
+            state.dataLoadDone = false;
+            state.dataNum = 1;
+            state.batchesTrustList = [];
+            state.loadStart = false;
+            state.totalDataCount = 0;
         },
         setFirstBatch(state, data) {
             state.allData.push(...data.list);
@@ -108,20 +108,24 @@ export default {
                 let res;
                 if (!state.allData[state.offset]) {
                     if (state.dataNum <= 3) {
-                        res = await axios.get(
-                            `${url}data${state.dataNum}.json`
-                        );
-                        res = res.data;
-                        state.dataNum += 1;
-                        if (!state.loadStart) {
-                            commit("setFirstBatch", res);
-                        } else {
-                            commit("setNewData", res);
+                        try {
+                            res = await axios.get(`${url}data${state.dataNum}.json`);
+                            res = res.data;
+                            state.dataNum += 1;
+                            if (!state.loadStart) {
+                                commit("setFirstBatch", res);
+                            } else {
+                                commit("setNewData", res);
+                            }
+                        } catch (error) {
+                            console.error("An error occurred:", error.message);
                         }
                     } else {
                         // let res = await dispatch("getDataAPI", {url: `${url}dataNew.json`,});
                         // let res = await dispatch("getDataAPI", {url: `${url}dataLost.json`});
-                        let res = await dispatch("getDataAPI", {url: `${url}dataTotalSame.json`});
+                        let res = await dispatch("getDataAPI", {
+                            url: `${url}dataTotalSame.json`,
+                        });
                         commit("setNewData", res);
                     }
                     //實際發API
@@ -140,7 +144,9 @@ export default {
         async getFormerZoneData({ dispatch, commit }, url) {
             // let res = await dispatch("getDataAPI", {url: `${url}dataNew.json`,});
             // let res = await dispatch("getDataAPI", {url: `${url}dataLost.json`});
-            let res = await dispatch("getDataAPI", {url: `${url}dataTotalSame.json`});
+            let res = await dispatch("getDataAPI", {
+                url: `${url}dataTotalSame.json`,
+            });
             commit("setFormerFalseData", res.list);
             // let params = new URLSearchParams();
             // params.append("offset", state.offset);
@@ -150,15 +156,19 @@ export default {
         },
         async getDataAPI({ state }, { url }) {
             //這裡只是模仿API抓index
-            let res = await axios.get(`${url}`);
-            let getData = res.data.list.filter((data) => {
-                return (
-                    data.index >= state.offset &&
-                    data.index < state.offset + state.getDataLen
-                );
-            });
-            getData = { list: getData, total: res.data.total };
-            return getData;
+            try {
+                let res = await axios.get(`${url}`);
+                let getData = res.data.list.filter((data) => {
+                    return (
+                        data.index >= state.offset &&
+                        data.index < state.offset + state.getDataLen
+                    );
+                });
+                getData = { list: getData, total: res.data.total };
+                return getData;
+            } catch (error) {
+                console.error("An error occurred:", error.message);
+            }
         },
     },
     modules: {},
