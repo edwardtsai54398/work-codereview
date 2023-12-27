@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
     <div class="bigcard-component layout-content">
-        <slot name="content"></slot>
+        <slot name="default"></slot>
     </div>
 </template>
 <style lang="scss">

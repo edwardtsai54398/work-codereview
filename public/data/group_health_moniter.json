@@ -4,26 +4,26 @@
         {
             "idOfDeviceHealthGroup": 84,
             "titleOfDeviceHealthGroup": "12121212",
-            "groupName": "James test",
-            "groupUUID": "ADA1A180-F5DC-41CA-B637-B0517DA9FB0A"
+            "groupName": "Jay's Test Group",
+            "groupUUID": "4CD59C7D-0D3A-4312-9FFC-C6F4AE11D947"
         },
         {
             "idOfDeviceHealthGroup": 87,
             "titleOfDeviceHealthGroup": "main",
-            "groupName": "MAIN",
-            "groupUUID": "756E3CD0-4F97-4C33-B35E-0CA1F55517C9"
+            "groupName": "group_health",
+            "groupUUID": "A6724F5D-FF0E-4E68-A779-0DAC80DDF305"
         },
         {
             "idOfDeviceHealthGroup": 112,
             "titleOfDeviceHealthGroup": "edwardTest",
-            "groupName": "test_android",
-            "groupUUID": "21E60A16-CEE5-4DBA-8B2F-73D5E4118D46"
+            "groupName": "Ada's testing group",
+            "groupUUID": "760E5FD0-6EAB-44E5-913A-32C23EA1DD06"
         },
         {
             "idOfDeviceHealthGroup": 115,
             "titleOfDeviceHealthGroup": "edwardTestGood",
-            "groupName": "123",
-            "groupUUID": "05F14E2A-5A1B-4D85-A4B2-C117692F7948"
+            "groupName": "testProfile_Darwin_Test_Profile_2",
+            "groupUUID": "1FE01BED-03FC-45DF-84F5-22195E13E891"
         }
         
     ],

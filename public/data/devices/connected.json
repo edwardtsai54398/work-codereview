@@ -1,0 +1,26 @@
+{
+    "status": 1,
+    "result": {
+        "useCache": false,
+        "list": [
+            {
+                "index": 0,
+                "deviceId": "0060ef33467c-4d0e26dcb3462f05",
+                "deviceName": "POS337N2",
+                "model": "WhiskeyLake",
+                "os": "Windows",
+                "agentVer": "1.3.1",
+                "serialNumber": "Type2 - Board Serial Number",
+                "timestamp": 1703486303,
+                "status": "ERROR",
+                "aliasName": ""
+            }
+        ],
+        "total": 111,
+        "connected": 1,
+        "disconnected": 110
+    },
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1703486411
+}

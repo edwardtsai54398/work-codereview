@@ -73,17 +73,17 @@ const props = defineProps({
         type: String,
         default: ""
     },//如果不要有search框但要有搜尋功能，可傳search文字
-    customColumns:{
+    customColumns: {
         type: Boolean,
         default: false
     },//是否要有欄位客製元件
-    filter:{
-        type:Boolean,
+    filter: {
+        type: Boolean,
         default: false
     },//是否要有filter
-    filterOptions:{
-        type:Array,
-        default: ()=>[]
+    filterOptions: {
+        type: Array,
+        default: () => []
     },//filter每個type設定
     // [
     // {dataKey篩選的kayname,
@@ -99,6 +99,7 @@ const props = defineProps({
 import { defineExpose, defineEmits } from 'vue'
 const emit = defineEmits([
     "reload"/*當reload按鈕被點擊時觸發*/,
+    "loaded"/*當資料load完(batchload則是第一批資料load完)*/,
     "clearSearch",//若使用父層傳入searchText，點擊claer search會觸發
     "check"/*row被勾選，傳被勾選的資料*/,
     "uncheck"/*row被取消勾選，傳被取消的資料*/,
@@ -115,30 +116,30 @@ defineExpose({
 //網頁寬度
 const windowW = ref(0)
 const userDevice = ref("pc")
-function setWindowW(){
+function setWindowW() {
     windowW.value = window.innerWidth
 }
-onMounted(()=>{
+onMounted(() => {
     setWindowW()
     window.addEventListener("resize", setWindowW)
 })
 
-watch(windowW,(newVal)=>{
-    if(newVal<500){
+watch(windowW, (newVal) => {
+    if (newVal < 500) {
         userDevice.value = "mobile"
-    }else if(newVal >=500 && newVal<1050){
+    } else if (newVal >= 500 && newVal < 1050) {
         userDevice.value = "pad"
-    }else{
+    } else {
         userDevice.value = "pc"
     }
-},{deep:true})
+}, { deep: true })
 
 //過濾不要的欄位
-const activeTab = computed(() => { return props.activeTab })
+
 const useSwitchTab = computed(() => { return typeof props.activeTab !== "undefined" })
 const tablePropsFilted = computed(() => {
     let columnKeep = props.tableProps
-    columnKeep.forEach((column)=>{
+    columnKeep.forEach((column) => {
         if (!("show" in column)) {
             column.show = true;
         }
@@ -150,21 +151,30 @@ const tablePropsFilted = computed(() => {
     })
     if (useSwitchTab.value && props.columnsExcept.length) {
         columnKeep = props.tableProps.filter((column) => {
-            let tabExpectList = props.columnsExcept.find((except) => except.tab === activeTab.value)
-            return !tabExpectList.except.some((except) => except === column.columnName)
+            let tabExpectList = props.columnsExcept.find((except) => except.tab.toLowerCase() === props.activeTab.toLowerCase())
+            return !tabExpectList?.except.some((except) => except == column.columnName)
         })
+        if (!columnKeep.length) {
+            columnKeep = props.tableProps
+        }
     }
     return columnKeep
 })
 //切換資料表格
-const tableNameComputed = computed(()=>{return useSwitchTab.value ? activeTab.value : props.tableName})
+const tableNameComputed = computed(() => { return useSwitchTab.value ? props.activeTab : props.tableName })
 
 //整理表格
 
 const tablePropsSorted = ref(tablePropsFilted.value)
-function setTableSorted(table){
+function setTableSorted(table) {
     tablePropsSorted.value = table
+
 }
+watch(() => props.activeTab, () => {
+    if (!props.customColumns) {
+        tablePropsSorted.value = tablePropsFilted.value
+    }
+})
 
 const tablePropsFixed = computed(() => {
     return tablePropsSorted.value.filter((column) => { return column.fixed })
@@ -205,7 +215,7 @@ function getColumnMinWidth(column) {
 }
 
 function ifWidthTotalNo100() {
-    let columnShowList = tablePropsSorted.value.filter((column) => column.show)
+    let columnShowList = tablePropsSorted.value.filter((column) => column.show && typeof column.width == 'number')
     if (columnShowList.length < tablePropsSorted.value.length) {
         let sum = 0
         columnShowList.forEach((column) => {
@@ -240,30 +250,56 @@ const calcMainMinWidth = computed(() => {
 })
 
 //filter
-function emitFilterParam(param){
-    emit("filt",param)
+function emitFilterParam(param) {
+    emit("filt", param)
 }
 
 //search
+const searchbarIsShow = ref(false)
 const searchInputText = ref("")
 const searchText = computed(() => { return props.searchShow ? searchInputText.value : props.searchText })
 const columsDatakeys = reactive(tablePropsSorted.value.map((column) => column.dataKey))
 const searchResult = computed(() => {
-    return props.items.filter((item) => {
-        return columsDatakeys.some((key) => item[key].toUpperCase().includes(searchText.value.toUpperCase()))
+    let searchResource = props.items
+    if (props.batchLoad) {
+        searchResource = store.state.scrollBatchLoad.allData
+        if (useSwitchTab.value) {
+            searchResource = store.state.scrollBatchLoad[props.activeTab].allData
+        }
+    }
+    return searchResource.filter((item) => {
+        return columsDatakeys.some((key) => item[key]?.toUpperCase().includes(searchText.value.toUpperCase()))
     })
+})
+const batchloadNotDoneShowText = computed(() => {
+    let loadDoneRef = store.getters["scrollBatchLoad/dataLoadDone"]
+    if (useSwitchTab.value) {
+        loadDoneRef = store.getters[`scrollBatchLoad/${props.activeTab}/dataLoadDone`]
+    }
+    return props.batchLoad && !loadDoneRef && searchText.value !== ""
 })
 function clearSearch() {
     searchInputText.value = ""
-    if(!props.searchShow && props.searchText !== ""){
+    if (!props.searchShow && props.searchText !== "") {
         emit("clearSearch")
     }
 }
+function searchbarHide() {
+    searchbarIsShow.value = false
+}
+watch(windowW, () => {
+    searchbarIsShow.value = false
+}, { deep: true })
+onMounted(() => { window.addEventListener("click", searchbarHide) })
+onBeforeUnmount(() => { window.removeEventListener("click", searchbarHide) })
 
 const items = computed(() => {
     let items = props.items
     if (props.batchLoad) {
         items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
+        if (useSwitchTab.value) {
+            items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad[props.activeTab].allData))
+        }
         let emptyLength = items.filter((data) => !data[props.keyField]).length
         let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
         items.splice(emptyStartIndex, emptyLength)
@@ -277,17 +313,17 @@ const items = computed(() => {
 //全選功能
 const rowDataChecked = reactive([])
 const rowDataCheckedUsetab = reactive({})
-const checkListRef = computed(()=>{return (useSwitchTab.value && props.activeTab in rowDataCheckedUsetab) ? rowDataCheckedUsetab[props.activeTab] : rowDataChecked})
-onMounted(()=>{
-    if(useSwitchTab.value && !(props.activeTab in rowDataCheckedUsetab)){
+const checkListRef = computed(() => { return (useSwitchTab.value && props.activeTab in rowDataCheckedUsetab) ? rowDataCheckedUsetab[props.activeTab] : rowDataChecked })
+onMounted(() => {
+    if (useSwitchTab.value && !(props.activeTab in rowDataCheckedUsetab)) {
         rowDataCheckedUsetab[props.activeTab] = []
     }
 })
-watch(activeTab,()=>{
-    if(!(props.activeTab in rowDataCheckedUsetab)){
+watch(() => props.activeTab, () => {
+    if (!(props.activeTab in rowDataCheckedUsetab)) {
         rowDataCheckedUsetab[props.activeTab] = []
     }
-},{deep:true})
+})
 
 const selectAll = computed(() => {
     return checkListRef.value.length === items.value.length && checkListRef.value.length !== 0
@@ -298,25 +334,26 @@ const isIndeterminate = computed(() => {
 
 function selectAllChange(value) {
     let checkedList = rowDataChecked
-    if(useSwitchTab.value){
-        if(!(props.activeTab in rowDataCheckedUsetab)){
-            rowDataCheckedUsetab[props.activeTab]=[]
+    if (useSwitchTab.value) {
+        if (!(props.activeTab in rowDataCheckedUsetab)) {
+            rowDataCheckedUsetab[props.activeTab] = []
         }
         checkedList = rowDataCheckedUsetab[props.activeTab]
     }
 
     checkedList.length = 0
     if (value) {
-        items.value.forEach((item) => {
+        let items = items.value
+        items.forEach((item) => {
             checkedList.push(item)
         })
     }
 }
 function setRowIsCheck(item) {
     let checkedList = rowDataChecked
-    if(useSwitchTab.value){
-        if(!(props.activeTab in rowDataCheckedUsetab)){
-            rowDataCheckedUsetab[props.activeTab]=[]
+    if (useSwitchTab.value) {
+        if (!(props.activeTab in rowDataCheckedUsetab)) {
+            rowDataCheckedUsetab[props.activeTab] = []
         }
         checkedList = rowDataCheckedUsetab[props.activeTab]
     }
@@ -333,11 +370,11 @@ function isRowChecked(item) {
     return rowDataCheckedExistRow
 }
 
-watch(items,()=>{
-    if(items.value.length == 0){
+watch(items, () => {
+    if (items.value.length == 0) {
         clearChecked()
     }
-},{deep:true})
+}, { deep: true })
 
 //被選取的資料傳到父層事件
 
@@ -348,16 +385,16 @@ watch(checkListRef, (newVal) => {
         emit("noCheckedData")
 
     }
-},{deep:true})
+}, { deep: true })
 
 function getCheckedData() {
     return [...checkListRef.value]
 }
 function clearChecked() {
     let checkedList = rowDataChecked
-    if(useSwitchTab.value){
-        if(!(props.activeTab in rowDataCheckedUsetab)){
-            rowDataCheckedUsetab[props.activeTab]=[]
+    if (useSwitchTab.value) {
+        if (!(props.activeTab in rowDataCheckedUsetab)) {
+            rowDataCheckedUsetab[props.activeTab] = []
         }
         checkedList = rowDataCheckedUsetab[props.activeTab]
     }
@@ -365,14 +402,7 @@ function clearChecked() {
 }
 
 
-//reload
-function reload() {
-    if (!props.batchLoad) {
-        emit('reload')
-    } else {
-        batchReloadData()
-    }
-}
+
 
 //scrollbar
 //監聽容器
@@ -392,7 +422,7 @@ const getTableInnerWidth = debounce((entries) => {
     tableMainInnerWidth.value = entries[0].contentRect.width
     compareTableInnerWider()
 }, 5)
-const getfixedLeftWidth =  debounce((entries) => {
+const getfixedLeftWidth = debounce((entries) => {
     fixedLeftWidth.value = entries[0].contentRect.width
 }, 5)
 
@@ -444,9 +474,7 @@ setTimeout(() => {
 }, 1)
 //scrollbar 拖曳
 const mainScroller = ref()
-const batchloadNotDoneShowText = computed(() => {
-    return props.batchLoad && !store.state.scrollBatchLoad.dataLoadDone && searchText.value !== ""
-})
+
 
 const mainScrollTop = ref(0)
 const scrollbarYTranslate = computed(() => {
@@ -501,16 +529,16 @@ function mouseDragY(e) {
             scrollerWrapperHeight += props.itemSize * 4
         }
         let translate = move + scrollbarYTranslate.value
-        if(translate<=0){
+        if (translate <= 0) {
             translate = 0
         }
         mainScrollTop.value = translate / scrollYHeight.value * scrollerWrapperHeight
     }
 }
 
-watch(mainScrollTop,(newVal)=>{
+watch(mainScrollTop, (newVal) => {
     mainScroller.value.scrollToPosition(newVal)
-},{deep:true})
+}, { deep: true })
 
 //main, fixed滾動聯動
 const fixedScroller = ref()
@@ -555,52 +583,60 @@ function debounce(func, delay = 250) {
         }, delay);
     };
 }
+const isScrollToBottom = computed(()=>scrollbarYTranslate.value+scrollYBarHeight.value >= tableMainHeight.value-props.itemSize)
 
 // tootltip
 //default
 const toolTiptriggerRefDefault = ref()
 const defaultTipToggle = ref(false)
-const tooltipIsOpenDefault =  computed(() => {
+const tooltipIsOpenDefault = computed(() => {
     return props.tooltipModel ? defaultTipToggle.value : props.tooltipModel
 })
-const tooltipTriggerDefault = computed(()=>{return userDevice.value=="pc" ? "hover" : "click"})
-const tooltipContentDefault =  ref("")
+
+const tooltipContentDefault = ref("")
+const dataContentWidth = ref(0)
 function tooltipCanBeOpen(e) {
+    let target = isTargetCorrect(e.target)
     let canOpen = true
-    if (props.openIfEllipsis && e.target.offsetWidth == e.target.scrollWidth) {
+    if (props.openIfEllipsis && target.offsetWidth == target.scrollWidth) {
         //判斷是否有ellipsis
         canOpen = false
     }
-    if (tooltipTriggerDefault.value == "click" && e.target == toolTiptriggerRefDefault.value && defaultTipToggle.value) {
+    if (e.target == toolTiptriggerRefDefault.value && defaultTipToggle.value) {
         canOpen = false
     }
     return canOpen
 }
-function defaultTipOpenMouse(e){
-    if(tooltipCanBeOpen(e) && tooltipTriggerDefault.value == "hover"){
-        
-        tooltipContentDefault.value = e.target.innerText
-        defaultTipToggle.value = true
-        toolTiptriggerRefDefault.value = e.target
-    }else {
-        defaultTipToggle.value = false
+function isTargetCorrect(target) {
+    if (target.className !== "px-3") {
+        target = isTargetCorrect(target.parentElement)
     }
+    return target
 }
-function defaultTipCloseMouse(){
-    defaultTipToggle.value = false
-}
-function defaultTipOpenClick(e){
+
+function defaultTipOpenClick(e) {
     e.stopPropagation()
-    if(tooltipCanBeOpen(e) && tooltipTriggerDefault.value == "click"){
+    if (tooltipCanBeOpen(e)) {
         tooltipContentDefault.value = e.target.innerText
+        dataContentWidth.value = e.target.scrollWidth
         defaultTipToggle.value = true
         toolTiptriggerRefDefault.value = e.target
-    }else {
+    } else {
         defaultTipToggle.value = false
     }
 }
-function defaultTipClose(){
+function defaultTipClose() {
     defaultTipToggle.value = false
+}
+//右擊複製
+const copied = ref(false)
+function copyText() {
+    navigator.clipboard.writeText(tooltipContentDefault.value)
+    copied.value = true
+    defaultTipToggle.value = false
+    setTimeout(() => {
+        copied.value = false
+    }, 900)
 }
 
 //custom
@@ -628,6 +664,11 @@ onMounted(() => {
     tableMain.value.addEventListener("click", defaultTipClose)
     tableMain.value.addEventListener("click", defaultTipClose)
 })
+onBeforeUnmount(() => {
+    tableMain.value.removeEventListener("click", tooltipClose)
+    tableMain.value.removeEventListener("click", defaultTipClose)
+    tableMain.value.removeEventListener("click", defaultTipClose)
+})
 
 //tooltip滾動超出消失
 function tooltipScrollHide() {
@@ -636,9 +677,9 @@ function tooltipScrollHide() {
         let scrollerSlotBottom = scrollerSlot.getBoundingClientRect().top + props.itemSize
         let tablemainBottom = tableMain.value.getBoundingClientRect().bottom
         let tooltip
-        if(tooltipToggle.value){
+        if (tooltipToggle.value) {
             tooltip = document.querySelector('.el-popper.VTtooltip')
-        }else if(defaultTipToggle.value){
+        } else if (defaultTipToggle.value) {
             tooltip = document.querySelector('.el-popper.VTDefaultTooltip')
         }
         if (tooltip.getBoundingClientRect().top <= scrollerSlotBottom + 10) {
@@ -701,39 +742,87 @@ function setSortTableDataKey(dataKey) {
 }
 const magicKey = ref(0)
 
-watch(sortedData.value, () => {
+watch(sortedData, () => {
     if (sortable.value) {
         magicKey.value = (magicKey.value > 0) ? -1 : 1
     }
 }, { deep: true })
 
 //loading
-const loaded = computed(() => { return props.batchLoad ? store.state.scrollBatchLoad.loadStart : !props.loading })
-const loadingEnd = ref(false)
-if (loaded.value) {
-    loadingEnd.value = true
-}
-watch(loaded, (newVal) => {
+const firstLoaded = computed(() => {
+    let scrollBatchLoadLoadStart = store.state.scrollBatchLoad.loadStart
+    if (useSwitchTab.value && props.batchLoad) {
+        scrollBatchLoadLoadStart = store.state.scrollBatchLoad[props.activeTab].loadStart
+    }
+    return props.batchLoad ? scrollBatchLoadLoadStart : !props.loading
+})
+const firstLoadingEnd = ref(false)
+
+watch(firstLoaded, (newVal) => {
     if (newVal) {
         setTimeout(() => {
-            loadingEnd.value = true
+            firstLoadingEnd.value = true
+            emit("loaded")
         }, 1000)
+    } else {
+        firstLoadingEnd.value = false
     }
-}, { deep: true })
+}, { deep: true, immediate: true })
+//reload
+function reload() {
+    if(firstLoadingEnd.value){
+        if (!props.batchLoad) {
+            emit('reload')
+        } else {
+            batchReloadData()
+        }
+    }
+}
+
+const batchLoading = computed(()=>{
+    let batchLoading = !firstLoadingEnd.value
+    if(props.batchLoad){
+        if(useSwitchTab.value){
+            batchLoading = store.state.scrollBatchLoad[props.activeTab].loading
+        }else{
+            batchLoading = store.state.scrollBatchLoad.loading
+        }
+    }
+    return !firstLoadingEnd.value ? !firstLoadingEnd.value : batchLoading
+})
+
 
 //batchLoad
-store.commit("scrollBatchLoad/setProps", {
-    batchLoad: props.batchLoad,
-    getDataLen: props.getDataLen,
-    keyField: props.keyField,
-})
+if (!useSwitchTab.value && props.batchLoad) {
+    store.commit("scrollBatchLoad/setProps", {
+        getDataLen: props.getDataLen,
+        keyField: props.keyField,
+    })
+}
+
+const tabsLsit = reactive([])
+watch(() => props.activeTab, (newVal) => {
+    if (useSwitchTab.value && props.batchLoad) {
+        if (!tabsLsit.some((tab) => tab === props.activeTab)) {
+            tabsLsit.push(props.activeTab)
+            store.commit(`scrollBatchLoad/${newVal}/setProps`, {
+                getDataLen: props.getDataLen,
+                keyField: props.keyField,
+            })
+        }
+    }
+}, { immediate: true })
 
 const getNextDataTrigger = ref(1)
 const getFormerDataTrigger = ref(1)
 const alreadyScrollTop = ref(0)
 const scrollZone = ref(1)
 if (props.batchLoad && props.getDataLen) {
-    store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+    if (useSwitchTab.value) {
+        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
+    } else {
+        store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+    }
 } else if (props.batchLoad && !props.getDataLen ||
     props.getDataLen && !props.batchLoad) {
     console.error("You can't use 'batchLoadData' without setting VirtualTable component props 'batchLoad: true' or 'getDataLen'");
@@ -747,34 +836,52 @@ function scrollDownOrUp() {
         getFormerDataTrigger.value = 1
         scrollZone.value = scrollzone
     }
-    if (mainScrollTop.value >= alreadyScrollTop.value) {
-        store.commit("scrollBatchLoad/setOffset", scrollZone.value * props.getDataLen)
-        if (mainScrollTop.value >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
-            getNextDataTrigger.value = 0
-        }
-    } else {
-        if (store.state.scrollBatchLoad.batchesTrustList.some((boolean) => !boolean)) {
-            store.commit("scrollBatchLoad/setOffset", (scrollZone.value - 1) * props.getDataLen)
-            if (mainScrollTop.value < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
-                getFormerDataTrigger.value = 0
+    if (searchText.value === "") {
+
+        if (mainScrollTop.value >= alreadyScrollTop.value) {
+            //往下滾動
+            if (useSwitchTab.value) {
+                store.commit(`scrollBatchLoad/${props.activeTab}/setOffset`, scrollZone.value * props.getDataLen)
+            } else {
+                store.commit("scrollBatchLoad/setOffset", scrollZone.value * props.getDataLen)
+            }
+            if (mainScrollTop.value >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
+                getNextDataTrigger.value = 0
+            }
+        } else {
+            //往上滾動
+            if (store.state.scrollBatchLoad.batchesTrustList.some((boolean) => !boolean) ||
+                (useSwitchTab.value && store.state.scrollBatchLoad[props.activeTab].batchesTrustList.some((boolean) => !boolean))) {
+                if (useSwitchTab.value) {
+                    store.commit(`scrollBatchLoad/${props.activeTab}/setOffset`, (scrollZone.value - 1) * props.getDataLen)
+                } else {
+                    store.commit("scrollBatchLoad/setOffset", (scrollZone.value - 1) * props.getDataLen)
+                }
+                if (mainScrollTop.value < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
+                    getFormerDataTrigger.value = 0
+                }
             }
         }
     }
     alreadyScrollTop.value = mainScrollTop.value
 }
-
-function mainScrollEvent() {
-    setMainScrollTop()
-    tooltipScrollHide()
-    scrollDownOrUp()
-}
-function fixedScrollEvent() {
-    setFixedScrollTop()
-}
+watch(() => props.activeTab, () => {
+    scrollTop()
+    if (props.batchLoad) {
+        getNextDataTrigger.value = 1
+        getFormerDataTrigger.value = 1
+        scrollZone.value = 1
+        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
+    }
+})
 
 watch(getNextDataTrigger, (newVal) => {
-    if (!newVal) {
-        store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+    if (!newVal && props.batchLoad) {
+        if (useSwitchTab.value) {
+            store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
+        } else {
+            store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+        }
     }
 }, { deep: true })
 
@@ -785,24 +892,36 @@ watch(getFormerDataTrigger, (newVal) => {
 }, { deep: true })
 function batchLoadScrollupCheck() {
     //若在第2區，抓第2區的資料
-    if (!store.state.scrollBatchLoad.batchesTrustList[scrollZone.value - 1]) {
+    if (useSwitchTab.value && !store.state.scrollBatchLoad[props.activeTab].batchesTrustList[scrollZone.value - 1]) {
+        store.dispatch(`scrollBatchLoad/${props.activeTab}/getFormerZoneData`, props.URL)
+    } else if (!useSwitchTab.value && !store.state.scrollBatchLoad.batchesTrustList[scrollZone.value - 1]) {
         store.dispatch("scrollBatchLoad/getFormerZoneData", props.URL)
     }
 }
 
 function batchReloadData() {
-    store.commit("scrollBatchLoad/resetAllData")
+    if (useSwitchTab.value) {
+        store.commit(`scrollBatchLoad/${props.activeTab}/resetAllData`)
+        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
+    } else {
+        store.commit("scrollBatchLoad/resetAllData")
+        store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+    }
     scrollTop()
     getFormerDataTrigger.value = 1
     getNextDataTrigger.value = 1
-    store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
 }
 
-//右擊複製
-// function copyText(){
-//     navigator.clipboard.writeText(copyBoard.value)
-// }
-
+function mainScrollEvent() {
+    setMainScrollTop()
+    tooltipScrollHide()
+    if (props.batchLoad) {
+        scrollDownOrUp()
+    }
+}
+function fixedScrollEvent() {
+    setFixedScrollTop()
+}
 const finalData = computed(() => {
     let data = items.value
     if (props.sortable) {
@@ -812,26 +931,37 @@ const finalData = computed(() => {
 })
 </script>
 <template>
-    <div class="inefi-table-v2 layout-content" :class="{ 'no-select': mouseYDown || mouseXDown, dark: darkMode, canHover: hover }">
-        <div class="table-func-header d-flex align-items-center justify-content-end">
-            <div class="px-3 me-auto" v-if="customColumns || filter">
-                <ColumnController class="my-2 me-2" :tableName="tableNameComputed" :columns="tablePropsFilted" v-if="customColumns" @change="setTableSorted" :loading="loading"/>
-                <FilterComponent class="d-inline-block my-2" :options="filterOptions" :darkMode="darkMode" v-if="filter" @sentParam="emitFilterParam" :loading="loading"/>
+    <div class="inefi-table-v2 layout-content pb-1" :class="{ 'no-select': mouseYDown || mouseXDown, dark: darkMode, canHover: hover }">
+        <div class="table-func-header d-flex align-items-center justify-content-end px-3 py-2" v-if="customColumns || filter || searchShow">
+            <div class="me-auto" v-if="customColumns || filter">
+                <ColumnController class="my-2 me-2" :tableName="tableNameComputed" :columns="tablePropsFilted" v-if="customColumns" @change="setTableSorted" :loading="batchLoading" />
+                <FilterComponent class="d-inline-block my-2" :options="filterOptions" :darkMode="darkMode" v-if="filter" @sentParam="emitFilterParam" :loading="batchLoading" />
             </div>
-            <div v-if="searchShow" style="width: 350px;" class="d-flex align-items-center justify-content-end ms-auto">
-                <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="me-3 py-2 reload" @click="reload" :class="{ rotate: !loadingEnd }" />
-                <div class="py-2" style="width: 250px; position: relative;">
+            <div v-if="searchShow" class="ms-auto search_group" :class="{ 'with-expansion': customColumns || filter }">
+                <div class="row me-1 ps-2">
+                    <div class="col-12 d-flex">
+                        <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="py-2 reload" @click="reload" :class="{ rotate: batchLoading }" />
+                        <button class="show-search_bar ms-3" @click.stop="searchbarIsShow = true" v-show="!searchbarIsShow">
+                            <font-awesome-icon icon="fa-solid fa-magnifying-glass" color="#aaa" />
+                        </button>
+                    </div>
+                </div>
+                <div class="py-2 search_bar" style="width:100%; position: relative;" :class="{ show: searchbarIsShow }">
                     <p class="load-notdone_hint" v-show="batchloadNotDoneShowText">
-                        <span class="me-2">Search in {{ store.state.scrollBatchLoad.allData.length }} of {{ store.state.scrollBatchLoad.totalDataCount }}</span>
+                        <span class="me-2">
+                            Search in
+                            {{ useSwitchTab ? store.state.scrollBatchLoad[activeTab].allData.length : store.state.scrollBatchLoad.allData.length }}
+                            of
+                            {{ useSwitchTab ? store.state.scrollBatchLoad[activeTab].totalDataCount : store.state.scrollBatchLoad.totalDataCount }}</span>
                         <el-tooltip popper-class="searchTooltip" placement="top-end" content="Search results are from devices that have been loaded. Scroll down to load more devices for complete search results." effect="dark">
                             <font-awesome-icon icon="fa-solid fa-circle-info" />
                         </el-tooltip>
                     </p>
-                    <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable />
+                    <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable :disabled="batchLoading" @click.stop="searchbarIsShow = true" />
                 </div>
             </div>
         </div>
-        <div class="layout-content" v-loading="!loadingEnd" element-loading-background="#fff">
+        <div class="layout-content" v-loading="!firstLoadingEnd" element-loading-background="#fff">
             <div class="inefi-table-v2__main layout-content overflow-auto" ref="tableMain" @scroll="Xscroll">
                 <div class="layout-content" ref="tableMainInner" :style="{ minWidth: `calc(${calcMainMinWidth})` }">
                     <RecycleScroller :key="magicKey" :items="finalData" :itemSize="itemSize" :keyField="keyField" ref="mainScroller" @scroll="mainScrollEvent">
@@ -856,17 +986,12 @@ const finalData = computed(() => {
                             </div>
                         </template>
                         <template v-slot="{ item, index }">
-                            <div class="table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent
-                            :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]), 'border-b':finalData.length-1 !== index}">
+                            <div class="table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]), 'border-b': finalData.length !== index + 1 }">
                                 <div class="px-2" v-if="showCheckBox">
                                     <el-checkbox class="p-2" />
                                 </div>
-                                <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" 
-                                :class="[column.dataKey]">
-                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) ? defaultTipOpenMouse($event) : tooltipOpen($event)" 
-                                    @mouseleave="(tooltipRef !== column.dataKey) ? defaultTipCloseMouse() : tooltipClose($event)" 
-                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)"
-                                    @mousedown="showCopyBtn($event)">
+                                <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
+                                    <div class="px-3" @mouseenter="(tooltipRef == column.dataKey) && tooltipOpen($event)" @mouseleave="(tooltipRef == column.dataKey) && tooltipClose($event)" @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
                                         <slot :name="column.slotName" :item="item">
                                             {{ item[column.dataKey] }}
                                         </slot>
@@ -874,32 +999,22 @@ const finalData = computed(() => {
                                 </div>
                             </div>
                         </template>
-                        <template #after v-if="batchloadNotDoneShowText">
-                            <div class="load-notdone_clear">
-                                <button class="clear-search p-3 mb-2" @click="clearSearch">
-                                    <font-awesome-icon icon="fa-solid fa-circle-xmark" />
-                                    <span class="ms-2">Clear Search</span>
-                                </button>
-                                <p>Here shows the search results from loaded devices.<br>
-                                    Clear search and scroll down to load more devices for complete search results.
-                                </p>
-                            </div>
+                        <template #after>
+                            <div class="batchLoading__slot" :style="{height:`${itemSize}px`}" v-loading="batchLoading" v-if="batchLoading"></div>
+                            <div class="nomoreData__slot" :style="{height:`${itemSize}px`}" v-else-if="!batchLoading && !batchloadNotDoneShowText">No more Data</div>
                             <el-skeleton animated v-if="batchloadNotDoneShowText">
                                 <template #template>
-                                    <el-skeleton-item variant="p">
-                                        <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
-                                            <div class="px-2" v-if="showCheckBox">
-                                                <el-skeleton-item style="width: 30px" />
-                                            </div>
-                                            <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
-                                                <div class="px-3">
-                                                    <el-skeleton-item style="width: 100%" />
-                                                </div>
+                                    <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
+                                        <div class="px-2" v-if="showCheckBox">
+                                            <el-skeleton-item style="width: 30px" />
+                                        </div>
+                                        <div class="table-row_data" v-for="(column, index) in tablePropsSorted" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
+                                            <div class="px-3">
+                                                <el-skeleton-item style="width: 100%" />
                                             </div>
                                         </div>
-                                    </el-skeleton-item>
+                                    </div>
                                 </template>
-
                             </el-skeleton>
                         </template>
                     </RecycleScroller>
@@ -927,15 +1042,12 @@ const finalData = computed(() => {
                             </div>
                         </template>
                         <template v-slot="{ item, index }">
-                            <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent
-                            :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]),'border-b':finalData.length-1 !== index }">
+                            <div class="fixed-left__table-row py-2" :style="{ height: `${itemSize}px` }" @contextmenu.prevent :class="{ 'highlight-row': checkListRef.some((row) => row[props.keyField] == item[props.keyField]), 'border-b': finalData.length - 1 !== index }">
                                 <div class="px-2 " v-if="showCheckBox">
                                     <el-checkbox class="p-2" @change="setRowIsCheck(item)" :model-value="isRowChecked(item)" />
                                 </div>
                                 <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" :class="[column.dataKey]">
-                                    <div class="px-3" @mouseenter="(tooltipRef !== column.dataKey) ? defaultTipOpenMouse($event) : tooltipOpen($event)" 
-                                    @mouseleave="(tooltipRef !== column.dataKey) ? defaultTipCloseMouse() : tooltipClose($event)" 
-                                    @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
+                                    <div class="px-3" @mouseenter="(tooltipRef == column.dataKey) && tooltipOpen($event)" @mouseleave="(tooltipRef == column.dataKey) && tooltipClose($event)" @click="(tooltipRef !== column.dataKey) ? defaultTipOpenClick($event) : tooltipOpen($event)">
                                         <slot :name="column.dataKey" :item="item">
                                             {{ item[column.dataKey] }}
                                         </slot>
@@ -944,35 +1056,48 @@ const finalData = computed(() => {
                             </div>
                         </template>
                         <template #after v-if="batchloadNotDoneShowText">
-                            <el-skeleton animated>
+                            <el-skeleton animated v-if="batchloadNotDoneShowText">
                                 <template #template>
-                                    <el-skeleton-item variant="p">
-                                        <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
-                                            <div class="px-2" v-if="showCheckBox">
-                                                <el-skeleton-item style="width: 30px" />
-                                            </div>
-                                            <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
-                                                <div class="px-3">
-                                                    <el-skeleton-item style="width: 100%" />
-                                                </div>
+                                    <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
+                                        <div class="px-2" v-if="showCheckBox">
+                                            <el-skeleton-item style="width: 30px" />
+                                        </div>
+                                        <div class="table-row_data" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }">
+                                            <div class="px-3">
+                                                <el-skeleton-item style="width: 100%" />
                                             </div>
                                         </div>
-                                    </el-skeleton-item>
+                                    </div>
                                 </template>
-
                             </el-skeleton>
                         </template>
                     </RecycleScroller>
                 </div>
             </div>
-            <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }" v-show="scrollYHeight!==scrollYBarHeight">
+            <div class="inefi-table-v2__scrolly" :style="{ top: `${scrollYTop}px`, height: `${scrollYHeight}px` }" v-show="scrollYHeight !== scrollYBarHeight">
                 <div class="scroll-thumb" :style="{ height: `${scrollYBarHeight}px`, transform: `translateY(${scrollbarYTranslate}px)` }" v-show="scrollYBarHeight <= scrollYHeight" @mousedown="mouseStartY"></div>
             </div>
             <div class="inefi-table-v2__scrollx" v-show="scrollXShow" :style="{ width: `${scrollXWidth}px` }">
                 <div class="scroll-thumb" :style="{ width: `${scrollBarXWidth}px`, transform: `translateX(${scrollbarXTranslate}px)` }" @mousedown="mouseStartX"></div>
             </div>
+            <div class="load-notdone_clear" v-if="batchloadNotDoneShowText && isScrollToBottom">
+                <button class="clear-search p-3 mb-2" @click="clearSearch">
+                    <font-awesome-icon icon="fa-solid fa-circle-xmark" />
+                    <span class="ms-2">Clear Search</span>
+                </button>
+                <p>Here shows the search results from loaded devices.<br>
+                    Clear search and scroll down to load more devices for complete search results.
+                </p>
+            </div>
         </div>
-        <el-tooltip :content="tooltipContentDefault" placement="top" effect="dark" :trigger="tooltipTriggerDefault" :visible="tooltipIsOpenDefault" virtual-triggering :virtual-ref="toolTiptriggerRefDefault" popper-class="VTDefaultTooltip" />
+        <el-popover placement="top" effect="dark" trigger="click" :visible="tooltipIsOpenDefault" virtual-triggering :virtual-ref="toolTiptriggerRefDefault" popper-class="VTDefaultTooltip" :width="dataContentWidth">
+            <span>{{ tooltipContentDefault }} <button class="p-1" @click="copyText"><font-awesome-icon icon="fa-regular fa-clone" /></button></span>
+        </el-popover>
+        <el-tooltip :virtual-ref="toolTiptriggerRefDefault" virtual-triggering :visible="copied" placement="top">
+            <template #content>
+                <span><font-awesome-icon icon='fa-solid fa-check' /><span class='ms-2'>Copied!</span></span>
+            </template>
+        </el-tooltip>
         <template v-if="tooltipRef">
             <el-tooltip :content="tooltipContent" placement="top" effect="dark" :trigger="tooltipTrigger" :visible="tooltipIsOpen" virtual-triggering :virtual-ref="toolTiptriggerRef" popper-class="VTtooltip" />
         </template>
@@ -991,9 +1116,74 @@ const finalData = computed(() => {
     }
 }
 
+.inefi-table-v2 {
+    .search_group {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        width: 100%;
+
+        .el-input {
+            width: 100%;
+        }
+
+        &.with-expansion {
+            width: 250px;
+
+            .show-search_bar {
+                display: flex;
+            }
+
+            .search_bar {
+                display: none;
+
+                &.show {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .show-search_bar {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #aaa;
+    }
+}
+
 .reload.rotate {
     animation: rotate 1s linear infinite;
 }
+
+@include bstrp(lg) {
+    .inefi-table-v2 {
+        .search_group {
+            width: 350px;
+
+            &.with-expansion {
+                width: 350px;
+
+                .show-search_bar {
+                    display: none;
+                }
+
+                .search_bar {
+                    display: block;
+                }
+            }
+        }
+
+        .show-search_bar {
+            display: none;
+        }
+    }
+}
+
+
 
 .canHover.inefi-table-v2 .vue-recycle-scroller__item-view.hover {
     transition: .3s;
@@ -1025,6 +1215,7 @@ const finalData = computed(() => {
 .table-row_data {
     transition: .5s;
     overflow: hidden;
+
     * {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -1071,15 +1262,18 @@ const finalData = computed(() => {
     scroll-padding-bottom: 0;
 
     &::-webkit-scrollbar {
-        display: none;;
+        display: none;
+        ;
     }
 
     &::-webkit-scrollbar-track {
-        display: none;;
+        display: none;
+        ;
     }
 
     &::-webkit-scrollbar-thumb {
-        display: none;;
+        display: none;
+        ;
     }
 }
 
@@ -1179,11 +1373,10 @@ const finalData = computed(() => {
 
 .load-notdone_clear {
     position: absolute;
-    top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    margin: auto;
+    bottom: 20px;
+    z-index: 200;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1206,31 +1399,52 @@ const finalData = computed(() => {
         text-align: center;
     }
 }
-.table-expansion{
+
+.table-expansion {
     padding: 8px;
     border: 1px solid $primary;
     border-radius: 8px;
     color: $primary;
     @extend .fw-bold;
-    &:hover{
+
+    &:hover {
         background-color: #e7f9ff;
     }
-    &:active{
+
+    &:active {
         border: 1px solid $primary;
     }
-    &:focus{
+
+    &:focus {
         border: 1px solid $primary;
     }
-    &.disable{
-        border-color:#bbb;
+
+    &.disable {
+        border-color: #bbb;
         background-color: #ddd;
-        span{
+        color: #bbb;
+
+        span {
             color: #bbb;
+        }
+
+        &:hover {
+            cursor: not-allowed;
         }
     }
 }
-.el-popper.copyPopper{
-    padding: 8px;
-    width: 50px !important;
+
+.el-popper.VTDefaultTooltip {
+    padding: 6px 8px;
+    box-sizing: content-box !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nomoreData__slot{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
 }
 </style>

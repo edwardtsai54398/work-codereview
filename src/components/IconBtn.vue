@@ -4,7 +4,7 @@ defineProps({
     iconClass: String,
     size: {
         type: String || null,
-        default: null,
+        default: "md",
     },
     active: {
         type: Boolean,
@@ -13,11 +13,8 @@ defineProps({
 });
 </script>
 <template>
-    <button
-        class="icon-btn"
-        :class="{ active: active, [`icon-${size}`]: true }"
-    >
-        <font-awesome-icon :icon="iconClass" :size="size" />
+    <button class="icon-btn" :class="{ active: active, [`icon-${size}`]: true }">
+        <font-awesome-icon :icon="iconClass" :size="size=='md'?null:size" />
     </button>
 </template>
 <style lang="scss" scoped>
@@ -25,7 +22,7 @@ defineProps({
 .icon-btn {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
     svg {
         color: #555;
     }

@@ -1,8 +1,13 @@
 @import "../../../node_modules/bootstrap/scss/functions";
+@import "reset";
 @import "variables";
 @import "../../../node_modules/bootstrap/scss/mixins";
 @import "~bootstrap";
 @import "breakpoint";
+@import "mixin";
+@import "utilit";
+@import "uiCover";
+@import "components";
 
 
 body {
@@ -23,140 +28,10 @@ body {
        display: none;
     }
 }
-* {
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-}
-ul,p{
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-button {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    &:focus{
-        border: none;
-        outline: none;
-    }
-}
-.scrollbar-none{
-    ::-webkit-scrollbar { 
-        display: none !important;
-    }
-}
-.scrollbar-style, .vue-recycle-scroller {
-
-    &::-webkit-scrollbar { 
-        width: 6px;
-        height: 6px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background-color: transparent;
-        border-radius: 8px;
-    }
-    
-    &::-webkit-scrollbar-thumb { 
-        background-color: rgba(0,0,0,0.1);
-        width: 5px;
-        height: 5px;
-        border-radius: 8px;
-    }
-}
 a {
     text-decoration: none;
     color: $secondary;
     &.color-link {
         color: $primary;
     }
-}
-.fw-bold {
-    font-weight: 700;
-}
-.layout-content {
-    flex: 100% 1 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-}
-.layout-overflow {
-    overflow: auto;
-}
-.color_prim{
-    color: $primary;
-}
-.active_folder {
-    svg {
-        fill: $primary;
-    }
-    color: $primary;
-    font-weight: 700;
-}
-.active{
-    color: $primary;
-    font-weight: 700;
-
-}
-.border-b {
-    border-bottom: 1px solid #bbb;
-}
-.devide-line-v{
-    width: 2px;
-    height: 80%;
-    background-color: #aaa;
-}
-.text-nowrap{
-    white-space: nowrap;
-}
-.pop_dialog{
-    min-width: 95%;
-    // margin: 10vh auto;
-    border-radius: 20px;
-    overflow: hidden;
-    .el-dialog__header{
-        background: linear-gradient(270deg,#29bfed,#82daf5 97.92%);
-        color: #fff;
-        padding: 16px;
-        margin-right: 0;
-        margin-bottom: 12px;
-    }
-    .el-dialog__body{
-        padding: 0;
-    }
-    .el-dialog__footer{
-        display: flex;
-        align-items: center;
-        justify-content: end;
-    }
-}
-@include bstrp(sm) {
-    .pop_dialog{
-        min-width: 85%;
-    }
-}
-@include bstrp(xl) {
-    .pop_dialog{
-        min-width: 60%;
-
-    }
-}
-@for $i from 0 through 5 {
-    .flex-#{$i} {
-      flex: $i;
-    }
-  }
-.el-select-dropdown__item{
-    &.selected span{
-        color: $primary;
-    }
-}
-.absolute-0{
-    position: absolute;
-    top: 0;
-    left: 0;
 }

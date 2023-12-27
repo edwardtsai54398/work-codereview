@@ -1,0 +1,502 @@
+{
+    "status": 1,
+    "result": [
+        {
+            "id": "pkg1c343-68e3-4038-9e2d-55e189a2adc0",
+            "os": "ANDROID",
+            "packageLabel": "steve_testDummy300MB",
+            "command": "UPGRADE_FIRMWARE",
+            "desc": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1616492630,
+            "detail": {
+                "fileName": "dummy_update_300MB.zip",
+                "extension": "zip",
+                "size": 314572800,
+                "unit": "B",
+                "packageName": "dummy_update_300MB.zip"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkg553d7-4706-4588-8593-29f8dae7d7bc",
+            "os": "ANDROID",
+            "packageLabel": "mytestapp4.0",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1658306093,
+            "detail": {
+                "fileName": "app-debug-4.0.apk",
+                "extension": "apk",
+                "size": 1882279,
+                "unit": "B",
+                "packageName": "com.inefi.mytestapp",
+                "packageVersion": "4.0"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgb0c5e-7e2f-416a-8ff1-2fbde960e1e3",
+            "os": "ANDROID",
+            "packageLabel": "testProjectFile_4123",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1658302890,
+            "detail": {
+                "fileName": "SysInfo.apk",
+                "extension": "apk",
+                "size": 1158104,
+                "unit": "B",
+                "packageName": "com.cedleg.sysinfo",
+                "packageVersion": "1.21"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkg57160-f51c-4319-badc-f62158b79455",
+            "os": "ANDROID",
+            "packageLabel": "4A0F14A60123W",
+            "command": "UPGRADE_FIRMWARE",
+            "contentType": "packages",
+            "desc": "4A0F14A60123W_INEFI_FT_DARWIN_DEV_date2104161800_partial_update",
+            "version": "1",
+            "lastupdate": 1622272100,
+            "detail": {
+                "fileName": "4A0F14A60123W_INEFI_FT_DARWIN_DEV_date2104161800_partial_update.zip",
+                "extension": "zip",
+                "size": 53929918,
+                "unit": "B",
+                "packageName": "4A0F14A60123W_INEFI_FT_DARWIN_DEV_date2104161800_partial_update.zip"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkg9d103-9cf2-4889-9f21-e797eb8af9af",
+            "os": "WINDOWS",
+            "packageLabel": "P27xFnKey_v1.1.3",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1624519242,
+            "detail": {
+                "fileName": "P27xFnKey_v1.1.3.exe",
+                "extension": "exe",
+                "size": 1161812,
+                "unit": "B",
+                "packageName": "P27xFnKey_v1.1.3.exe",
+                "packageVersion": ""
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkg6280d-69da-43ad-a3fe-ddb3a2722a3b",
+            "os": "WINDOWS",
+            "packageLabel": "P27xFnKey",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1627562238,
+            "detail": {
+                "fileName": "P27xFnKey_v1.1.4.exe",
+                "extension": "exe",
+                "size": 4954664,
+                "unit": "B",
+                "packageName": "P27xFnKey_v1.1.4.exe",
+                "packageVersion": ""
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgba227-7e81-4eeb-825f-967aada941c4",
+            "os": "ANDROID",
+            "packageLabel": "TxtFileCreator",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1627986320,
+            "detail": {
+                "fileName": "com.rstls.txtfilecreator_21_apps.evozi.com.apk",
+                "extension": "apk",
+                "size": 2577478,
+                "unit": "B",
+                "packageName": "com.rstls.txtfilecreator",
+                "packageVersion": "3.0"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgf57b4-072e-4525-a467-57a0de71404a",
+            "os": "WINDOWS",
+            "packageLabel": "20211201_2",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "\/verysilent \/norestart",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1638352357,
+            "detail": {
+                "fileName": "FnKeyAction_v1.0.0.exe",
+                "extension": "exe",
+                "size": 4889870,
+                "unit": "B",
+                "packageName": "FnKeyAction_v1.0.0.exe",
+                "packageVersion": ""
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgc1fc5-9323-4095-b38a-6e04e44d072c",
+            "os": "WINDOWS",
+            "packageLabel": "TP_testproject_fixed",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "\/quiet",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1657089857,
+            "detail": {
+                "fileName": "MinecraftInstaller.msi",
+                "extension": "msi",
+                "size": 2666496,
+                "unit": "B",
+                "packageName": "MinecraftInstaller.msi",
+                "packageVersion": ""
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgf51bc-45d0-4353-a742-0048447f55ce",
+            "os": "ANDROID",
+            "packageLabel": "jaytestapp_usbStatus",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1658305853,
+            "detail": {
+                "fileName": "UsbStatus-1.2.7528.150.apk",
+                "extension": "apk",
+                "size": 2162575,
+                "unit": "B",
+                "packageName": "com.apos.app.usbstatus",
+                "packageVersion": "1.2.7528.150"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgeb8b3-af15-4a71-9565-715d50cef32f",
+            "os": "ANDROID",
+            "packageLabel": "jaytestapp_updateDeviceInfo",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1651719927,
+            "detail": {
+                "fileName": "UpdateDeviceInfo_F14_newKey.apk",
+                "extension": "apk",
+                "size": 284572,
+                "unit": "B",
+                "packageName": "com.apos.production.updatedeviceinfo",
+                "packageVersion": "1.4"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkg5ca10-c4ce-482b-9593-4a2549ef0311",
+            "os": "ANDROID",
+            "packageLabel": "jaytestapp_BootOnOffTest",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1656303812,
+            "detail": {
+                "fileName": "BootUpOnOffTest3-1.47.8315.1163_F16_F14_F12.apk",
+                "extension": "apk",
+                "size": 1483018,
+                "unit": "B",
+                "packageName": "com.apos.tool.bootuponofftest",
+                "packageVersion": "1.47.8315.1163"
+            },
+            "productPackage": "PREMIUM"
+        },
+        {
+            "id": "pkgc256a-dae6-4575-8c28-59fd9215d66e",
+            "os": "ANDROID",
+            "packageLabel": "apk example",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1658302958,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "test.apk",
+                "extension": "apk",
+                "size": 1779172,
+                "unit": "B",
+                "packageName": "com.electricsheep.asi",
+                "packageVersion": "1.26.2"
+            }
+        },
+        {
+            "id": "pkg21648-f793-4677-a5a2-0a9379834831",
+            "os": "ANDROID",
+            "packageLabel": "jaytest_usb_status",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1676351601,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "UsbStatus-1.2.7528.150.apk",
+                "extension": "apk",
+                "size": 2162575,
+                "unit": "B",
+                "packageName": "com.apos.app.usbstatus",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkg202cf-61a4-4123-9aa9-d0c34dd74332",
+            "os": "ANDROID",
+            "packageLabel": "jaytest_pkg1",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1676536927,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "UsbStatus-1.2.7528.150.apk",
+                "extension": "apk",
+                "size": 2162575,
+                "unit": "B",
+                "packageName": "com.apos.app.usbstatus",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkg3ee05-3474-4cba-a21e-41f4a967ac2c",
+            "os": "ANDROID",
+            "packageLabel": "JayTest_DRMInfo",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1676888295,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "DRM_Info_Apkpure.apk",
+                "extension": "apk",
+                "size": 4633581,
+                "unit": "B",
+                "packageName": "com.androidfung.drminfo",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkgca86c-7b47-4c5f-9a96-901dce04b880",
+            "os": "ANDROID",
+            "packageLabel": "test_APKR",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1682926175,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "test.apk",
+                "extension": "apk",
+                "size": 1779172,
+                "unit": "B",
+                "packageName": "com.electricsheep.asi",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkgaee72-af37-47a6-82f9-aa71897b7093",
+            "os": "ANDROID",
+            "packageLabel": "DRMInfo",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1686019164,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "DRM_Info_Apkpure.apk",
+                "extension": "apk",
+                "size": 4633581,
+                "unit": "B",
+                "packageName": "com.androidfung.drminfo",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkgef757-a184-4e91-9b95-2eb88b361f27",
+            "os": "ANDROID",
+            "packageLabel": "QR code reader",
+            "command": "INSTALL_APPLICATION",
+            "desc": "QR code reader",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1686716471,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "QR code reader&QR code Scanner_3.6.2_Apkpure.apk",
+                "extension": "apk",
+                "size": 3301738,
+                "unit": "B",
+                "packageName": "tw.mobileapp.qrcode.banner",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkg71d57-2026-48ad-b314-fda1386ddf9f",
+            "os": "WINDOWS",
+            "packageLabel": "firefox_msi",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1695697982,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "Firefox Setup 117.0.1.msi",
+                "extension": "msi",
+                "size": 58711040,
+                "unit": "B",
+                "packageName": "Firefox%20Setup%20117.0.1.msi",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkge7ec2-700e-464f-a55f-7a56db9182fb",
+            "os": "WINDOWS",
+            "packageLabel": "chrome_exe",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1695698328,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "ChromeSetup.exe",
+                "extension": "exe",
+                "size": 1373744,
+                "unit": "B",
+                "packageName": "ChromeSetup.exe",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkg39581-fb42-4f55-a2b7-5e03056bc234",
+            "os": "WINDOWS",
+            "packageLabel": "Notepad_7_9_1_msi",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1697683392,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "Notepad++7_9_1.msi",
+                "extension": "msi",
+                "size": 3805184,
+                "unit": "B",
+                "packageName": "Notepad%2B%2B7_9_1.msi",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkgbf4b3-4f0a-46aa-b485-8e4a6ceccadf",
+            "os": "WINDOWS",
+            "packageLabel": "putty_msi",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1698032931,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "putty-64bit-0.79-installer.msi",
+                "extension": "msi",
+                "size": 3708928,
+                "unit": "B",
+                "packageName": "putty-64bit-0.79-installer.msi",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkg7b54b-b1fb-4641-9519-f718f796586e",
+            "os": "WINDOWS",
+            "packageLabel": "Aries_agent_with_GUID",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1702869948,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "inefi_v1.3.1_TWINS_GUID_SIGN.exe",
+                "extension": "exe",
+                "size": 16722128,
+                "unit": "B",
+                "packageName": "inefi_v1.3.1_TWINS_GUID_SIGN.exe",
+                "packageVersion": ""
+            }
+        },
+        {
+            "id": "pkgbfdb3-78fc-452a-9953-2bab829b3e0f",
+            "os": "WINDOWS",
+            "packageLabel": "inefi_agent_1.3.1_with_GUID",
+            "command": "INSTALL_APPLICATION",
+            "desc": "",
+            "parameters": "",
+            "contentType": "packages",
+            "version": "1",
+            "lastupdate": 1703043050,
+            "productPackage": "PREMIUM",
+            "detail": {
+                "fileName": "inefi_v1.3.1_TWINS_GUID_SIGN_20231220.exe",
+                "extension": "exe",
+                "size": 16722128,
+                "unit": "B",
+                "packageName": "inefi_v1.3.1_TWINS_GUID_SIGN_20231220.exe",
+                "packageVersion": ""
+            }
+        }
+    ],
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1703153647
+}

@@ -226,7 +226,7 @@ let deviceTableProps = [
     {
         columnName: "Status",
         dataKey: "healthStatus",
-        slotName:"status",
+        slotName: "status",
         width: 10,
         minWidth: '80px'
     },
@@ -239,7 +239,7 @@ let deviceTableProps = [
     {
         columnName: "Label",
         dataKey: "aliasName",
-        slotName:"label",
+        slotName: "label",
         width: 25,
         minWidth: '150px',
     },
@@ -258,7 +258,7 @@ let deviceTableProps = [
     {
         columnName: "Enrolled Status",
         dataKey: "deviceState",
-        slotName:"enroll",
+        slotName: "enroll",
         width: 20,
         minWidth: '130px'
     }
@@ -303,10 +303,10 @@ let columnsExcept = [
         except: ["Status"]
     }
 ]
-const deviceListActiveTab = computed(()=>{return breadCrumbList.length?breadCrumbList[0].data.slaveGroupName:"MAIN"})
+const deviceListActiveTab = computed(() => { return breadCrumbList.length ? breadCrumbList[0].data.slaveGroupName : "MAIN" })
 
 
-function getFilterParam(param){
+function getFilterParam(param) {
     console.log(param);
 }
 const devicesChecked = ref([])
@@ -345,31 +345,35 @@ function clearTouchTimer() {
     clearTimeout(touchTimer.value);
     touchTimer.value = null;
 }
+watch(currentNode,()=>{
+    deviceListTable.value.clearChecked()
+},{deep:true})
 
 
 //add device
 const addDeviceDialogOpen = ref(false)
 const searchAddDeviceText = ref("")
 const activeTab = ref(0)
-const adddeviceActiveTab = computed(()=>{return addDeviceTabs[activeTab.value].name})
+const adddeviceActiveTab = computed(() => { return addDeviceTabs[activeTab.value].name })
 const checkedUnassignedList = ref([])
 const checkedInactiveList = ref([])
-const hasNoDeviceChecked = computed(() => { return checkedUnassignedList.value.length == 0  && checkedInactiveList.value.length == 0})
+const hasNoDeviceChecked = computed(() => { return checkedUnassignedList.value.length == 0 && checkedInactiveList.value.length == 0 })
 const addDeviceTabs = reactive([
     {
         name: "UNASSIGNED",
-        addAmount: computed(()=>{return checkedUnassignedList.value.length})
+        addAmount: computed(() => { return checkedUnassignedList.value.length })
     },
     {
         name: "INACTIVE",
-        addAmount: computed(()=>{return checkedInactiveList.value.length})
+        addAmount: computed(() => { return checkedInactiveList.value.length })
     }
 ])
 const addDeviceAllResult = ref([])
+const deviceTable = ref()
 function addDeviceCheck(data) {
-    if(activeTab.value == 0){
+    if (activeTab.value == 0) {
         checkedUnassignedList.value = data
-    }else if(activeTab.value == 1){
+    } else if (activeTab.value == 1) {
         checkedInactiveList.value = data
     }
 }
@@ -391,6 +395,13 @@ watch(groupTreeData, (newVal) => {
 watch(activeTab, () => {
     addDeviceAllOrganize(groupTreeData.value)
 })
+watch(addDeviceDialogOpen,(newVal)=>{
+    if(!newVal){
+        setTimeout(() => {
+            deviceTable.value.clearChecked()
+        }, 500);
+    }
+},{deewp:true})
 
 let addDeviceTableProps = [
     {
@@ -406,6 +417,14 @@ let addDeviceTableProps = [
     },
 ]
 
+//loading
+const loadingEnd = ref(false)
+
+setTimeout(()=>{
+    loadingEnd.value = true
+},1000)
+
+
 //RWD
 const windowWidth = ref(window.innerWidth);
 const mobileSize = ref(576);
@@ -418,10 +437,8 @@ function isMoblieGroupChildren() {
     breadCrumbList.length = 0;
     groupChildren.length = 0;
     if (windowWidth.value < mobileSize.value) {
-        // console.log(groupTreeData.value);
         groupTreeData.value.forEach((group) => {
             let node = treeRef.value.getNode(group.slaveGroupId);
-            // console.log(node);``
             groupChildren.push(node);
         });
     }
@@ -437,10 +454,6 @@ watch(windowWidth, () => {
         searchPopoverWidth.value = windowWidth.value - 20;
     }
 });
-
-
-
-
 </script>
 <template>
     <div class="layout-content">
@@ -464,8 +477,7 @@ watch(windowWidth, () => {
                         <template #reference>
                             <el-input v-model="searchText" size="large" placeholder="Please Input" :prefix-icon="Search" @input="searchGroupData(groupTreeData)" @focus="searchInputFocus = true" @blur="searchInputFocus = false">
                                 <template #prepend>
-                                    <el-select v-model="searchType" placeholder="群組" style="width: 115px" 
-                                    @change="searchResult=[];searchText = ''" size="large">
+                                    <el-select v-model="searchType" placeholder="群組" style="width: 115px" @change="searchResult = []; searchText = ''" size="large">
                                         <el-option label="群組" value="group" />
                                         <el-option label="裝置" value="device" />
                                     </el-select>
@@ -550,40 +562,55 @@ watch(windowWidth, () => {
                             </div>
                         </div>
                         <ul class="custom-tabs mb-2">
-                            <li class="custom-tab" v-for="(item, index) in addDeviceTabs" :key="index" :class="{ 'active': activeTab == index }"
-                             @click="activeTab = index">
+                            <li class="custom-tab" v-for="(item, index) in addDeviceTabs" :key="index" :class="{ 'active': activeTab == index }" @click="activeTab = index">
                                 <span class="me-2">{{ item.name }}</span>
                                 <span class="adddevice-tab__number py-2 px-1">{{ item.addAmount }}</span>
                             </li>
                         </ul>
                         <div class="device-result w-100 py-2 px-3 layout-content">
-                            <InefiVirtualTable ref="deviceTable" :item-size="54" :table-props="addDeviceTableProps"
-                            :items="addDeviceAllResult" :showCheckBox="true" :searchShow="false"
-                            key-field="deviceId" :tooltipModel="addDeviceDialogOpen"
-                            :searchText="searchAddDeviceText" @clearSearch="searchAddDeviceText=''"
-                            @haveCheckedData="addDeviceCheck" :activeTab="adddeviceActiveTab"/>
+                            <InefiVirtualTable ref="deviceTable" :item-size="54" :table-props="addDeviceTableProps" 
+                            :items="addDeviceAllResult" :showCheckBox="true" :searchShow="false" key-field="deviceId" 
+                            :tooltipModel="addDeviceDialogOpen" :searchText="searchAddDeviceText" @clearSearch="searchAddDeviceText = ''" 
+                            @haveCheckedData="addDeviceCheck" :activeTab="adddeviceActiveTab" />
                         </div>
                     </div>
 
                     <template #footer>
                         <el-button @click="addDeviceDialogOpen = false">Cancel</el-button>
-                        <el-button class="ms-3" :type="!hasNoDeviceChecked ? 'primary' : 'info'" @click="addDeviceDialogOpen=false" :disabled="hasNoDeviceChecked">
+                        <el-button class="ms-3" :type="!hasNoDeviceChecked ? 'primary' : 'info'" @click="addDeviceDialogOpen = false" :disabled="hasNoDeviceChecked">
                             Go
                         </el-button>
                     </template>
                 </el-dialog>
             </div>
         </div>
-        <BigCard class="flex-row layout-content">
-            <template v-slot:content>
-                <el-drawer v-model="treeDrawerOpen" direction="btt" :show-close="false" :with-header="false" class="tree_drawer px-3" modal-class="tree_drawer_overlay" size="80%">
+        <BigCard class="flex-row" v-loading="!loadingEnd" element-loading-background="#fff">
+            <el-drawer v-model="treeDrawerOpen" direction="btt" :show-close="false" :with-header="false" class="tree_drawer px-3" modal-class="tree_drawer_overlay" size="80%">
+                <el-scrollbar class="py-3 ps-2">
+                    <el-tree :data="groupTreeData" :props="defaultProps" ref="treeRefMobile" :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="slaveGroupId">
+                        <template #default="{ node }">
+                            <label class="d-flex align-items-center w-100" @click="
+                                showNodeData(node, 'mobile');
+                            treeDrawerOpen = false;
+                            ">
+                                <font-awesome-icon icon="fa-solid fa-folder" v-show="!node.expanded" />
+                                <font-awesome-icon icon="fa-solid fa-folder-open" v-show="node.expanded" />
+                                <span class="ms-2" :class="{
+                                    highLight:
+                                        currentNode.slaveGroupId ===
+                                        node.data.slaveGroupId,
+                                }">{{ node.label }}</span>
+                            </label>
+                        </template>
+                    </el-tree>
+                </el-scrollbar>
+            </el-drawer>
+            <splitpanes>
+                <pane class="d-none d-sm-block" min-size="20" max-size="35">
                     <el-scrollbar class="py-3 ps-2">
-                        <el-tree :data="groupTreeData" :props="defaultProps" ref="treeRefMobile" :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="slaveGroupId">
+                        <el-tree :data="groupTreeData" :props="defaultProps" ref="treeRef" :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="slaveGroupId">
                             <template #default="{ node }">
-                                <label class="d-flex align-items-center w-100" @click="
-                                    showNodeData(node, 'mobile');
-                                treeDrawerOpen = false;
-                                ">
+                                <label class="d-flex align-items-center w-100" @click="showNodeData(node)">
                                     <font-awesome-icon icon="fa-solid fa-folder" v-show="!node.expanded" />
                                     <font-awesome-icon icon="fa-solid fa-folder-open" v-show="node.expanded" />
                                     <span class="ms-2" :class="{
@@ -595,137 +622,122 @@ watch(windowWidth, () => {
                             </template>
                         </el-tree>
                     </el-scrollbar>
-                </el-drawer>
-                <splitpanes>
-                    <pane class="d-none d-sm-block" min-size="20" max-size="35">
-                        <el-scrollbar class="py-3 ps-2">
-                            <el-tree :data="groupTreeData" :props="defaultProps" ref="treeRef" :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="slaveGroupId">
-                                <template #default="{ node }">
-                                    <label class="d-flex align-items-center w-100" @click="showNodeData(node)">
-                                        <font-awesome-icon icon="fa-solid fa-folder" v-show="!node.expanded" />
-                                        <font-awesome-icon icon="fa-solid fa-folder-open" v-show="node.expanded" />
-                                        <span class="ms-2" :class="{
-                                            highLight:
-                                                currentNode.slaveGroupId ===
-                                                node.data.slaveGroupId,
-                                        }">{{ node.label }}</span>
-                                    </label>
-                                </template>
-                            </el-tree>
-                        </el-scrollbar>
-                    </pane>
-                    <pane>
-                        <div class="layout-content">
-                            <div class="d-none d-sm-flex py-2 px-2 border-b align-items-center">
-                                <IconBtn iconClass="fa-solid fa-house" />
-                                <div class="ms-2">
-                                    <el-breadcrumb :separator-icon="ArrowRight">
-                                        <el-breadcrumb-item v-for="item in breadCrumbList" :key="`path-${item}`">
-                                            <a href="" @click.prevent="showNodeData(item)">{{ item.data.slaveGroupName }}</a>
-                                        </el-breadcrumb-item>
-                                    </el-breadcrumb>
-                                </div>
-                            </div>
-                            <div class="layout-content">
-                                <splitpanes horizontal>
-                                    <pane v-if="deviceListActiveTab == 'MAIN'">
-                                        <div class="layout-content">
-                                            <div class="list-refresh border-b px-3 d-sm-none d-flex justify-content-end">
-                                                <IconBtn iconClass="fa-solid fa-list" active @click="
-                                                    treeDrawerOpen = true
-                                                    " />
-                                                <IconBtn iconClass="fa-solid fa-refresh" active />
-                                            </div>
-                                            <div class="row p-3 border-b d-none d-sm-flex">
-                                                <div class="col-6">
-                                                    <span>群組名稱</span>
-                                                </div>
-                                                <div class="col-6">
-                                                    <span>環境設定</span>
-                                                </div>
-                                            </div>
-                                            <div class="layout-content">
-                                                <el-scrollbar max-height="100%">
-                                                    <ul class="p-0">
-                                                        <li class="row border-b py-2 py-sm-3 p-sm-2" v-for="(item, index) in groupChildren" :key="index" @click="showNodeData(item)">
-                                                            <div class="col-12 col-sm-6 d-flex align-items-center ps-4">
-                                                                <font-awesome-icon class="active" icon="fa-solid fa-folder" size="2xl" />
-                                                                <div class="ms-2 p-sm-0">
-                                                                    <span class="active">{{ item.data.slaveGroupName }}</span>
-                                                                    <div class="d-sm-none d-flex align-items-end">
-                                                                        <span class="fs-7">
-                                                                            環境設定:
-                                                                            <span class="fs-7" v-if="item.data.profiles">{{ item.data.profiles[0].assignedProfileName }}</span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6 d-none d-sm-block" v-if="item.data.profiles">
-                                                                {{ item.data.profiles[0].assignedProfileName }}
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                    <div class="d-flex p-3 justify-content-center" v-if="groupChildren.length ===
-                                                        0
-                                                        ">
-                                                        無群組資料
-                                                    </div>
-                                                </el-scrollbar>
-                                            </div>
-                                        </div>
-                                    </pane>
-                                    <pane>
-                                        <div class="layout-content">
-                                            <div class="header border-b p-3 d-flex align-items-center justify-content-between" v-if="deviceListActiveTab == 'MAIN'">
-                                                <div class="operate d-flex align-items-center flex-grow-1">
-                                                    <div class="" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
-                                                        <font-awesome-icon icon="fa-solid fa-folder" />
-                                                        <span class="ms-2">移動</span>
-                                                    </div>
-                                                    <div class="ms-4" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
-                                                        <font-awesome-icon icon="fa-solid fa-trash" />
-                                                        <span class="ms-2">刪除</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="layout-content">
-                                                <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" :items="deviceResult" key-field="deviceId" 
-                                                :showCheckBox="deviceListActiveTab == 'MAIN'" tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" 
-                                                tooltipRef="aliasName" @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []" 
-                                                table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" :customColumns="false"
-                                                :filter="deviceListActiveTab == 'UNASSIGNED'" :filter-options="filterOptions" @filt="getFilterParam" :searchShow="false">
-                                                    <template #status="{item}">
-                                                        <div class="d-flex w-100 align-items-center justify-content-center">
-                                                            <div class="status_dot" :class="{
-                                                                err:item.healthStatus === 'ERROR',
-                                                                good:item.healthStatus === 'GOOD'}"></div>
-                                                        </div>
-                                                    </template>
-                                                    <template #label="{ item }">
-                                                        <div class="label" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" 
-                                                        @touchstart="thisTouchStart(item.deviceId)" @touchmove="clearTouchTimer" @touchend="clearTouchTimer">
-                                                            <span class="alias_name">{{ item.aliasName }}</span>
-                                                            <span class="alias_input">
-                                                                <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
-                                                            </span>
-                                                        </div>
-                                                    </template>
-                                                    <template #enroll="{ item }">
-                                                        <div class="enrolled_status py-1 px-2" :class="{ enrolled: item.deviceState === 'REGISTERED' }">
-                                                            <div class="dot me-2"></div>
-                                                            <span>{{ item.deviceState === "REGISTERED" ? "ENROLLED" : "INACTIVE" }}</span>
-                                                        </div>
-                                                    </template>
-                                                </InefiVirtualTable>
-                                            </div>
-                                        </div>
-                                    </pane>
-                                </splitpanes>
+                </pane>
+                <pane>
+                    <div class="layout-content">
+                        <div class="d-none d-sm-flex p-2 border-b align-items-center">
+                            <IconBtn iconClass="fa-solid fa-house" />
+                            <div class="ms-2">
+                                <el-breadcrumb :separator-icon="ArrowRight">
+                                    <el-breadcrumb-item v-for="item in breadCrumbList" :key="`path-${item}`">
+                                        <a href="" @click.prevent="showNodeData(item)">{{ item.data.slaveGroupName }}</a>
+                                    </el-breadcrumb-item>
+                                </el-breadcrumb>
                             </div>
                         </div>
-                    </pane>
-                </splitpanes>
-            </template>
+                        <div class="layout-content">
+                            <splitpanes horizontal>
+                                <pane v-if="deviceListActiveTab == 'MAIN'">
+                                    <div class="layout-content">
+                                        <div class="list-refresh border-b px-3 d-sm-none d-flex justify-content-end">
+                                            <IconBtn iconClass="fa-solid fa-list" active @click="
+                                                treeDrawerOpen = true
+                                                " />
+                                            <IconBtn iconClass="fa-solid fa-refresh" active />
+                                        </div>
+                                        <div class="row p-3 border-b d-none d-sm-flex">
+                                            <div class="col-6">
+                                                <span>群組名稱</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span>環境設定</span>
+                                            </div>
+                                        </div>
+                                        <div class="layout-content">
+                                            <el-scrollbar max-height="100%">
+                                                <ul class="p-0">
+                                                    <li class="row border-b py-2 py-sm-3 p-sm-2" v-for="(item, index) in groupChildren" :key="index" @click="showNodeData(item)">
+                                                        <div class="col-12 col-sm-6 d-flex align-items-center ps-4">
+                                                            <font-awesome-icon class="active" icon="fa-solid fa-folder" size="2xl" />
+                                                            <div class="ms-2 p-sm-0">
+                                                                <span class="active">{{ item.data.slaveGroupName }}</span>
+                                                                <div class="d-sm-none d-flex align-items-end">
+                                                                    <span class="fs-7">
+                                                                        環境設定:
+                                                                        <span class="fs-7" v-if="item.data.profiles">{{ item.data.profiles[0].assignedProfileName }}</span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 d-none d-sm-block" v-if="item.data.profiles">
+                                                            {{ item.data.profiles[0].assignedProfileName }}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="d-flex p-3 justify-content-center" v-if="groupChildren.length ===
+                                                    0
+                                                    ">
+                                                    無群組資料
+                                                </div>
+                                            </el-scrollbar>
+                                        </div>
+                                    </div>
+                                </pane>
+                                <pane>
+                                    <div class="layout-content">
+                                        <div class="header border-b p-3 d-flex align-items-center justify-content-between" v-if="deviceListActiveTab == 'MAIN'">
+                                            <div class="operate d-flex align-items-center flex-grow-1">
+                                                <div class="" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
+                                                    <font-awesome-icon icon="fa-solid fa-folder" />
+                                                    <span class="ms-2">移動</span>
+                                                </div>
+                                                <div class="ms-4" :style="{ color: devicesChecked.length == 0 ? '#d6d6d6' : '' }">
+                                                    <font-awesome-icon icon="fa-solid fa-trash" />
+                                                    <span class="ms-2">刪除</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layout-content">
+                                            <InefiVirtualTable ref="deviceListTable" :item-size="50" :table-props="deviceTableProps" :items="deviceResult" key-field="deviceId" 
+                                            :showCheckBox="deviceListActiveTab == 'MAIN'" 
+                                            tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" tooltipRef="aliasName" 
+                                            @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []" 
+                                            table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" 
+                                            :customColumns="false" :filter="deviceListActiveTab == 'UNASSIGNED'" :filter-options="filterOptions" 
+                                            @filt="getFilterParam" :searchShow="false">
+                                                <template #status="{ item }">
+                                                    <div class="d-flex w-100 align-items-center justify-content-center">
+                                                        <div class="status_dot" :class="{
+                                                            err: item.healthStatus === 'ERROR',
+                                                            good: item.healthStatus === 'GOOD'
+                                                        }"></div>
+                                                    </div>
+                                                </template>
+                                                <template #label="{ item }">
+                                                    <div class="label" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" 
+                                                    @touchstart.passive="thisTouchStart(item.deviceId)" @touchmove.passive="clearTouchTimer" @touchend.passive="clearTouchTimer">
+                                                        <span class="alias_name">{{ item.aliasName }}</span>
+                                                        <span class="alias_input">
+                                                            <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
+                                                        </span>
+                                                    </div>
+                                                </template>
+                                                <template #enroll="{ item }">
+                                                    <div class="enrolled_status py-1 px-2" :class="{ enrolled: item.deviceState === 'REGISTERED' }">
+                                                        <div class="dot me-2"></div>
+                                                        <span>{{ item.deviceState === "REGISTERED" ? "ENROLLED" : "INACTIVE" }}</span>
+                                                    </div>
+                                                </template>
+                                            </InefiVirtualTable>
+                                        </div>
+                                    </div>
+                                </pane>
+                            </splitpanes>
+                        </div>
+                    </div>
+                </pane>
+            </splitpanes>
+
         </BigCard>
     </div>
 </template>
@@ -754,7 +766,7 @@ watch(windowWidth, () => {
     }
 }
 
-.addDevice_dialog-body{
+.addDevice_dialog-body {
     min-height: 350px;
     max-height: calc(90vh - 150px);
 }
@@ -860,18 +872,22 @@ watch(windowWidth, () => {
     color: $primary;
     cursor: pointer;
 }
-.status_dot{
+
+.status_dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    &.err{
+
+    &.err {
         background-color: $danger;
     }
-    &.good{
+
+    &.good {
         background-color: $success;
     }
-    
+
 }
+
 .label {
     width: 100%;
     min-height: 24px;
@@ -903,6 +919,7 @@ watch(windowWidth, () => {
     align-items: center;
     background-color: #eee;
     width: fit-content;
+
     span {
         @extend .fw-bold;
         font-size: 12px;
@@ -919,8 +936,9 @@ watch(windowWidth, () => {
         background-color: lighten($primary, 30%);
 
         span {
-            color:$primary;
+            color: $primary;
         }
+
         .dot {
             background-color: $primary;
         }

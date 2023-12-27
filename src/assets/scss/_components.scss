@@ -1,0 +1,12 @@
+.btn-prim{
+    color: #fff;
+    background: linear-gradient(232.42deg,#29bfed 18.04%,#72d5f3 76.82%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 8px;
+    &:disabled{
+        background: #bdbdbd;
+    }
+}

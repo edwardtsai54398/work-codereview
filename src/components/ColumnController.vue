@@ -259,7 +259,7 @@ watch(windowW, (newVal) => {
     <span class="d-none d-sm-inline-block column-controller">
         <span @click="panelOpen = !panelOpen">
             <slot name="btn">
-                <button class="table-expansion d-none d-sm-inline-block">
+                <button class="table-expansion d-none d-sm-inline-block" :disabled="loading" :class="{disable:loading}">
                     <font-awesome-icon icon="fa-solid fa-table-columns" />
                     <span class="ms-2">Columns Setting</span>
                 </button>

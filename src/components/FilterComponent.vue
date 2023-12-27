@@ -55,11 +55,11 @@ const paramSended = ref(false)
         <el-popover placement="bottom" :width="200" trigger="manual" popper-class="filter-popover" ref="popoverRef" :visible="visible"
         :effect="darkMode?'dark':'light'">
             <template #reference>
-                <button class="table-expansion filter-expansion" :class="{disable:loading, sended:paramSended}" 
-                @click="visible = !visible" :disabled="loading">
+                <button class="table-expansion filter-expansion py-1 py-sm-2" :class="{disable:loading, sended:paramSended}" 
+                    @click="visible = !visible" :disabled="loading">
                     <span v-show="!paramSended">
                         <font-awesome-icon icon="fa-solid fa-filter" />
-                        <span class="ms-2">Add Filter</span>
+                        <span class="d-none d-sm-inline ms-2">Add Filter</span>
                     </span>
                     <span v-if="paramSended" class="d-flex align-items-center">
                         <span class="fw-bold me-2">{{ typeName }}</span>

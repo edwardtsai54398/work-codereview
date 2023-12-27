@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import scrollBatchLoad from './scrollBatchLoad';
+import scrollBatchLoad from './scrollBatchLoad/scrollBatchLoad';
 import groupHealth from './groupHealth';
 import columnControl from './columnControl/columnControl.js';
 const store = createStore({

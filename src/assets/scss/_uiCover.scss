@@ -1,0 +1,40 @@
+.vue-recycle-scroller {
+    @extend .scrollbar-style;
+}
+.pop_dialog{
+    min-width: 95%;
+    // margin: 10vh auto;
+    border-radius: 20px;
+    overflow: hidden;
+    .el-dialog__header{
+        background: linear-gradient(270deg,#29bfed,#82daf5 97.92%);
+        color: #fff;
+        padding: 16px;
+        margin-right: 0;
+        margin-bottom: 12px;
+    }
+    .el-dialog__body{
+        padding: 0;
+    }
+    .el-dialog__footer{
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+}
+@include bstrp(sm) {
+    .pop_dialog{
+        min-width: 85%;
+    }
+}
+@include bstrp(xl) {
+    .pop_dialog{
+        min-width: 60%;
+
+    }
+}
+.el-select-dropdown__item{
+    &.selected span{
+        color: $primary;
+    }
+}

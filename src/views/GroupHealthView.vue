@@ -41,11 +41,12 @@ const groupBeenDeleted = ref([]);
 watch([groupHealthMointor, groupTreeData], ([newVal1, newVal2]) => {
     let groupWatchedFounded = findGroupWatched(newVal1, newVal2);
     //如果有被刪除的監看群組，發通知
-    if (groupWatchedFounded.length !== newVal1.length) {
-        findGroupDeleted(newVal1, groupWatchedFounded);
-    } else {
-        groupWatchedList.value = groupWatchedFounded;
-    }
+    // if (groupWatchedFounded.length !== newVal1.length) {
+    //     findGroupDeleted(newVal1, groupWatchedFounded);
+    // } else {
+    //     groupWatchedList.value = groupWatchedFounded;
+    // }
+    groupWatchedList.value = groupWatchedFounded;
 });
 function findGroupWatched(monitorData = [], groupTree = []) {
     let watchedList = [];
@@ -70,21 +71,21 @@ function findGroupWatched(monitorData = [], groupTree = []) {
     watchedList.push(...mainResult);
     return watchedList;
 }
-function findGroupDeleted(monitorData = [], groupFounded = []) {
-    let groupDeletedList = [];
-    monitorData.forEach((monitor) => {
-        let isExist = groupFounded.some(
-            (group) => monitor.groupUUID === group.slaveGroupUUID
-        );
-        if (!isExist) {
-            groupDeletedList.push(monitor);
-        }
-    });
-    if (groupDeletedList.length) {
-        groupBeenDeleted.value = groupDeletedList;
-        groupDeletedDialogVisible.value = true;
-    }
-}
+// function findGroupDeleted(monitorData = [], groupFounded = []) {
+//     let groupDeletedList = [];
+//     monitorData.forEach((monitor) => {
+//         let isExist = groupFounded.some(
+//             (group) => monitor.groupUUID === group.slaveGroupUUID
+//         );
+//         if (!isExist) {
+//             groupDeletedList.push(monitor);
+//         }
+//     });
+//     if (groupDeletedList.length) {
+//         groupBeenDeleted.value = groupDeletedList;
+//         groupDeletedDialogVisible.value = true;
+//     }
+// }
 //確認刪除對話框
 const groupDeletedDialogVisible = ref(false);
 const userConfirmGroupDeleted = ref(false);
@@ -237,22 +238,14 @@ function toManagePageGroup(group) {
                                             <div class="row h-100 flex-wrap">
                                                 <div class="col-6 col-md-4 col-xxl-12">
                                                     <div class="h-100 d-flex align-items-center">
-                                                        {{
-                                                            item.titleOfDeviceHealthGroup
-                                                        }}
+                                                        {{item.titleOfDeviceHealthGroup}}
                                                     </div>
                                                 </div>
                                                 <div class="col-6 col-md-4 col-xxl-12">
                                                     <div class="d-flex align-items-center active_folder h-100">
                                                         <font-awesome-icon icon="fa-solid fa-folder" />
-                                                        <router-link to="/deviceManagement/group" class="ms-2 highLight" @click="
-                                                        toManagePageGroup(
-                                                            item
-                                                        )
-                                                            ">
-                                                            {{
-                                                                item.slaveGroupName
-                                                            }}
+                                                        <router-link to="/deviceManagement/group" class="ms-2 highLight" @click="toManagePageGroup(item)">
+                                                            {{item.slaveGroupName}}
                                                         </router-link>
                                                     </div>
                                                 </div>

@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+ul,p{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    &:focus{
+        border: none;
+        outline: none;
+    }
+}
