@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkinefi_cli"]=self["webpackChunkinefi_cli"]||[]).push([[411],{411:function(n,e,t){t.r(e),t.d(e,{default:function(){return o}});var c=t(6252);const i={class:"d-flex justify-content-center align-items-center"},s=(0,c._)("span",{class:"fz-2"},"404 找不到頁面",-1),r=[s];function f(n,e){return(0,c.wg)(),(0,c.iD)("div",i,r)}var u=t(3744);const a={},l=(0,u.Z)(a,[["render",f]]);var o=l}}]);
+//# sourceMappingURL=411.11d371ff.js.map

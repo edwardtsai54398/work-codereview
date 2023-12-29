@@ -1,0 +1,33 @@
+{
+    "status": 1,
+    "result": [
+        {
+            "idOfDeviceHealthGroup": 84,
+            "titleOfDeviceHealthGroup": "12121212",
+            "groupName": "Jay's Test Group",
+            "groupUUID": "4CD59C7D-0D3A-4312-9FFC-C6F4AE11D947"
+        },
+        {
+            "idOfDeviceHealthGroup": 87,
+            "titleOfDeviceHealthGroup": "main",
+            "groupName": "group_health",
+            "groupUUID": "A6724F5D-FF0E-4E68-A779-0DAC80DDF305"
+        },
+        {
+            "idOfDeviceHealthGroup": 112,
+            "titleOfDeviceHealthGroup": "edwardTest",
+            "groupName": "Ada's testing group",
+            "groupUUID": "760E5FD0-6EAB-44E5-913A-32C23EA1DD06"
+        },
+        {
+            "idOfDeviceHealthGroup": 115,
+            "titleOfDeviceHealthGroup": "edwardTestGood",
+            "groupName": "testProfile_Darwin_Test_Profile_2",
+            "groupUUID": "1FE01BED-03FC-45DF-84F5-22195E13E891"
+        }
+        
+    ],
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1698830398
+}
