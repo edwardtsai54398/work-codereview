@@ -1,0 +1,215 @@
+{
+    "status": 1,
+    "result": {
+        "chart": [
+            {
+                "id": 1,
+                "title": "label_operating_system",
+                "unit": "unit_percentage",
+                "type": 1,
+                "data": [
+                    {
+                        "name": "UNKNOWN",
+                        "value": "17.4",
+                        "color": "#dbdbdb"
+                    },
+                    {
+                        "name": "Android",
+                        "value": "21.7",
+                        "color": "#40e2b4"
+                    },
+                    {
+                        "name": "Linux",
+                        "value": "21.7",
+                        "color": "#f8ac1a"
+                    },
+                    {
+                        "name": "Windows",
+                        "value": "39.1",
+                        "color": "#29bfed"
+                    }
+                ],
+                "detail": [
+                    {
+                        "name": "UNKNOWN",
+                        "value": "17.4",
+                        "color": "#dbdbdb"
+                    },
+                    {
+                        "name": "Android",
+                        "value": "21.7",
+                        "color": "#40e2b4"
+                    },
+                    {
+                        "name": "Linux",
+                        "value": "21.7",
+                        "color": "#f8ac1a"
+                    },
+                    {
+                        "name": "Windows",
+                        "value": "39.1",
+                        "color": "#29bfed"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "label_device_status",
+                "unit": "unit_percentage",
+                "type": 1,
+                "data": [
+                    {
+                        "name": "NODATA",
+                        "value": 100,
+                        "color": "#c9c9c9"
+                    }
+                ],
+                "detail": [
+                    {
+                        "name": "NODATA",
+                        "value": 0,
+                        "color": "#c9c9c9"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "title": "label_device_model",
+                "unit": "unit_numbers",
+                "type": 1,
+                "data": [
+                    {
+                        "name": "VirtualBox",
+                        "value": 4,
+                        "color": "#29bfed"
+                    },
+                    {
+                        "name": "ElkhartLake",
+                        "value": 3,
+                        "color": "#89adf3"
+                    },
+                    {
+                        "name": "Razor",
+                        "value": 2,
+                        "color": "#54d752"
+                    },
+                    {
+                        "name": "OTHERS",
+                        "value": 14,
+                        "color": "#44ffcA"
+                    }
+                ],
+                "detail": [
+                    {
+                        "name": "VirtualBox",
+                        "value": 4,
+                        "color": "#29bfed"
+                    },
+                    {
+                        "name": "ElkhartLake",
+                        "value": 3,
+                        "color": "#89adf3"
+                    },
+                    {
+                        "name": "Razor",
+                        "value": 2,
+                        "color": "#54d752"
+                    },
+                    {
+                        "name": "unknown",
+                        "value": 2,
+                        "color": "#f915a1"
+                    },
+                    {
+                        "name": "CometLake",
+                        "value": 2,
+                        "color": "#ba043b"
+                    },
+                    {
+                        "name": "KPC6 D36",
+                        "value": 1,
+                        "color": "#bc0987"
+                    },
+                    {
+                        "name": "HP Stream Laptop 11-y0XX",
+                        "value": 1,
+                        "color": "#84053b"
+                    },
+                    {
+                        "name": "HP ProDesk 600 G2 MT",
+                        "value": 1,
+                        "color": "#a1e166"
+                    },
+                    {
+                        "name": "Latitude 3420",
+                        "value": 1,
+                        "color": "#850210"
+                    },
+                    {
+                        "name": "POS667",
+                        "value": 1,
+                        "color": "#6bfba7"
+                    },
+                    {
+                        "name": "CherryTrail",
+                        "value": 1,
+                        "color": "#4f99f4"
+                    },
+                    {
+                        "name": "AURA TABLET",
+                        "value": 1,
+                        "color": "#3dc3b3"
+                    },
+                    {
+                        "name": "Victus by HP Laptop 16-d1xxx",
+                        "value": 1,
+                        "color": "#82616d"
+                    },
+                    {
+                        "name": "HP Pavilion Gaming Laptop 15-dk0xxx",
+                        "value": 1,
+                        "color": "#9edf98"
+                    },
+                    {
+                        "name": "BayTrail Platform",
+                        "value": 1,
+                        "color": "#eb8b49"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "title": "label_connection_state",
+                "unit": "unit_percentage",
+                "type": 1,
+                "data": [
+                    {
+                        "name": "DISCONNECTED",
+                        "value": "97.1",
+                        "color": "#737373"
+                    },
+                    {
+                        "name": "CONNECTED",
+                        "value": "2.9",
+                        "color": "#29bfed"
+                    }
+                ],
+                "detail": [
+                    {
+                        "name": "DISCONNECTED",
+                        "value": "97.1",
+                        "color": "#737373"
+                    },
+                    {
+                        "name": "CONNECTED",
+                        "value": "2.9",
+                        "color": "#29bfed"
+                    }
+                ]
+            }
+        ]
+    },
+    "errorCode": null,
+    "message": null,
+    "updatedTimestampInUTC": 1698212403
+}

@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkinefi_cli"]=self["webpackChunkinefi_cli"]||[]).push([[142],{8142:function(n,i,e){e.r(i),e.d(i,{default:function(){return s}});var r=e(6252);function t(n,i){const e=(0,r.up)("router-view");return(0,r.wg)(),(0,r.iD)("div",null,[(0,r.Uk)(" AdministrationView "),(0,r.Wm)(e)])}var u=e(3744);const c={},f=(0,u.Z)(c,[["render",t]]);var s=f}}]);
+//# sourceMappingURL=142.7e26fcf1.js.map
