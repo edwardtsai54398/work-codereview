@@ -1,5 +1,6 @@
 <script setup>
 import { defineProps, nextTick, watch, computed, reactive, onMounted, onBeforeUnmount, ref } from 'vue'
+import {onActivated} from "vue"
 import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
 import { Search } from "@element-plus/icons-vue";
@@ -8,6 +9,14 @@ import FilterComponent from "@/components/FilterComponent.vue";
 import IconCircleBtn from '@/components/IconCircleBtn.vue'
 import { useStore } from 'vuex'
 const store = useStore()
+const state = computed(()=>store.state.scrollBatchLoad[props.tableName])
+const getters = (getter)=>store.getters[`scrollBatchLoad/${props.tableName}/${getter}`]
+function commit(mutations, param){
+    store.commit(`scrollBatchLoad/${props.tableName}/${mutations}`, param)
+}
+function dispatch(actions, param){
+    store.dispatch(`scrollBatchLoad/${props.tableName}/${actions}`, param)
+}
 const props = defineProps({
     items: Array,//使用batchLoad則不用給，資料會從vuex抓
     keyField: String,//id key
@@ -53,13 +62,13 @@ const props = defineProps({
     batchLoad: {
         type: Boolean,
         default: false
-    },
+    },//如果為true，要設定tableName，並在Vuex建一個與tableName同名的module
     getDataLen: {
         type: Number,
         default: 0
     },//batchload每次讀取筆數
     URL: String,//batchload API網址
-    tableName: String,//如果有column controller，要設定名稱
+    tableName: String,//如果有column controller或batchLoad，要設定名稱
     columnsExcept: {
         type: Array,
         default: () => []
@@ -76,7 +85,7 @@ const props = defineProps({
     customColumns: {
         type: Boolean,
         default: false
-    },//是否要有欄位客製元件
+    },//是否要有欄位客製元件。如果為true，要設定tableName
     filter: {
         type: Boolean,
         default: false
@@ -261,22 +270,23 @@ const searchText = computed(() => { return props.searchShow ? searchInputText.va
 const columsDatakeys = reactive(tablePropsSorted.value.map((column) => column.dataKey))
 const searchResult = computed(() => {
     let searchResource = props.items
-    if (props.batchLoad) {
-        searchResource = store.state.scrollBatchLoad.allData
-        if (useSwitchTab.value) {
-            searchResource = store.state.scrollBatchLoad[props.activeTab].allData
-        }
-    }
+    // if (props.batchLoad) {
+    //     searchResource = state.value.allData
+    // }
     return searchResource.filter((item) => {
-        return columsDatakeys.some((key) => item[key]?.toUpperCase().includes(searchText.value.toUpperCase()))
+        return columsDatakeys.some((key) => {
+            if(typeof item[key] !== "string"){
+                return false
+            }else{
+                return item[key]?.toUpperCase().includes(searchText.value.toUpperCase())
+            }
+        })
     })
 })
 const batchloadNotDoneShowText = computed(() => {
-    let loadDoneRef = store.getters["scrollBatchLoad/dataLoadDone"]
-    if (useSwitchTab.value) {
-        loadDoneRef = store.getters[`scrollBatchLoad/${props.activeTab}/dataLoadDone`]
-    }
+    let loadDoneRef = getters("dataLoadDone")
     return props.batchLoad && !loadDoneRef && searchText.value !== ""
+    // return false
 })
 function clearSearch() {
     searchInputText.value = ""
@@ -296,10 +306,7 @@ onBeforeUnmount(() => { window.removeEventListener("click", searchbarHide) })
 const items = computed(() => {
     let items = props.items
     if (props.batchLoad) {
-        items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad.allData))
-        if (useSwitchTab.value) {
-            items = JSON.parse(JSON.stringify(store.state.scrollBatchLoad[props.activeTab].allData))
-        }
+        items = JSON.parse(JSON.stringify(state.value.allData))
         let emptyLength = items.filter((data) => !data[props.keyField]).length
         let emptyStartIndex = items.findIndex((data) => !data[props.keyField])
         items.splice(emptyStartIndex, emptyLength)
@@ -343,8 +350,7 @@ function selectAllChange(value) {
 
     checkedList.length = 0
     if (value) {
-        let items = items.value
-        items.forEach((item) => {
+        items.value.forEach((item) => {
             checkedList.push(item)
         })
     }
@@ -750,10 +756,7 @@ watch(sortedData, () => {
 
 //loading
 const firstLoaded = computed(() => {
-    let scrollBatchLoadLoadStart = store.state.scrollBatchLoad.loadStart
-    if (useSwitchTab.value && props.batchLoad) {
-        scrollBatchLoadLoadStart = store.state.scrollBatchLoad[props.activeTab].loadStart
-    }
+    let scrollBatchLoadLoadStart = state.value?.loadStart
     return props.batchLoad ? scrollBatchLoadLoadStart : !props.loading
 })
 const firstLoadingEnd = ref(false)
@@ -771,10 +774,10 @@ watch(firstLoaded, (newVal) => {
 //reload
 function reload() {
     if(firstLoadingEnd.value){
-        if (!props.batchLoad) {
-            emit('reload')
-        } else {
+        if (props.batchLoad && !batchLoading.value) {
             batchReloadData()
+        } else{
+            emit('reload')
         }
     }
 }
@@ -782,47 +785,26 @@ function reload() {
 const batchLoading = computed(()=>{
     let batchLoading = !firstLoadingEnd.value
     if(props.batchLoad){
-        if(useSwitchTab.value){
-            batchLoading = store.state.scrollBatchLoad[props.activeTab].loading
-        }else{
-            batchLoading = store.state.scrollBatchLoad.loading
-        }
+        batchLoading = state.value.loading
     }
     return !firstLoadingEnd.value ? !firstLoadingEnd.value : batchLoading
 })
 
 
 //batchLoad
-if (!useSwitchTab.value && props.batchLoad) {
-    store.commit("scrollBatchLoad/setProps", {
+if (props.batchLoad) {
+    commit("setProps", {
         getDataLen: props.getDataLen,
         keyField: props.keyField,
     })
 }
-
-const tabsLsit = reactive([])
-watch(() => props.activeTab, (newVal) => {
-    if (useSwitchTab.value && props.batchLoad) {
-        if (!tabsLsit.some((tab) => tab === props.activeTab)) {
-            tabsLsit.push(props.activeTab)
-            store.commit(`scrollBatchLoad/${newVal}/setProps`, {
-                getDataLen: props.getDataLen,
-                keyField: props.keyField,
-            })
-        }
-    }
-}, { immediate: true })
 
 const getNextDataTrigger = ref(1)
 const getFormerDataTrigger = ref(1)
 const alreadyScrollTop = ref(0)
 const scrollZone = ref(1)
 if (props.batchLoad && props.getDataLen) {
-    if (useSwitchTab.value) {
-        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
-    } else {
-        store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
-    }
+    dispatch(`batchLoadData`, props.URL)
 } else if (props.batchLoad && !props.getDataLen ||
     props.getDataLen && !props.batchLoad) {
     console.error("You can't use 'batchLoadData' without setting VirtualTable component props 'batchLoad: true' or 'getDataLen'");
@@ -837,26 +819,16 @@ function scrollDownOrUp() {
         scrollZone.value = scrollzone
     }
     if (searchText.value === "") {
-
         if (mainScrollTop.value >= alreadyScrollTop.value) {
             //往下滾動
-            if (useSwitchTab.value) {
-                store.commit(`scrollBatchLoad/${props.activeTab}/setOffset`, scrollZone.value * props.getDataLen)
-            } else {
-                store.commit("scrollBatchLoad/setOffset", scrollZone.value * props.getDataLen)
-            }
+            commit("setOffset", scrollZone.value * props.getDataLen)
             if (mainScrollTop.value >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
                 getNextDataTrigger.value = 0
             }
         } else {
             //往上滾動
-            if (store.state.scrollBatchLoad.batchesTrustList.some((boolean) => !boolean) ||
-                (useSwitchTab.value && store.state.scrollBatchLoad[props.activeTab].batchesTrustList.some((boolean) => !boolean))) {
-                if (useSwitchTab.value) {
-                    store.commit(`scrollBatchLoad/${props.activeTab}/setOffset`, (scrollZone.value - 1) * props.getDataLen)
-                } else {
-                    store.commit("scrollBatchLoad/setOffset", (scrollZone.value - 1) * props.getDataLen)
-                }
+            if (!getters("dataLoadTrust")) {
+                    commit(`setOffset`, (scrollZone.value - 1) * props.getDataLen)
                 if (mainScrollTop.value < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
                     getFormerDataTrigger.value = 0
                 }
@@ -865,22 +837,13 @@ function scrollDownOrUp() {
     }
     alreadyScrollTop.value = mainScrollTop.value
 }
-watch(() => props.activeTab, () => {
-    scrollTop()
-    if (props.batchLoad) {
-        getNextDataTrigger.value = 1
-        getFormerDataTrigger.value = 1
-        scrollZone.value = 1
-        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
-    }
-})
 
 watch(getNextDataTrigger, (newVal) => {
     if (!newVal && props.batchLoad) {
-        if (useSwitchTab.value) {
-            store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
-        } else {
-            store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
+        if(!getters("dataLoadDone") && state.value.batchesTrustList.length == scrollZone.value){
+            dispatch(`batchLoadData`, props.URL)
+        }else if(!getters("dataLoadTrust")){
+            dispatch("getNextUntrustData", props.URL)
         }
     }
 }, { deep: true })
@@ -892,21 +855,19 @@ watch(getFormerDataTrigger, (newVal) => {
 }, { deep: true })
 function batchLoadScrollupCheck() {
     //若在第2區，抓第2區的資料
-    if (useSwitchTab.value && !store.state.scrollBatchLoad[props.activeTab].batchesTrustList[scrollZone.value - 1]) {
-        store.dispatch(`scrollBatchLoad/${props.activeTab}/getFormerZoneData`, props.URL)
-    } else if (!useSwitchTab.value && !store.state.scrollBatchLoad.batchesTrustList[scrollZone.value - 1]) {
-        store.dispatch("scrollBatchLoad/getFormerZoneData", props.URL)
+    if (!state.value.batchesTrustList[scrollZone.value - 1]) {
+        dispatch("getFormerZoneData", props.URL)
     }
 }
+onActivated(()=>{
+    if(props.batchLoad && !getters("dataLoadTrust")){
+        dispatch("getNextUntrustData", props.URL)
+    }
+})
 
 function batchReloadData() {
-    if (useSwitchTab.value) {
-        store.commit(`scrollBatchLoad/${props.activeTab}/resetAllData`)
-        store.dispatch(`scrollBatchLoad/${props.activeTab}/batchLoadData`, props.URL)
-    } else {
-        store.commit("scrollBatchLoad/resetAllData")
-        store.dispatch("scrollBatchLoad/batchLoadData", props.URL)
-    }
+    commit("resetAllData")
+    dispatch("batchLoadData", props.URL)
     scrollTop()
     getFormerDataTrigger.value = 1
     getNextDataTrigger.value = 1
@@ -947,12 +908,9 @@ const finalData = computed(() => {
                     </div>
                 </div>
                 <div class="py-2 search_bar" style="width:100%; position: relative;" :class="{ show: searchbarIsShow }">
-                    <p class="load-notdone_hint" v-show="batchloadNotDoneShowText">
+                    <p class="load-notdone_hint" v-if="batchloadNotDoneShowText">
                         <span class="me-2">
-                            Search in
-                            {{ useSwitchTab ? store.state.scrollBatchLoad[activeTab].allData.length : store.state.scrollBatchLoad.allData.length }}
-                            of
-                            {{ useSwitchTab ? store.state.scrollBatchLoad[activeTab].totalDataCount : store.state.scrollBatchLoad.totalDataCount }}</span>
+                            Search in {{ state.allData.length }} of {{ state.totalDataCount }}</span>
                         <el-tooltip popper-class="searchTooltip" placement="top-end" content="Search results are from devices that have been loaded. Scroll down to load more devices for complete search results." effect="dark">
                             <font-awesome-icon icon="fa-solid fa-circle-info" />
                         </el-tooltip>
@@ -1157,6 +1115,9 @@ const finalData = computed(() => {
 
 .reload.rotate {
     animation: rotate 1s linear infinite;
+    &:hover{
+        cursor: not-allowed;
+    }
 }
 
 @include bstrp(lg) {
@@ -1444,7 +1405,7 @@ const finalData = computed(() => {
 .nomoreData__slot{
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     font-size: 16px;
 }
 </style>

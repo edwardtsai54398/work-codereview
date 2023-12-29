@@ -21,13 +21,14 @@ const routes = [
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-hard-drive",
                 title: "Device Management",
-                redirect: "/deviceManagement/device",
+                redirect: "/deviceManagement/device/enrolled",
                 children: [
                     {
                         path: "device",
                         name: "device",
                         component: () =>
                             import("@/views/deviceManagement/DeviceView.vue"),
+                        meta: { compoName: "DeviceView" },
                         title: "Device",
                         redirect: "/deviceManagement/device/enrolled",
                         children: [
@@ -35,17 +36,20 @@ const routes = [
                                 path: "enrolled",
                                 name: "enrolled",
                                 props: true,
+                                meta: { compoName: "EnrolledView" },
                                 component: () =>import("@/views/deviceManagement/device/EnrolledView.vue"),
                             },
                             {
                                 path: "connected",
                                 name: "connected",
                                 props: true,
+                                meta: { compoName: "ConnectedView" },
                                 component: () =>import("@/views/deviceManagement/device/ConnectedView.vue"),
                             },
                             {
                                 path: "disconnected",
                                 name: "disconnected",
+                                meta: { compoName: "DisconnectedView" },
                                 props: true,
                                 component: () =>import("@/views/deviceManagement/device/DisconnectedView.vue"),
                             },
@@ -57,6 +61,7 @@ const routes = [
                         component: () =>
                             import("@/views/deviceManagement/GroupView.vue"),
                         title: "Group",
+                        meta: { compoName: "GroupView" },
                     },
                     {
                         path: "package",
@@ -64,6 +69,7 @@ const routes = [
                         component: () =>
                             import("@/views/deviceManagement/PackageView.vue"),
                         title: "Package",
+                        meta: { compoName: "PackageView" },
                     },
                 ],
             },

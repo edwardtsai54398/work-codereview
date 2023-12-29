@@ -17,20 +17,20 @@
             },
             {
                 "index": 1,
-                "deviceId": "fdbflkuol6b4-4defqf2f05",
-                "deviceName": "M2156d6G (fdbflkuol6b4) ",
+                "deviceId": "NewData (1)",
+                "deviceName": "NewData (1)",
                 "model": "M2156d6G",
-                "os": "Android",
+                "os": "Linux",
                 "agentVer": "01.00.01",
                 "serialNumber": "UNKNOWN",
                 "timestamp": 1667357249
             },
             {
                 "index": 2,
-                "deviceId": "a4atgzfg689-4d0ejmklnmf05",
-                "deviceName": "unknown",
+                "deviceId": "NewData (2)",
+                "deviceName": "NewData (2)",
                 "model": "unknown",
-                "os": "Android",
+                "os": "Linux",
                 "agentVer": "1.1.5",
                 "serialNumber": "unknown",
                 "timestamp": 1702437755

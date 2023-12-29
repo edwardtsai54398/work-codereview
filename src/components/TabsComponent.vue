@@ -1,19 +1,30 @@
 <script setup>
-import {ref, watch, defineProps, defineEmits} from "vue"
+import {ref, watch, defineProps, defineEmits, defineExpose} from "vue"
 defineProps({
     tabs: Array,
 })
 const emit = defineEmits([
     "change"
 ])
-const activeTab = ref(0)
-watch(activeTab,(newVal)=>{
+
+const activeTabSelf = ref(0)
+watch(activeTabSelf,(newVal)=>{
     emit("change", newVal)
 },{deep:true, immediate:true})
+
+
+function goTab(index){
+    activeTabSelf.value = index
+}
+
+defineExpose({
+    goTab
+})
 </script>
 <template>
     <ul class="custom-tabs">
-        <li class="custom-tab px-4 py-3" v-for="(item, index) in tabs" :key="index" :class="{ 'active': activeTab == index }" @click="activeTab = index">
+        <li class="custom-tab px-4 py-3" v-for="(item, index) in tabs" :key="index" 
+        :class="{ 'active': activeTabSelf == index }" @click="activeTabSelf = index">
             <slot name="tab" :item="item" :index="index">
                 {{ item }}
             </slot>

@@ -1,40 +1,27 @@
 <script setup>
-// import { ref } from "vue"
+import { ref } from "vue"
 import { reactive } from "vue"
-// import { computed } from "vue"
-// import {watch} from "vue"
+import { onActivated } from "vue"
+// import { onMounted } from "vue"
+// import {onBeforeUnmount} from "vue"
 import {useStore} from "vuex"
+import {useRouter} from "vue-router"
 const store = useStore()
+const router = useRouter()
 
 import BigCard from "@/components/BigCard.vue";
 import TabsComponent from "@/components/TabsComponent.vue";
-// import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
 
-const tabs = reactive([
-    {
-        name: "Enrolled",
-        route: "enrolled",
-        amount: 0
-    },
-    {
-        name: "Connected",
-        route: "connected",
-        amount: 0
-    },
-    {
-        name: "Disconnected",
-        route: "disconnected",
-        amount: 0
-    },
-])
-// const activeTab = ref(0)
-// const activeTabName = computed(() => { return tabs[activeTab.value].name.toLowerCase() })
-// function getActiveTab(tab) {
-//     activeTab.value = tab
-// }
+
 
 //table
 const tableProps = [
+    {
+        columnName: "INDEX",
+        dataKey: "index",
+        width: "65px",
+        minWidth: "65px",
+    },
     {
         columnName: "Status",
         dataKey: "healthStatus",
@@ -87,124 +74,90 @@ const tableProps = [
         minWidth: "150px",
     },
 ]
-// const columnsExcept = [
-//     {
-//         tab: "Enrolled",
-//         except: ["Status", "Label", "Last Connect"]
-//     },
-//     {
-//         tab: "Disconnected",
-//         except: ["Status"]
-//     },
-// ]
-// const filterOptions = [
-//     {
-//         dataKey: "os",
-//         typeName: "OS",
-//         options: [
-//             {
-//                 value: "WINDOWS",
-//                 valName: "Windows"
-//             },
-//             {
-//                 value: "ANDROID",
-//                 valName: "Android"
-//             },
-//             {
-//                 value: "LINUX",
-//                 valName: "Linux"
-//             },
-//         ]
-//     }
-// ]
+const columnsExcept = [
+    {
+        tab: "Enrolled",
+        except: ["Status", "Label", "Last Connect"]
+    },
+    {
+        tab: "Disconnected",
+        except: ["Status"]
+    },
+]
+const filterOptions = [
+    {
+        dataKey: "os",
+        typeName: "OS",
+        options: [
+            {
+                value: "WINDOWS",
+                valName: "Windows"
+            },
+            {
+                value: "ANDROID",
+                valName: "Android"
+            },
+            {
+                value: "LINUX",
+                valName: "Linux"
+            },
+        ]
+    }
+]
 
-//batchLoad
-// const getDataLen = computed(() => { return activeTabName.value === "enrolled" ? 50 : 30 })
-// const url = computed(() => {
-//     let fileName = activeTabName.value
-//     return `/data/devices/${fileName}.json`
-// })
+const firstBatchLoaded = ref(false)
+function loaded(){
+    firstBatchLoaded.value = true
+}
 
+//切換tab
+const tabs = reactive([
+    {
+        name: "Enrolled",
+        route: "enrolled",
+    },
+    {
+        name: "Connected",
+        route: "connected",
+    },
+    {
+        name: "Disconnected",
+        route: "disconnected",
+    },
+])
+function changeTable(index){
+    let route = tabs[index].route
+    router.push(`/deviceManagement/device/${route}`)
+}
 
-// function canEdit(event, id) {
-//     // console.log(event);
-//     let triggerDeviceDOM = document.getElementById(id);
-//     let deviceDOMs = document.querySelectorAll(`.label`);
-//     deviceDOMs.forEach((DOM) => {
-//         DOM.classList.remove("can_edit");
-//     });
-//     if (event === "click") {
-//         triggerDeviceDOM.classList.add("can_edit");
-//     }
-// }
-// //手機版長按編輯標籤
-// const touchTimer = ref(null);
-// const touchTime = 800;
-// function thisTouchStart(index) {
-//     touchstart();
-//     watch(touchTimer, (newVal) => {
-//         if (newVal === "longpress") {
-//             canEdit("click", index);
-//         }
-//     });
-// }
-// function touchstart() {
-//     touchTimer.value = setTimeout(() => {
-//         touchTimer.value = "longpress";
-//     }, touchTime);
-// }
-// function clearTouchTimer() {
-//     clearTimeout(touchTimer.value);
-//     touchTimer.value = null;
-// }
-
-// const firstBatchLoaded = ref(false)
-// function loaded(){
-//     firstBatchLoaded.value = true
-// }
+const tableTab = ref()
+onActivated(()=>{
+    tableTab.value.goTab(0)
+})
 
 </script>
 <template>
     <BigCard>
         <div class="border-b">
-            <TabsComponent :tabs="tabs" @change="getActiveTab" class="device_tabs">
+            <TabsComponent :tabs="tabs" class="device_tabs" @change="changeTable" ref="tableTab">
                 <template #tab="{ item }">
-                    <span>{{ item.name }}</span>
-                    <span class="number ms-2 px-2 py-1" v-if="firstBatchLoaded">
-                        {{ store.state.scrollBatchLoad.enrolled[item.name.toLowerCase()] }}
-                    </span>
+                    <div class="d-flex align-items-center w-100 justify-content-center">
+                        <span>{{ item.name }}</span>
+                        <span class="number ms-2 px-2 py-1" v-if="firstBatchLoaded">
+                            {{ store.state.scrollBatchLoad.totalDeviceCount
+                            [item.name.toLowerCase() == "enrolled" ? "total" : item.name.toLowerCase()] }}
+                        </span>
+                    </div>
                 </template>
             </TabsComponent>
         </div>
         <div class="layout-content">
-            <router-view v-slot="{Component}">
-                <keep-alive>
-                    <component :is="Component" :view-props="tableProps"/>
+            <router-view v-slot="{ Component }">
+                <keep-alive :include="store.state.keepAlive.include">
+                    <component :is="Component" :tableProps="tableProps" :columnsExcept="columnsExcept"
+                :filterOptions="filterOptions" @loaded="loaded"/>
                 </keep-alive>
             </router-view>
-            <!-- <InefiVirtualTable key-field="deviceId" :item-size="50" :filter="true" 
-            :tableProps="tableProps" :columnsExcept="columnsExcept" :activeTab="activeTabName" 
-            :batchLoad="true" :getDataLen="getDataLen" :URL="url" :filterOptions="filterOptions"
-            tooltipTrigger="hover" tooltipContent="Double click to edit." tooltipRef="aliasName"
-            @loaded="loaded" :customColumns="true">
-                <template #status="{ item }">
-                    <div class="d-flex w-100 align-items-center justify-content-center">
-                        <div class="status_dot" :class="{
-                            err: item.healthStatus === 'ERROR',
-                            good: item.healthStatus === 'GOOD'
-                        }"></div>
-                    </div>
-                </template>
-                <template #label="{ item }">
-                    <div class="label" :id="item.deviceId" @dblclick="canEdit('click', item.deviceId)" 
-                        @touchstart.passive="thisTouchStart(item.deviceId)" @touchmove.passive="clearTouchTimer" @touchend.passive="clearTouchTimer">
-                        <span class="alias_name">{{ item.aliasName }}</span>
-                        <span class="alias_input">
-                            <el-input v-model="item.aliasName" @blur="canEdit('blur')" size="small" />
-                        </span>
-                    </div>
-                </template>
-            </InefiVirtualTable> -->
         </div>
 
     </BigCard>

@@ -2,7 +2,7 @@ import getters from "@/store/scrollBatchLoad/getters.js";
 import mutations from "@/store/scrollBatchLoad/mutations.js";
 import actions from "@/store/scrollBatchLoad/actions.js";
 
-import convertUnixTimestamp from "@/utilit/convertUnixTimestamp";
+// import convertUnixTimestamp from "@/utilit/convertUnixTimestamp";
 const enrolled = {
     namespaced: true,
     state: {
@@ -10,59 +10,22 @@ const enrolled = {
         keyField: "",
         offset: 0,
         dataChangeCount: 0,
-        dataLoadDone: false,
         loadStart: false,
         loading: false,
         allData: [],
         batchesTrustList: [],
         totalDataCount: 0,
-        enrolled: 0,
-        disconnected: 0,
-        connected: 0,
         dataNum: 1,
     },
-    getters,
-    mutations: {
+    getters:{
+        ...getters,
+        totalDeviceCount:(state, getters, rootState)=>rootState.scrollBatchLoad.totalDeviceCount,
+    },
+    mutations:{
         ...mutations,
-        setFirstBatch(state, data) {
-            data.list.forEach((data) => {
-                data.timestamp = convertUnixTimestamp(data.timestamp);
-            });
-            console.log(data.list);
-            state.allData.push(...data.list);
-            state.batchesTrustList.push(true);
-            state.totalDataCount = data.total;
-            state.enrolled = data.total;
-            state.disconnected = data.disconnected;
-            state.connected = data.connected;
-            state.loadStart = true;
-        },
         setNewData(state, data) {
-            if (state.totalDataCount !== data.total) {
-                for (let i = 0; i < state.batchesTrustList.length; i++) {
-                    state.batchesTrustList[i] = false;
-                }
-                this.commit("scrollBatchLoad/disconnected/resetAllData");
-                this.commit("scrollBatchLoad/connected/resetAllData");
-                state.dataChangeCount = data.total - state.totalDataCount;
-                if (state.dataChangeCount > 0) {
-                    //資料有多
-                    this.commit(
-                        "scrollBatchLoad/enrolled/setEmptyObjects",
-                        state.dataChangeCount
-                    );
-                    console.log(state.allData);
-                }
-                state.totalDataCount = data.total;
-                state.enrolled = data.total;
-                state.disconnected = data.disconnected;
-                state.connected = data.connected;
-            }
-            data.list.forEach((data) => {
-                data.timestamp = convertUnixTimestamp(data.timestamp);
-            });
-            console.log(data.list);
-
+            state.totalDataCount = data.total
+            this.commit("scrollBatchLoad/setTotalData",data)
             state.allData.push(...data.list);
             state.batchesTrustList.push(true);
         },
@@ -70,31 +33,41 @@ const enrolled = {
     actions: {
         ...actions,
         async batchLoadData({ dispatch, commit, state }, url) {
-            if (!state.dataLoadDone && !state.allData[state.offset]) {
-                state.loading = true;
-                if (state.dataNum > 2) {
-                    url = "/data/devices/enrolledNew.json";
-                } 
-                try {
-                    state.dataNum += 1;
-                    let res = await dispatch("getDataAPI", { url });
-                    if (!state.loadStart) {
-                        commit("setFirstBatch", res);
-                    } else {
-                        commit("setNewData", res);
-                    }
-                    
-                } catch (error) {
-                    console.error("An error occurred:", error.message);
-                }
-                state.loading = false;
+            state.loading = true;
+            if (state.dataNum > 2) {
+                url = "/data/devices/enrolledNew.json";
             }
+            try {
+                state.dataNum += 1;
+                let res = await dispatch("getDataAPI", { url });
+                console.log(res);
+                await dispatch("checkTotalCountChange", res);
+                if (!state.loadStart) {
+                    state.loadStart = true
+                }
+                commit("setNewData", res);
+            } catch (error) {
+                console.error("An error occurred:", error.message);
+            }
+            state.loading = false;
         },
-        async getFormerZoneData({ dispatch, commit }, url) {
-            url = "/data/devices/enrolledNew.json";
-            let res = await dispatch("getDataAPI", { url });
-            console.log(res);
-            commit("setFormerFalseData", res.list);
+        async checkTotalCountChange({ commit, state, getters }, data) {
+            if (getters["totalDeviceCount"].total > 0 
+            && getters["totalDeviceCount"].total !== data.total) {
+                commit("allTrustListFalse");
+                this.commit("scrollBatchLoad/connected/allTrustListFalse");
+                this.commit("scrollBatchLoad/disconnected/allTrustListFalse");
+                state.dataChangeCount =data.total - getters["totalDeviceCount"].total;
+
+                this.commit("scrollBatchLoad/newUrl"); //
+                if (state.dataChangeCount > 0 && state.loadStart) {
+                    console.log("checkTotalCountChange/setEmptyObjects/enroll");
+                    //資料有多
+                    console.log(state.allData);
+                    console.log(state.dataChangeCount);
+                    commit("setEmptyObjects", state.dataChangeCount);
+                }
+            }
         },
     },
 };

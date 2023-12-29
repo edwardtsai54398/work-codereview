@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import scrollBatchLoad from './scrollBatchLoad/scrollBatchLoad';
 import groupHealth from './groupHealth';
 import columnControl from './columnControl/columnControl.js';
+import keepAlive from './keepAlive.js';
 const store = createStore({
     state: {
         user:{
@@ -13,6 +14,7 @@ const store = createStore({
         scrollBatchLoad,
         groupHealth,
         columnControl,
+        keepAlive
     }
 })
 
