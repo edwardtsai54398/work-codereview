@@ -14,31 +14,11 @@
                 "timestamp": 1703486303,
                 "status": "ERROR",
                 "aliasName": ""
-            },
-            {
-                "index": 1,
-                "deviceId": "NewData (1)",
-                "deviceName": "NewData (1)",
-                "model": "M2156d6G",
-                "os": "Linux",
-                "agentVer": "01.00.01",
-                "serialNumber": "UNKNOWN",
-                "timestamp": 1667357249
-            },
-            {
-                "index": 2,
-                "deviceId": "NewData (2)",
-                "deviceName": "NewData (2)",
-                "model": "unknown",
-                "os": "Linux",
-                "agentVer": "1.1.5",
-                "serialNumber": "unknown",
-                "timestamp": 1702437755
             }
         ],
         "total": 113,
-        "connected": 3,
-        "disconnected": 110
+        "connected": 1,
+        "disconnected": 112
     },
     "errorCode": null,
     "message": null,

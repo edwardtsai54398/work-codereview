@@ -1,6 +1,7 @@
 
 <script setup>
 import { ref } from "vue"
+import {inject} from "vue"
 
 import BigCard from "@/components/BigCard.vue";
 import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
@@ -8,10 +9,12 @@ import axios from 'axios'
 
 const loading = ref(true)
 const packageData = ref([])
+const prefixURL = inject('prefixURL');
+let url = `${prefixURL}/data/package.json`
 async function getDataAPI() {
     loading.value = true
     try {
-        let res = await axios.get("/data/package.json")
+        let res = await axios.get(url)
         loading.value = false
         let data = res.data.result
         data.forEach((item) => { item.lastupdate = convertUnixTimestamp(item.lastupdate) })
@@ -84,7 +87,7 @@ function convertUnixTimestamp(timestamp) {
                 <InefiVirtualTable :items="packageData" :item-size="40" :loading="loading" key-field="id" 
                 :tableProps="tableProps" :hover="true" :sortable="true" @reload="getDataAPI">
                     <template #name="{ item }">
-                        <a href="" class="color_prim">{{ item.packageLabel }}</a>
+                        <a href="#" class="color_prim" @click.prevent>{{ item.packageLabel }}</a>
                     </template>
                     <template #os="{ item }">
                         <span class="d-none d-sm-inline">{{ item.os }}</span>

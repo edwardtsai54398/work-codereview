@@ -23,7 +23,7 @@ const store = useStore()
         </el-menu>
         <div class="device_route_page p-0 p-sm-3 layout-content">
             <router-view v-slot="{ Component }">
-                <keep-alive :include="store.state.include">
+                <keep-alive :include="store.state.keepAlive.include">
                     <component :is="Component" />
                 </keep-alive>
             </router-view>

@@ -93,7 +93,9 @@ function getStorageColumnSetting() {
 getStorageColumnSetting()
 
 const columnList = computed(() => { 
-    return (storageSetting.value.length && storageSetting.value[0].tables[props.tableName]) ? storageSetting.value[0].tables[props.tableName] : deepcopy(oringinSetting.value) 
+    return (storageSetting.value.length && storageSetting.value[0].tables[props.tableName]) 
+    ? storageSetting.value[0].tables[props.tableName] 
+    : deepcopy(oringinSetting.value) 
 })
 emit("change", columnList.value)
 
@@ -114,7 +116,6 @@ function switchShow(columnName) {
     if (column.fixed) {
         column.fixed = false;
     }
-    columnList.value = columnSortedByFixed(columnList.value)
     reorderColumn()
     saveCustomColumnsSetting()
     getStorageColumnSetting()
@@ -216,7 +217,6 @@ function reorderColumn() {
 //欄位全部顯示
 function showAllColumns() {
     columnList.value.forEach((column) => { column.show = true; })
-    columnList.value = columnSortedByFixed(columnList.value)
 
     saveCustomColumnsSetting()
     getStorageColumnSetting()
@@ -230,7 +230,6 @@ function resetColumn() {
 }
 
 //切換頁面
-// const tableName = computed(()=>{return props.tableName})
 watch(columnList,()=>{
     emit("change", columnList.value)
 },{deep:true})

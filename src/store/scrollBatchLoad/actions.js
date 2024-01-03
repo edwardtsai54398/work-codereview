@@ -15,13 +15,19 @@ const actions = {
             }
             state.loading = false;
     },
-    async getNextUntrustData({ dispatch, commit }, url) {
+    async getNextUntrustData({ dispatch, commit,state }, url) {
+        state.loading = true;
+        console.log("getNextUntrustData");
         let res = await dispatch("getDataAPI", { url });
         commit("setNextFalseData", res.list);
+        state.loading = false;
     },
-    async getFormerZoneData({ dispatch, commit }, url) {
+    async getFormerZoneData({ dispatch, commit, state }, url) {
+        state.loading = true;
+        console.log("getFormerZoneData");
         let res = await dispatch("getDataAPI", { url });
         commit("setFormerFalseData", res.list);
+        state.loading = false;
     },
     async checkTotalCountChange({commit, state }, data){
         if (state.totalDataCount !== data.total) {
@@ -36,6 +42,7 @@ const actions = {
     },
     async getDataAPI({ state }, { url }) {
         //這裡只是模仿API抓index
+        console.log(`getData:${state.offset}~${state.offset + state.getDataLen-1}`);
         try {
             let res = await axios.get(`${url}`);
             let getData = res.data.result.list.filter((data) => {

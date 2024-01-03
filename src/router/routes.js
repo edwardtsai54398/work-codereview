@@ -1,14 +1,32 @@
+// import { defineAsyncComponent } from 'vue'
+// const DeviceManagement = defineAsyncComponent(() => import('@/views/deviceManagement/DeviceManagementView.vue'))
+
+// import Main from "@/views/MainView.vue"
+import Dashboard from "@/views/DashboardView.vue"
+// import DeviceManagement from "@/views/deviceManagement/DeviceManagementView.vue"
+import Device from "@/views/deviceManagement/DeviceView.vue"
+import Enroll from "@/views/deviceManagement/device/EnrolledView.vue"
+import Connect from "@/views/deviceManagement/device/ConnectedView.vue"
+import Disconnect from "@/views/deviceManagement/device/DisconnectedView.vue"
+import Group from "@/views/deviceManagement/GroupView.vue"
+import Package from "@/views/deviceManagement/PackageView.vue"
+import Insights from "@/views/InsightsView.vue"
+import GroupHealth from "@/views/GroupHealthView.vue"
+import Administration from "@/views/administration/AdministrationView.vue"
+import User from "@/views/administration/UserView.vue"
+import Support from "@/views/SupportView.vue"
 const routes = [
     {
         path: "/",
         name: "main",
-        component: () => import("@/views/MainView.vue"),
+        component: ()=>import("@/views/MainView.vue"),
+        // component: Main,
         redirect: "/dashboard",
         children: [
             {
                 path: "/dashboard",
                 name: "dashboard",
-                component: () => import("@/views/DashboardView.vue"),
+                component: Dashboard,
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-chart-simple",
                 title: "Dashboard",
@@ -16,18 +34,17 @@ const routes = [
             {
                 path: "/deviceManagement",
                 name: "deviceManagement",
-                component: () =>
-                    import("@/views/deviceManagement/DeviceManagement.vue"),
+                component: () => import("@/views/deviceManagement/DeviceManagementView.vue"),
+                // component: DeviceManagement,
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-hard-drive",
                 title: "Device Management",
-                redirect: "/deviceManagement/device/enrolled",
+                redirect: "/deviceManagement/device",
                 children: [
                     {
                         path: "device",
                         name: "device",
-                        component: () =>
-                            import("@/views/deviceManagement/DeviceView.vue"),
+                        component: Device,
                         meta: { compoName: "DeviceView" },
                         title: "Device",
                         redirect: "/deviceManagement/device/enrolled",
@@ -37,37 +54,35 @@ const routes = [
                                 name: "enrolled",
                                 props: true,
                                 meta: { compoName: "EnrolledView" },
-                                component: () =>import("@/views/deviceManagement/device/EnrolledView.vue"),
+                                component: Enroll,
                             },
                             {
                                 path: "connected",
                                 name: "connected",
                                 props: true,
                                 meta: { compoName: "ConnectedView" },
-                                component: () =>import("@/views/deviceManagement/device/ConnectedView.vue"),
+                                component: Connect,
                             },
                             {
                                 path: "disconnected",
                                 name: "disconnected",
                                 meta: { compoName: "DisconnectedView" },
                                 props: true,
-                                component: () =>import("@/views/deviceManagement/device/DisconnectedView.vue"),
+                                component: Disconnect,
                             },
                         ],
                     },
                     {
                         path: "group",
                         name: "group",
-                        component: () =>
-                            import("@/views/deviceManagement/GroupView.vue"),
+                        component: Group,
                         title: "Group",
                         meta: { compoName: "GroupView" },
                     },
                     {
                         path: "package",
                         name: "package",
-                        component: () =>
-                            import("@/views/deviceManagement/PackageView.vue"),
+                        component: Package,
                         title: "Package",
                         meta: { compoName: "PackageView" },
                     },
@@ -76,7 +91,7 @@ const routes = [
             {
                 path: "/insights",
                 name: "insights",
-                component: () => import("@/views/InsightsView.vue"),
+                component: Insights,
                 meta: { requiresPremium: true },
                 icon: "fa-solid fa-arrow-trend-up",
                 title: "Insights",
@@ -84,7 +99,7 @@ const routes = [
             {
                 path: "/groupHealth",
                 name: "groupHealth",
-                component: () => import("@/views/GroupHealthView.vue"),
+                component: GroupHealth,
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-folder",
                 title: "Group Health",
@@ -92,8 +107,7 @@ const routes = [
             {
                 path: "/administration",
                 name: "administration",
-                component: () =>
-                    import("@/views/administration/AdministrationView.vue"),
+                component: Administration,
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-gear",
                 title: "Administration",
@@ -102,27 +116,17 @@ const routes = [
                     {
                         path: "user",
                         name: "user",
-                        component: () =>
-                            import("@/views/administration/UserView.vue"),
+                        component: User,
                     },
                 ],
             },
             {
                 path: "/support",
                 name: "support",
-                component: () => import("@/views/SupportView.vue"),
+                component: Support,
                 meta: { requiresPremium: false },
                 icon: "fa-solid fa-headphones",
                 title: "Support",
-            },
-            {
-                path: "/deviceManagement/groupMobile",
-                name: "groupMobile",
-                component: () =>
-                    import("@/views/deviceManagement/GroupMobileView.vue"),
-                meta: { requiresPremium: false },
-                icon: "fa-brands fa-artstation",
-                title: "Group PWA",
             },
         ],
     },
@@ -132,4 +136,5 @@ const routes = [
         component: () => import("@/views/NotFoundView.vue"), // 404 页面组件
     },
 ];
+console.log("routes", routes);
 export default routes;

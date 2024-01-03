@@ -1,8 +1,13 @@
 import getters from "@/store/scrollBatchLoad/getters.js";
 import mutations from "@/store/scrollBatchLoad/mutations.js";
 import actions from "@/store/scrollBatchLoad/actions.js";
+import deviceGetters from "@/store/scrollBatchLoad/modules/device/deviceGetters.js";
+import deviceActions from "@/store/scrollBatchLoad/modules/device/deviceActions.js";
 
 // import convertUnixTimestamp from "@/utilit/convertUnixTimestamp";
+
+const prefixURL = ""
+// const prefixURL = "/work-codereview"
 const enrolled = {
     namespaced: true,
     state: {
@@ -19,23 +24,25 @@ const enrolled = {
     },
     getters:{
         ...getters,
-        totalDeviceCount:(state, getters, rootState)=>rootState.scrollBatchLoad.totalDeviceCount,
+        ...deviceGetters
     },
     mutations:{
         ...mutations,
         setNewData(state, data) {
-            state.totalDataCount = data.total
+            // state.totalDataCount = data.total
             this.commit("scrollBatchLoad/setTotalData",data)
             state.allData.push(...data.list);
             state.batchesTrustList.push(true);
         },
+        
     },
     actions: {
         ...actions,
+        ...deviceActions,
         async batchLoadData({ dispatch, commit, state }, url) {
             state.loading = true;
             if (state.dataNum > 2) {
-                url = "/data/devices/enrolledNew.json";
+                url = `${prefixURL}/data/devices/enrolledNew.json`;
             }
             try {
                 state.dataNum += 1;
@@ -63,8 +70,6 @@ const enrolled = {
                 if (state.dataChangeCount > 0 && state.loadStart) {
                     console.log("checkTotalCountChange/setEmptyObjects/enroll");
                     //資料有多
-                    console.log(state.allData);
-                    console.log(state.dataChangeCount);
                     commit("setEmptyObjects", state.dataChangeCount);
                 }
             }

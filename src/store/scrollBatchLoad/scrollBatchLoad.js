@@ -1,11 +1,12 @@
 
 import actions from "./actions"
 import mutations from "./mutations"
-// import getters from "./getters"
 
-import enrolled from "./modules/enrolled"
-import connected from "./modules/connected"
-import disconnected from "./modules/disconnected"
+import enrolled from "./modules/device/modules/enrolled"
+import connected from "./modules/device/modules/connected"
+import disconnected from "./modules/device/modules/disconnected"
+const prefixURL = ""
+// const prefixURL = "/work-codereview"
 export default {
     namespaced: true,
     state: {
@@ -15,9 +16,9 @@ export default {
             disconnected: 0,
             connected:0,
         },
-        enrollUrl: "/data/devices/enrolled.json",//
-        connectUrl: "/data/devices/connected.json",//
-        disconnectUrl: "/data/devices/disconnected.json",//
+        enrollUrl: `${prefixURL}/data/devices/enrolled.json`,//
+        connectUrl: `${prefixURL}/data/devices/connected.json`,//
+        disconnectUrl: `${prefixURL}/data/devices/disconnected.json`,//
     },
     getters:{},
     mutations:{
@@ -28,10 +29,9 @@ export default {
             state.totalDeviceCount.connected = data.connected;
         },
         newUrl(state){
-            console.log("new");
-            state.enrollUrl = "/data/devices/enrolledNew.json"
-            state.connectUrl = "/data/devices/connectedNew.json"
-            state.disconnectUrl = "/data/devices/disconnectedNew.json"
+            state.enrollUrl = `${prefixURL}/data/devices/enrolledNew.json`
+            state.connectUrl = `${prefixURL}/data/devices/connectedNew.json`
+            state.disconnectUrl = `${prefixURL}/data/devices/disconnectedNew.json`
         },//
     },
     actions,

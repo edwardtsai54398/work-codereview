@@ -14,6 +14,7 @@ import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
 import { nextTick, ref, reactive, watch, onBeforeUnmount } from "vue";
 import { onMounted } from "vue";
 import { computed } from "vue";
+import {inject} from "vue"
 import axios from "axios";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
@@ -25,8 +26,8 @@ const searchInputOpen = ref(false);
 const treeDrawerOpen = ref(false);
 
 const groupTreeData = ref([]);
-let url = "/data/group_tree.json";
-// let url = "/data/group_tree_moreData.json";
+const prefixURL = inject('prefixURL');
+let url = `${prefixURL}/data/group_tree.json`;
 const getTreeData = async () => {
     try {
         const res = await axios.get(url);

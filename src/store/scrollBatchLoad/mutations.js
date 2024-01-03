@@ -1,3 +1,14 @@
+function setEmptyObjects(offset, allData, changeCount){
+    let emptyObjects = Array.from({ length:changeCount }, () => ({}));
+    if(offset>0){
+        console.log(emptyObjects);
+        allData.splice(
+            offset - changeCount,
+            changeCount,
+            ...emptyObjects
+        );
+    }
+}
 const mutations= {
     setProps(state, { getDataLen, keyField }) {
         state.getDataLen = getDataLen;
@@ -14,7 +25,7 @@ const mutations= {
     setNewData(state, data) {
         state.totalDataCount = data.total
         state.allData.push(...data.list);
-        console.log(state.allData);
+        console.log("setNewData",state.allData);
         state.batchesTrustList.push(true);
     },
     setOffset(state, offset) {
@@ -26,46 +37,42 @@ const mutations= {
         }
     },
     setNextFalseData(state, data){
-        console.log(data);
+        console.log("setNextFalseData",data);
         data.forEach((newData, index) => {
             state.allData[state.offset + index] = newData;
         });
         state.batchesTrustList[state.offset / state.getDataLen] = true;
     },
     setFormerFalseData(state, data) {
-        console.log(state.allData);
+        console.log("setFormerFalseData");
         console.log(data);
         let firstIndex = state.allData.findIndex(
             (gotData) => gotData[state.keyField] === data[0][state.keyField]
         );
-        
+        console.log("firstIndex",firstIndex);
         let endIndex = state.allData.findIndex(
             (gotData) =>gotData[state.keyField] ===data[data.length - 1][state.keyField]
-        );
+            );
+        console.log("endIndex",endIndex);
         let changeCount = state.getDataLen - (endIndex - firstIndex + 1);
+            console.log("changeCount",changeCount);
         if (state.dataChangeCount > 0) {
             state.dataChangeCount = state.dataChangeCount - changeCount;
+            console.log(state.dataChangeCount);
         }
-        //
+
         data.forEach((newData, index) => {
             state.allData[state.offset + index] = newData;
         });
         state.batchesTrustList[state.offset / state.getDataLen] = true;
         if (state.dataChangeCount > 0) {
-            this.commit(
-                "scrollBatchLoad/setEmptyObjects",
-                state.dataChangeCount
-            );
+            setEmptyObjects(state.offset, state.allData, state.dataChangeCount)
+            console.log("dataChangeCount",state.dataChangeCount,state.allData);
         }
     },
     setEmptyObjects(state, length) {
-        let emptyObjects = Array.from({ length }, () => ({}));
-        state.allData.splice(
-            state.offset - length,
-            length,
-            ...emptyObjects
-        );
+        setEmptyObjects(state.offset, state.allData, length)
+        console.log("setEmptyObjects", state.allData);
     },
-    
 }
 export default mutations

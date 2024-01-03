@@ -2,6 +2,8 @@
 import getters from "@/store/scrollBatchLoad/getters.js";
 import mutations from "@/store/scrollBatchLoad/mutations.js";
 import actions from "@/store/scrollBatchLoad/actions.js";
+import deviceGetters from "@/store/scrollBatchLoad/modules/device/deviceGetters.js";
+import deviceActions from "@/store/scrollBatchLoad/modules/device/deviceActions.js";
 
 // import convertUnixTimestamp from "@/utilit/convertUnixTimestamp";
 const disconnected = {
@@ -19,7 +21,7 @@ const disconnected = {
     },
     getters:{
         ...getters,
-        totalDeviceCount:(state, getters, rootState)=>rootState.scrollBatchLoad.totalDeviceCount,
+        ...deviceGetters
     },
     mutations:{
         ...mutations,
@@ -32,30 +34,16 @@ const disconnected = {
     },
     actions:{
         ...actions,
-        async batchLoadData({ dispatch, commit, state }, url) {
-            state.loading = true;
-            if (state.dataNum > 2) {
-                url = "/data/devices/enrolledNew.json";
-            }
-            try {
-                state.dataNum += 1;
-                let res = await dispatch("getDataAPI", { url });
-                await dispatch("checkTotalCountChange", res);
-                if (!state.loadStart) {
-                    state.loadStart = true
-                }
-                commit("setNewData", res);
-            } catch (error) {
-                console.error("An error occurred:", error.message);
-            }
-            state.loading = false;
-        },
+        ...deviceActions,
         async checkTotalCountChange({commit, state, getters }, data){
-            if (getters["totalDeviceCount"].total !== data.total) {
+            console.log("discconet/checkTotalCountChange",data);
+            if (getters["totalDeviceCount"].total > 0 
+            && getters["totalDeviceCount"].disconnected !== data.disconnected) {
                 commit("allTrustListFalse")
                 this.commit("scrollBatchLoad/connected/allTrustListFalse")
                 this.commit("scrollBatchLoad/enrolled/allTrustListFalse")
-                state.dataChangeCount = data.total - getters["totalDeviceCount"].total;
+                state.dataChangeCount = data.disconnected - getters["totalDeviceCount"].disconnected;
+                console.log(state.dataChangeCount);
                 if (state.dataChangeCount > 0 && state.loadStart) {
                     //資料有多
                     commit("setEmptyObjects",state.dataChangeCount);

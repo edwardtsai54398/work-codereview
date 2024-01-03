@@ -1,11 +1,13 @@
 <script setup>
 import { ref, watch } from "vue";
+import {inject} from "vue"
 import CardComponent from "@/components/CardComponent.vue";
 import { Refresh } from "@element-plus/icons-vue";
 import axios from "axios";
 
-let groupTreeUrl = "/data/group_tree.json";
-let groupHealthUrl = "/data/group_health_moniter.json";
+const prefixURL = inject('prefixURL');
+let groupTreeUrl = `${prefixURL}/data/group_tree.json`;
+let groupHealthUrl = `${prefixURL}/data/group_health_moniter.json`;
 const groupTreeData = ref([]);
 
 axios

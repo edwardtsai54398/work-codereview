@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps} from 'vue'
 import { defineEmits} from 'vue'
+// import { defineExpose} from 'vue'
 import {ref} from 'vue'
 import {computed} from 'vue'
 import { CaretBottom } from "@element-plus/icons-vue";
@@ -18,6 +19,10 @@ const props = defineProps({
 const emit = defineEmits([
     "sentParam"//傳送filter參數
 ])
+// defineExpose({
+//     setParams
+// })
+
 const typeVal = ref(null)
 
 const typeName  = computed(()=>{
@@ -29,11 +34,12 @@ const typeOptions = computed(()=>{
 const optionsVal = ref(null)
 const optionName = ref("")
 
-const popoverRef = ref(null)
-const visible = ref(false)
+const filterToggle = ref(false)
 
-function hidePopover(){
-    popoverRef.value.hide()
+function clearParams(){
+    typeVal.value = null
+    optionsVal.value = null
+    paramSended.value = false
 }
 function setParams(){
     let params = {
@@ -44,41 +50,46 @@ function setParams(){
     paramSended.value = true
     optionName.value = typeOptions.value.find((option)=>option.value == optionsVal.value).valName
 
-    hidePopover()
+    filterToggle.value = false
+}
+function cancelParams(){
+    filterToggle.value = false
+    setTimeout(clearParams, 300)
 }
 
 //loading
 const paramSended = ref(false)
+
 </script>
 <template>
     <span>
-        <el-popover placement="bottom" :width="200" trigger="manual" popper-class="filter-popover" ref="popoverRef" :visible="visible"
+        <el-popover placement="bottom" :width="200" trigger="manual" popper-class="filter-popover" :filterToggle="filterToggle"
         :effect="darkMode?'dark':'light'">
             <template #reference>
                 <button class="table-expansion filter-expansion py-1 py-sm-2" :class="{disable:loading, sended:paramSended}" 
-                    @click="visible = !visible" :disabled="loading">
-                    <span v-show="!paramSended">
+                    @click="filterToggle = !filterToggle" :disabled="loading">
+                    <span v-if="!paramSended">
                         <font-awesome-icon icon="fa-solid fa-filter" />
                         <span class="d-none d-sm-inline ms-2">Add Filter</span>
                     </span>
-                    <span v-if="paramSended" class="d-flex align-items-center">
+                    <span v-else-if="paramSended" class="d-flex align-items-center">
                         <span class="fw-bold me-2">{{ typeName }}</span>
                         <span class="me-2" style="font-weight: 500">{{ optionName }}</span>
-                        <button class="circle-closebtn"><font-awesome-icon icon="fa-solid fa-xmark" /></button>
+                        <button class="circle-closebtn" @click="clearParams"><font-awesome-icon icon="fa-solid fa-xmark" /></button>
                     </span>
                 </button>
             </template>
-            <el-select v-model="typeVal" class="mb-2" placeholder="Choose Type" :suffix-icon="CaretBottom" 
+            <el-select v-model="filterTypeVal" class="mb-2" placeholder="Choose Type" :suffix-icon="CaretBottom" 
             :effect="darkMode?'dark':'light'" :disabled="paramSended">
-                <el-option v-for="item in options" :key="item.dataKey" :label="item.typeName" :value="item.dataKey" />
+                <el-option v-for="item in filterOptions" :key="item.dataKey" :label="item.typeName" :value="item.dataKey" />
             </el-select>
             <el-select v-model="optionsVal" :placeholder="`Choose ${typeName}`" :suffix-icon="CaretBottom"
-            :disabled="!typeVal" :effect="darkMode?'dark':'light'">
+            :disabled="!filterTypeVal" :effect="darkMode?'dark':'light'">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.valName" :value="item.value" />
             </el-select>
             <div class="filter_button-group d-flex justify-content-end mt-3 align-items-center">
-                <button @click="hidePopover">Cancel</button>
-                <button class="color_prim ms-3" @click="setParams" :disable="!optionsVal">Apply</button>
+                <button @click="cancelParams">Cancel</button>
+                <button class="color_prim ms-3 apply_btn" @click="setParams" :disabled="!optionsVal">Apply</button>
             </div>
         </el-popover>
     </span>
@@ -114,5 +125,8 @@ const paramSended = ref(false)
         background-color: $primary;
         color: #fff;
     }
+}
+.apply_btn:disabled:hover{
+    cursor: not-allowed;
 }
 </style>

@@ -67,21 +67,13 @@ app.use(VueApexCharts)
 import i18n from '@/lang/i18n'
 app.use(i18n)
 
-
-//vuetify
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
-app.use(vuetify)
-
 import VueVirtualScroller  from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 app.use(VueVirtualScroller)
+
+//url
+const prefixURL = ""
+// const prefixURL = "/work-codereview"
+app.provide('prefixURL', prefixURL);
 
 app.mount('#app')

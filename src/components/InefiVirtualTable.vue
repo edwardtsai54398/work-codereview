@@ -1,20 +1,21 @@
 <script setup>
 import { defineProps, nextTick, watch, computed, reactive, onMounted, onBeforeUnmount, ref } from 'vue'
-import {onActivated} from "vue"
+import { onActivated, onDeactivated } from "vue"
 import { SortUp } from "@element-plus/icons-vue";
 import { SortDown } from "@element-plus/icons-vue";
 import { Search } from "@element-plus/icons-vue";
+import { CaretBottom } from "@element-plus/icons-vue";
 import ColumnController from "@/components/ColumnController.vue";
-import FilterComponent from "@/components/FilterComponent.vue";
+// import FilterComponent from "@/components/FilterComponent.vue";
 import IconCircleBtn from '@/components/IconCircleBtn.vue'
 import { useStore } from 'vuex'
 const store = useStore()
-const state = computed(()=>store.state.scrollBatchLoad[props.tableName])
-const getters = (getter)=>store.getters[`scrollBatchLoad/${props.tableName}/${getter}`]
-function commit(mutations, param){
+const state = computed(() => store.state.scrollBatchLoad[props.tableName])
+const getters = (getter) => store.getters[`scrollBatchLoad/${props.tableName}/${getter}`]
+function commit(mutations, param) {
     store.commit(`scrollBatchLoad/${props.tableName}/${mutations}`, param)
 }
-function dispatch(actions, param){
+function dispatch(actions, param) {
     store.dispatch(`scrollBatchLoad/${props.tableName}/${actions}`, param)
 }
 const props = defineProps({
@@ -107,14 +108,14 @@ const props = defineProps({
 })
 import { defineExpose, defineEmits } from 'vue'
 const emit = defineEmits([
-    "reload"/*當reload按鈕被點擊時觸發*/,
+    "reload"/*當reload按鈕被點擊時觸發，有filter參數時會傳入參數*/,
     "loaded"/*當資料load完(batchload則是第一批資料load完)*/,
     "clearSearch",//若使用父層傳入searchText，點擊claer search會觸發
     "check"/*row被勾選，傳被勾選的資料*/,
     "uncheck"/*row被取消勾選，傳被取消的資料*/,
     "haveCheckedData"/*當有一個以上的勾選資料，傳所有被選取的資料*/,
     "noCheckedData"/*當沒有勾選資料*/,
-    "filt"//filter傳出參數
+    "clearFilter"/*當沒有勾選資料*/
 ])
 
 defineExpose({
@@ -132,6 +133,9 @@ onMounted(() => {
     setWindowW()
     window.addEventListener("resize", setWindowW)
 })
+onActivated(() => { window.addEventListener("resize", setWindowW) })
+onDeactivated(() => { window.removeEventListener("resize", setWindowW) })
+onBeforeUnmount(() => { window.removeEventListener("resize", setWindowW) })
 
 watch(windowW, (newVal) => {
     if (newVal < 500) {
@@ -177,7 +181,6 @@ const tableNameComputed = computed(() => { return useSwitchTab.value ? props.act
 const tablePropsSorted = ref(tablePropsFilted.value)
 function setTableSorted(table) {
     tablePropsSorted.value = table
-
 }
 watch(() => props.activeTab, () => {
     if (!props.customColumns) {
@@ -258,9 +261,87 @@ const calcMainMinWidth = computed(() => {
     return allWidth
 })
 
+//loading
+const firstLoaded = computed(() => {
+    let scrollBatchLoadLoadStart = state.value?.loadStart
+    return props.batchLoad ? scrollBatchLoadLoadStart : !props.loading
+})
+const firstLoadingEnd = ref(false)
+
+watch(firstLoaded, (newVal) => {
+    if (newVal) {
+        setTimeout(() => {
+            firstLoadingEnd.value = true
+            emit("loaded")
+        }, 1000)
+    } else {
+        firstLoadingEnd.value = false
+    }
+}, { deep: true, immediate: true })
+//reload
+function reload() {
+    if(searchText.value !== ""){
+        clearSearch()
+    }
+    cancelParams()
+    if (firstLoadingEnd.value) {
+        if (props.batchLoad && !loading.value) {
+            batchReloadData()
+        }else if(paramSended.value){
+            setParams()
+        }else{
+            emit('reload')
+        }
+    }
+}
+
+const loading = computed(() => {
+    let loading = !firstLoadingEnd.value
+    if (props.batchLoad) {
+        loading = state.value.loading
+    }
+    return !firstLoadingEnd.value ? !firstLoadingEnd.value : loading
+})
+
 //filter
-function emitFilterParam(param) {
-    emit("filt", param)
+const paramSended = ref(false)
+const filterTypeVal = ref(null)
+
+const typeName  = computed(()=>{
+    return filterTypeVal.value ? props.filterOptions.find((option)=>option.dataKey == filterTypeVal.value).typeName : ""
+})
+const filterTypeOptions = computed(()=>{
+    return filterTypeVal.value ? props.filterOptions.find((option)=>option.dataKey == filterTypeVal.value).options : []
+})
+const optionsVal = ref(null)
+const optionName = ref("")
+
+const filterToggle = ref(false)
+
+function clearParams(){
+    filterTypeVal.value = null
+    optionsVal.value = null
+    if(paramSended.value){
+        emit("clearFilter")
+        paramSended.value = false
+    }
+}
+function setParams(){
+    let params = {
+        type:filterTypeVal.value,
+        value:optionsVal.value
+    }
+    emit("reload", params)
+    paramSended.value = true
+    optionName.value = filterTypeOptions.value.find((option)=>option.value == optionsVal.value).valName
+
+    filterToggle.value = false
+}
+function cancelParams(){
+    if(!paramSended.value){
+        filterToggle.value = false
+        setTimeout(clearParams, 300)
+    }
 }
 
 //search
@@ -270,14 +351,14 @@ const searchText = computed(() => { return props.searchShow ? searchInputText.va
 const columsDatakeys = reactive(tablePropsSorted.value.map((column) => column.dataKey))
 const searchResult = computed(() => {
     let searchResource = props.items
-    // if (props.batchLoad) {
-    //     searchResource = state.value.allData
-    // }
+    if (props.batchLoad) {
+        searchResource = state.value.allData
+    }
     return searchResource.filter((item) => {
         return columsDatakeys.some((key) => {
-            if(typeof item[key] !== "string"){
+            if (typeof item[key] !== "string") {
                 return false
-            }else{
+            } else {
                 return item[key]?.toUpperCase().includes(searchText.value.toUpperCase())
             }
         })
@@ -301,6 +382,8 @@ watch(windowW, () => {
     searchbarIsShow.value = false
 }, { deep: true })
 onMounted(() => { window.addEventListener("click", searchbarHide) })
+onActivated(() => { window.addEventListener("click", searchbarHide) })
+onDeactivated(() => { window.removeEventListener("click", searchbarHide) })
 onBeforeUnmount(() => { window.removeEventListener("click", searchbarHide) })
 
 const items = computed(() => {
@@ -350,7 +433,8 @@ function selectAllChange(value) {
 
     checkedList.length = 0
     if (value) {
-        items.value.forEach((item) => {
+        let data = JSON.parse(JSON.stringify(items.value))
+        data.forEach((item) => {
             checkedList.push(item)
         })
     }
@@ -406,9 +490,6 @@ function clearChecked() {
     }
     checkedList.length = 0
 }
-
-
-
 
 //scrollbar
 //監聽容器
@@ -476,7 +557,6 @@ const scrollYBarHeight = computed(() => {
 
 setTimeout(() => {
     tableMainHeight.value = tableMain.value.offsetHeight
-    scrollYHeight.value = tableMainHeight.value - scrollYTop.value
 }, 1)
 //scrollbar 拖曳
 const mainScroller = ref()
@@ -500,6 +580,16 @@ onMounted(() => {
     window.addEventListener("mouseup", mouseUp)
     window.addEventListener("mousemove", mouseDragX)
     window.addEventListener("mousemove", mouseDragY)
+})
+onActivated(() => {
+    window.addEventListener("mouseup", mouseUp)
+    window.addEventListener("mousemove", mouseDragX)
+    window.addEventListener("mousemove", mouseDragY)
+})
+onDeactivated(() => {
+    window.removeEventListener("mouseup", mouseUp)
+    window.removeEventListener("mousemove", mouseDragX)
+    window.removeEventListener("mousemove", mouseDragY)
 })
 onBeforeUnmount(() => {
     window.removeEventListener("mouseup", mouseUp)
@@ -589,7 +679,7 @@ function debounce(func, delay = 250) {
         }, delay);
     };
 }
-const isScrollToBottom = computed(()=>scrollbarYTranslate.value+scrollYBarHeight.value >= tableMainHeight.value-props.itemSize)
+const isScrollToBottom = computed(() => scrollbarYTranslate.value + scrollYBarHeight.value >= tableMainHeight.value - props.itemSize)
 
 // tootltip
 //default
@@ -678,21 +768,24 @@ onBeforeUnmount(() => {
 
 //tooltip滾動超出消失
 function tooltipScrollHide() {
-    if (tooltipToggle.value || defaultTipToggle.value) {
+    if (tooltipToggle.value || defaultTipToggle.value || copied.value) {
         let scrollerSlot = mainScroller.value.$refs.before
         let scrollerSlotBottom = scrollerSlot.getBoundingClientRect().top + props.itemSize
         let tablemainBottom = tableMain.value.getBoundingClientRect().bottom
         let tooltip
         if (tooltipToggle.value) {
             tooltip = document.querySelector('.el-popper.VTtooltip')
-        } else if (defaultTipToggle.value) {
-            tooltip = document.querySelector('.el-popper.VTDefaultTooltip')
+        } else if (defaultTipToggle.value || copied.value) {
+            // tooltip = document.querySelector('.el-popper.VTDefaultTooltip')
+            tooltip = toolTiptriggerRefDefault.value
         }
         if (tooltip.getBoundingClientRect().top <= scrollerSlotBottom + 10) {
             defaultTipToggle.value = false
+            copied.value = false
             tooltipToggle.value = false
         } else if (tooltip.getBoundingClientRect().bottom + 10 >= tablemainBottom) {
             defaultTipToggle.value = false
+            copied.value = false
             tooltipToggle.value = false
         }
     }
@@ -704,7 +797,7 @@ const sortUp = ref(true)
 const DefaultSortColumn = ref(tablePropsSorted.value[0])
 const sortTableDataKey = ref(DefaultSortColumn.value.dataKey)
 const sortedData = computed(() => {
-    let newData = [...items.value]
+    let newData = JSON.parse(JSON.stringify(items.value))
     if (sortUp.value) {
         //從小到大
         for (let i = 0; i < newData.length; i++) {
@@ -754,43 +847,6 @@ watch(sortedData, () => {
     }
 }, { deep: true })
 
-//loading
-const firstLoaded = computed(() => {
-    let scrollBatchLoadLoadStart = state.value?.loadStart
-    return props.batchLoad ? scrollBatchLoadLoadStart : !props.loading
-})
-const firstLoadingEnd = ref(false)
-
-watch(firstLoaded, (newVal) => {
-    if (newVal) {
-        setTimeout(() => {
-            firstLoadingEnd.value = true
-            emit("loaded")
-        }, 1000)
-    } else {
-        firstLoadingEnd.value = false
-    }
-}, { deep: true, immediate: true })
-//reload
-function reload() {
-    if(firstLoadingEnd.value){
-        if (props.batchLoad && !batchLoading.value) {
-            batchReloadData()
-        } else{
-            emit('reload')
-        }
-    }
-}
-
-const batchLoading = computed(()=>{
-    let batchLoading = !firstLoadingEnd.value
-    if(props.batchLoad){
-        batchLoading = state.value.loading
-    }
-    return !firstLoadingEnd.value ? !firstLoadingEnd.value : batchLoading
-})
-
-
 //batchLoad
 if (props.batchLoad) {
     commit("setProps", {
@@ -819,16 +875,20 @@ function scrollDownOrUp() {
         scrollZone.value = scrollzone
     }
     if (searchText.value === "") {
-        if (mainScrollTop.value >= alreadyScrollTop.value) {
+        if (mainScrollTop.value >= alreadyScrollTop.value && !state.value.loading) {
             //往下滾動
-            commit("setOffset", scrollZone.value * props.getDataLen)
+            if(!state.value.batchesTrustList[scrollZone.value-1]){
+                commit("setOffset", (scrollZone.value-1) * props.getDataLen)
+            }else{
+                commit("setOffset", scrollZone.value * props.getDataLen)
+            }
             if (mainScrollTop.value >= scrollzone * singleLenH - singleLenH / 2 && getNextDataTrigger.value) {
                 getNextDataTrigger.value = 0
             }
         } else {
             //往上滾動
-            if (!getters("dataLoadTrust")) {
-                    commit(`setOffset`, (scrollZone.value - 1) * props.getDataLen)
+            if (!getters("dataLoadTrust") && !state.value.loading) {
+                commit(`setOffset`, (scrollZone.value - 1) * props.getDataLen)
                 if (mainScrollTop.value < scrollzone * singleLenH - props.itemSize * 2 && getFormerDataTrigger.value) {
                     getFormerDataTrigger.value = 0
                 }
@@ -840,9 +900,9 @@ function scrollDownOrUp() {
 
 watch(getNextDataTrigger, (newVal) => {
     if (!newVal && props.batchLoad) {
-        if(!getters("dataLoadDone") && state.value.batchesTrustList.length == scrollZone.value){
+        if (!getters("dataLoadDone") && state.value.batchesTrustList.length == scrollZone.value) {
             dispatch(`batchLoadData`, props.URL)
-        }else if(!getters("dataLoadTrust")){
+        } else if (!state.value.batchesTrustList[scrollZone.value-1]) {
             dispatch("getNextUntrustData", props.URL)
         }
     }
@@ -859,8 +919,8 @@ function batchLoadScrollupCheck() {
         dispatch("getFormerZoneData", props.URL)
     }
 }
-onActivated(()=>{
-    if(props.batchLoad && !getters("dataLoadTrust")){
+onActivated(() => {
+    if (props.batchLoad && !getters("dataLoadTrust")) {
         dispatch("getNextUntrustData", props.URL)
     }
 })
@@ -872,6 +932,12 @@ function batchReloadData() {
     getFormerDataTrigger.value = 1
     getNextDataTrigger.value = 1
 }
+onBeforeUnmount(() => {
+    if (props.batchLoad) {
+        commit("resetAllData")
+
+    }
+})
 
 function mainScrollEvent() {
     setMainScrollTop()
@@ -895,13 +961,41 @@ const finalData = computed(() => {
     <div class="inefi-table-v2 layout-content pb-1" :class="{ 'no-select': mouseYDown || mouseXDown, dark: darkMode, canHover: hover }">
         <div class="table-func-header d-flex align-items-center justify-content-end px-3 py-2" v-if="customColumns || filter || searchShow">
             <div class="me-auto" v-if="customColumns || filter">
-                <ColumnController class="my-2 me-2" :tableName="tableNameComputed" :columns="tablePropsFilted" v-if="customColumns" @change="setTableSorted" :loading="batchLoading" />
-                <FilterComponent class="d-inline-block my-2" :options="filterOptions" :darkMode="darkMode" v-if="filter" @sentParam="emitFilterParam" :loading="batchLoading" />
+                <ColumnController class="my-2 me-2" :tableName="tableNameComputed" :columns="tablePropsFilted" v-if="customColumns" @change="setTableSorted" :loading="loading" />
+                <el-popover placement="bottom" :width="200" trigger="manual" popper-class="filter-popover" :visible="filterToggle" :effect="darkMode ? 'dark' : 'light'">
+                    <template #reference>
+                        <button class="table-expansion filter-expansion py-1 py-sm-2" :class="{ disable: loading, sended: paramSended }" 
+                        @click="filterToggle = !filterToggle" :disabled="loading">
+                            <span v-if="!paramSended">
+                                <font-awesome-icon icon="fa-solid fa-filter" />
+                                <span class="d-none d-sm-inline ms-2">Add Filter</span>
+                            </span>
+                            <span v-else-if="paramSended" class="d-flex align-items-center">
+                                <span class="fw-bold me-2">{{ typeName }}</span>
+                                <span class="me-2" style="font-weight: 500">{{ optionName }}</span>
+                                <button class="circle-closebtn" @click.stop="clearParams" :disabled="loading">
+                                    <font-awesome-icon icon="fa-solid fa-xmark" />
+                                </button>
+                            </span>
+                        </button>
+                    </template>
+                    <el-select v-model="filterTypeVal" class="mb-2" placeholder="Choose Type" :suffix-icon="CaretBottom" :effect="darkMode ? 'dark' : 'light'" :disabled="paramSended">
+                        <el-option v-for="item in filterOptions" :key="item.dataKey" :label="item.typeName" :value="item.dataKey" />
+                    </el-select>
+                    <el-select v-model="optionsVal" :placeholder="`Choose ${typeName}`" :suffix-icon="CaretBottom" :disabled="!filterTypeVal" :effect="darkMode ? 'dark' : 'light'">
+                        <el-option v-for="item in filterTypeOptions" :key="item.value" :label="item.valName" :value="item.value" />
+                    </el-select>
+                    <div class="filter_button-group d-flex justify-content-end mt-3 align-items-center">
+                        <button @click="cancelParams">Cancel</button>
+                        <button class="color_prim ms-3 apply_btn" @click="setParams" :disabled="!optionsVal">Apply</button>
+                    </div>
+                </el-popover>
+                <!-- <FilterComponent class="d-inline-block my-2" ref="filter" :options="filterOptions" :darkMode="darkMode" v-if="filter" @sentParam="emitFilterParam" :loading="loading" /> -->
             </div>
             <div v-if="searchShow" class="ms-auto search_group" :class="{ 'with-expansion': customColumns || filter }">
                 <div class="row me-1 ps-2">
                     <div class="col-12 d-flex">
-                        <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="py-2 reload" @click="reload" :class="{ rotate: batchLoading }" />
+                        <IconCircleBtn iconClass="fa-solid fa-arrows-rotate" class="py-2 reload" @click="reload" :class="{ rotate: loading }" />
                         <button class="show-search_bar ms-3" @click.stop="searchbarIsShow = true" v-show="!searchbarIsShow">
                             <font-awesome-icon icon="fa-solid fa-magnifying-glass" color="#aaa" />
                         </button>
@@ -915,7 +1009,7 @@ const finalData = computed(() => {
                             <font-awesome-icon icon="fa-solid fa-circle-info" />
                         </el-tooltip>
                     </p>
-                    <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable :disabled="batchLoading" @click.stop="searchbarIsShow = true" />
+                    <el-input v-model="searchInputText" placeholder="Search" :prefix-icon="Search" size="large" clearable :disabled="loading" @click.stop="searchbarIsShow = true" />
                 </div>
             </div>
         </div>
@@ -958,8 +1052,8 @@ const finalData = computed(() => {
                             </div>
                         </template>
                         <template #after>
-                            <div class="batchLoading__slot" :style="{height:`${itemSize}px`}" v-loading="batchLoading" v-if="batchLoading"></div>
-                            <div class="nomoreData__slot" :style="{height:`${itemSize}px`}" v-else-if="!batchLoading && !batchloadNotDoneShowText">No more Data</div>
+                            <div class="loading__slot" :style="{ height: `${itemSize}px` }" v-loading="loading" v-if="loading"></div>
+                            <div class="nomoreData__slot" :style="{ height: `${itemSize}px` }" v-else-if="!loading && !batchloadNotDoneShowText">No more Data</div>
                             <el-skeleton animated v-if="batchloadNotDoneShowText">
                                 <template #template>
                                     <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
@@ -984,7 +1078,7 @@ const finalData = computed(() => {
                         <template #before>
                             <div class="fixed-left__table-columns py-2 border-b" :style="{ height: `${itemSize}px` }">
                                 <div class="px-2" v-if="showCheckBox">
-                                    <el-checkbox class="p-2" @change="selectAllChange" v-model="selectAll" :indeterminate="isIndeterminate" />
+                                    <el-checkbox class="p-2" @change="selectAllChange" :checked="selectAll" :indeterminate="isIndeterminate" />
                                 </div>
                                 <div class="column-name" v-for="(column, index) in tablePropsFixed" :key="index" :style="{ width: getColumnWidth(column), minWidth: getColumnMinWidth(column) }" @click="setSortTableDataKey(column.dataKey)">
                                     <span class="px-3">{{ column.columnName }}</span>
@@ -1013,7 +1107,9 @@ const finalData = computed(() => {
                                 </div>
                             </div>
                         </template>
-                        <template #after v-if="batchloadNotDoneShowText">
+                        <template #after>
+                            <div class="loading__slot" :style="{ height: `${itemSize}px` }" v-if="loading"></div>
+                            <div class="nomoreData__slot" :style="{ height: `${itemSize}px` }" v-else-if="!loading && !batchloadNotDoneShowText"></div>
                             <el-skeleton animated v-if="batchloadNotDoneShowText">
                                 <template #template>
                                     <div class="table-row py-2" :style="{ height: `${itemSize}px` }" v-for="n in 4" :key="n">
@@ -1048,9 +1144,11 @@ const finalData = computed(() => {
                 </p>
             </div>
         </div>
-        <el-popover placement="top" effect="dark" trigger="click" :visible="tooltipIsOpenDefault" virtual-triggering :virtual-ref="toolTiptriggerRefDefault" popper-class="VTDefaultTooltip" :width="dataContentWidth">
-            <span>{{ tooltipContentDefault }} <button class="p-1" @click="copyText"><font-awesome-icon icon="fa-regular fa-clone" /></button></span>
-        </el-popover>
+        <el-tooltip placement="top" effect="dark" trigger="click" :visible="tooltipIsOpenDefault" virtual-triggering :virtual-ref="toolTiptriggerRefDefault" popper-class="VTDefaultTooltip">
+            <template #content>
+                <span>{{ tooltipContentDefault }} <button class="p-1" @click="copyText"><font-awesome-icon icon="fa-regular fa-clone" /></button></span>
+            </template>
+        </el-tooltip>
         <el-tooltip :virtual-ref="toolTiptriggerRefDefault" virtual-triggering :visible="copied" placement="top">
             <template #content>
                 <span><font-awesome-icon icon='fa-solid fa-check' /><span class='ms-2'>Copied!</span></span>
@@ -1115,7 +1213,8 @@ const finalData = computed(() => {
 
 .reload.rotate {
     animation: rotate 1s linear infinite;
-    &:hover{
+
+    &:hover {
         cursor: not-allowed;
     }
 }
@@ -1144,7 +1243,48 @@ const finalData = computed(() => {
     }
 }
 
-
+.filter-popover{
+    .el-input.is-focus{
+        border-color: $primary;
+    }
+}
+.filter-expansion{
+    &.disable.sended{
+        border-color:#bbb;
+        background-color: #ddd;
+        span{
+            color: #bbb;
+        }
+    }
+    &.sended{
+        background-color: #e7f9ff;
+    }
+}
+.circle-closebtn{
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+    &:hover{
+        background-color: $primary;
+        color: #fff;
+    }
+    &:disabled{
+        color: #bbb;
+        background-color: transparent;
+        cursor: not-allowed;
+        &:hover{
+            color: #bbb;
+            background-color: transparent;
+        }
+    }
+}
+.apply_btn:disabled:hover{
+    cursor: not-allowed;
+}
 
 .canHover.inefi-table-v2 .vue-recycle-scroller__item-view.hover {
     transition: .3s;
@@ -1402,7 +1542,8 @@ const finalData = computed(() => {
     justify-content: center;
     align-items: center;
 }
-.nomoreData__slot{
+
+.nomoreData__slot {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from "vue";
+import { Search } from "@element-plus/icons-vue";
 import CardComponent from "@/components/CardComponent.vue";
 const donutGroup = reactive([
     {
