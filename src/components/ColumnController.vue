@@ -6,8 +6,6 @@ import { computed } from 'vue'
 import { watch } from 'vue'
 import { defineProps } from 'vue'
 import { defineEmits } from 'vue'
-// import { useStore } from 'vuex'
-// const store = useStore()
 const props = defineProps({
     tableName: String,//對應要控制的tablem元件的字串
     columns: {
@@ -56,32 +54,17 @@ function columnSortedByFixed(columns) {
     });
     return [...columnWithFixed, ...columnNoFixed];
 }
-const storageSetting = ref([])
-const oringinSetting = computed(() => { return columnSortedByFixed(props.columns) })
+const storageSetting = ref({})
 
 //localStorage
 function saveCustomColumnsSetting() {
-    let otherTable = {}
-    let otherTableOringinal = {}
-    if(storageSetting.value.length){
-        otherTable = Object.keys(storageSetting.value[0].tables).reduce((result, key) => {
+    let otherTable = Object.keys(storageSetting.value).reduce((result, key) => {
                 if (key !== props.tableName) {
-                    result[key] = storageSetting.value[0].tables[key];
+                    result[key] = storageSetting.value[key];
                 }
                 return result;
             }, {})
-    
-        otherTableOringinal = Object.keys(storageSetting.value[1].oringinSetting).reduce((result, key) => {
-                if (key !== props.tableName) {
-                    result[key] = storageSetting.value[1].oringinSetting[key];
-                }
-                return result;
-            }, {})
-    }
-    let data = [
-        { tables: { ...otherTable, [props.tableName]: columnList.value } },
-        { oringinSetting: { ...otherTableOringinal, [props.tableName]: oringinSetting.value } }
-    ]
+    let data = {...otherTable, [props.tableName]: columnList.value }
     localStorage.setItem("columnsSetting", JSON.stringify(data))
 }
 function getStorageColumnSetting() {
@@ -93,9 +76,9 @@ function getStorageColumnSetting() {
 getStorageColumnSetting()
 
 const columnList = computed(() => { 
-    return (storageSetting.value.length && storageSetting.value[0].tables[props.tableName]) 
-    ? storageSetting.value[0].tables[props.tableName] 
-    : deepcopy(oringinSetting.value) 
+    return storageSetting.value[props.tableName]
+    ? storageSetting.value[props.tableName] 
+    : deepcopy(columnSortedByFixed(props.columns)) 
 })
 emit("change", columnList.value)
 
@@ -115,6 +98,12 @@ function switchShow(columnName) {
     column.show = !column.show;
     if (column.fixed) {
         column.fixed = false;
+        columnList.value.forEach((col)=>{
+            if(col.order>column.order && col.fixed){
+                col.order-=1
+            }
+        })
+        column.order = columnFixed.value.length+1
     }
     reorderColumn()
     saveCustomColumnsSetting()
@@ -223,10 +212,15 @@ function showAllColumns() {
 }
 //欄位回到初始設定
 function resetColumn() {
-    storageSetting.value[0].tables[props.tableName] = deepcopy(oringinSetting.value)
-
-    saveCustomColumnsSetting()
-    getStorageColumnSetting()
+    let otherTable = Object.keys(storageSetting.value).reduce((result, key) => {
+        if (key !== props.tableName) {
+            result[key] = storageSetting.value[key];
+        }
+        return result;
+    }, {})
+    console.log(otherTable);
+    localStorage.setItem("columnsSetting", JSON.stringify(otherTable))
+    storageSetting.value[props.tableName] = null
 }
 
 //切換頁面
@@ -248,7 +242,7 @@ onBeforeMount(() => {
 })
 watch(windowW, (newVal) => {
     if (newVal < 500) {
-        storageSetting.value[0].tables[props.tableName] = null
+        storageSetting.value[props.tableName] = null
     } else {
         getStorageColumnSetting()
     }

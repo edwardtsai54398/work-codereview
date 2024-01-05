@@ -15,21 +15,13 @@ const actions = {
         }
         state.loading = false;
     },
-    async getNextUntrustData({ dispatch, commit,state }, url) {
+    async getUntrustData({ dispatch, commit,state }, url) {
         state.loading = true;
-        console.log("getNextUntrustData");
+        console.log("getUntrustData");
         let res = await dispatch("getDataAPI", { url });
-        dispatch("checkTotalCountChange", res)
-        commit("setNextFalseData", res.list);
+        commit("setFalseData", res.list);
         state.loading = false;
     },
-    async getFormerZoneData({ dispatch, commit, state }, url) {
-        state.loading = true;
-        console.log("getFormerZoneData");
-        let res = await dispatch("getDataAPI", { url });
-        dispatch("checkTotalCountChange", res)
-        commit("setFormerFalseData", res.list);
-        state.loading = false;
-    },
+    
 }
 export default actions;

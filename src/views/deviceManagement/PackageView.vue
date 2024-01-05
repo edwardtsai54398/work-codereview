@@ -1,7 +1,7 @@
 
 <script setup>
 import { ref } from "vue"
-import {inject} from "vue"
+import { inject } from "vue"
 
 import BigCard from "@/components/BigCard.vue";
 import InefiVirtualTable from "@/components/InefiVirtualTable.vue";
@@ -12,6 +12,7 @@ const packageData = ref([])
 const prefixURL = inject('prefixURL');
 let url = `${prefixURL}/data/package.json`
 async function getDataAPI() {
+    packageData.value = []
     loading.value = true
     try {
         let res = await axios.get(url)
@@ -62,6 +63,16 @@ let tableProps = [
         minWidth: "50px",
     },
 ]
+const openIndex = ref(0)
+function dropdownChoose(index){
+    console.log(index);
+    openIndex.value = index
+}
+// const dropdownToggle = ref(false)
+// function dropDownChange(value){
+//     console.log(value);
+//     dropdownToggle.value = value
+// }
 
 //轉換時間
 function convertUnixTimestamp(timestamp) {
@@ -84,21 +95,35 @@ function convertUnixTimestamp(timestamp) {
         </div>
         <BigCard>
             <div class="layout-content">
-                <InefiVirtualTable :items="packageData" :item-size="40" :loading="loading" key-field="id" 
-                :tableProps="tableProps" :hover="true" :sortable="true" @reload="getDataAPI">
+                <!-- <el-scrollbar>
+                    <template v-for="n in 100" :key="n">
+                            <div style="height: 50px;">
+                                <el-dropdown trigger="click">
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
+                                        <button @click="dropdownChoose(index)"><font-awesome-icon icon="fa-solid fa-ellipsis" /></button>
+                                    </div>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item>
+                                                <font-awesome-icon icon="fa-solid fa-trash" color="#29BFED"/>
+                                                <span class="ms-2">Remove</span>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </div>
+                        </template>
+                </el-scrollbar> -->
+                <InefiVirtualTable :items="packageData" :item-size="40" :loading="loading" key-field="id" :tableProps="tableProps" :hover="true" :sortable="true" @reload="getDataAPI">
                     <template #name="{ item }">
                         <a href="#" class="color_prim" @click.prevent>{{ item.packageLabel }}</a>
                     </template>
-                    <template #os="{ item }">
-                        <span class="d-none d-sm-inline">{{ item.os }}</span>
-                        <div class="w-100 d-block d-sm-none pic-contain"><img :src="require(`@/assets/images/${item.os}.png`)" alt=""></div>
-                    </template>
-                    <template #remove>
-                        <el-dropdown trigger="click">
+                    <template #remove="{index}">
+                        <!-- <el-dropdown trigger="click" @visible-change="dropDownChange">
                             <div class="d-flex justify-content-center align-items-center" style="height: 20px;">
-                                <button><font-awesome-icon icon="fa-solid fa-ellipsis" /></button>
+                                <button @click="dropdownChoose(index)"><font-awesome-icon icon="fa-solid fa-ellipsis" /></button>
                             </div>
-                            <template #dropdown>
+                            <template #dropdown v-if="dropdownToggle && openIndex == index">
                                 <el-dropdown-menu>
                                     <el-dropdown-item>
                                         <font-awesome-icon icon="fa-solid fa-trash" color="#29BFED"/>
@@ -106,10 +131,13 @@ function convertUnixTimestamp(timestamp) {
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
-                        </el-dropdown>
-                        
+                        </el-dropdown> -->
+                        <div class="d-flex justify-content-center align-items-center" style="height: 20px;">
+                                <button @click="dropdownChoose(index)"><font-awesome-icon icon="fa-solid fa-ellipsis" /></button>
+                            </div>
                     </template>
                 </InefiVirtualTable>
+            
             </div>
         </BigCard>
     </div>

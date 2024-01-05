@@ -15,28 +15,20 @@ const actions = {
             }
             state.loading = false;
     },
-    async getNextUntrustData({ dispatch, commit,state }, url) {
+    async getUntrustData({ dispatch, commit,state }, url) {
         state.loading = true;
         console.log("getNextUntrustData");
         let res = await dispatch("getDataAPI", { url });
-        commit("setNextFalseData", res.list);
-        state.loading = false;
-    },
-    async getFormerZoneData({ dispatch, commit, state }, url) {
-        state.loading = true;
-        console.log("getFormerZoneData");
-        let res = await dispatch("getDataAPI", { url });
-        commit("setFormerFalseData", res.list);
+        commit("setFalseData", res.list);
         state.loading = false;
     },
     async checkTotalCountChange({commit, state }, data){
         if (state.totalDataCount !== data.total) {
             commit("allTrustListFalse")
-            state.dataChangeCount = data.total - state.totalDataCount;
-            console.log("dataChangeCount", state.dataChangeCount);
-            if (state.dataChangeCount > 0) {
+            let dataChangeCount = data.total - state.totalDataCount;
+            if (dataChangeCount > 0) {
                 //資料有多
-                commit("setEmptyObjects",state.dataChangeCount);
+                commit("setEmptyObjects", data.list);
             }
         }
     },
@@ -45,12 +37,11 @@ const actions = {
         console.log(`getData:${state.offset}~${state.offset + state.getDataLen-1}`);
         try {
             let res = await axios.get(`${url}`);
-            let getData = res.data.result.list.filter((data) => {
-                return (
-                    data.index >= state.offset &&
-                    data.index < state.offset + state.getDataLen
-                );
-            });
+            let getData = res.data.result.list.filter((data) => 
+                state.filterOn
+                ? (data.index >= state.offset && data.index < state.offset + state.getDataLen && data.os == "Windows")
+                : (data.index >= state.offset && data.index < state.offset + state.getDataLen)
+            );
             getData = {
                 list: getData,
                 total: res.data.result.total,

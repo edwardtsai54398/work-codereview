@@ -26,11 +26,13 @@ const searchInputOpen = ref(false);
 const treeDrawerOpen = ref(false);
 
 const groupTreeData = ref([]);
+const loadingEnd = ref(false)
 const prefixURL = inject('prefixURL');
 let url = `${prefixURL}/data/group_tree.json`;
 const getTreeData = async () => {
     try {
         const res = await axios.get(url);
+        loadingEnd.value = true
         let inefiData = res.data;
         groupTreeData.value = [...orgnizeTreeData(inefiData.result)];
     } catch (err) {
@@ -142,6 +144,7 @@ function showNodeData(node, ref = "") {
     expandTree(node);
     currentNode.value = node.data;
     scrollbarToRight();
+    clearDevicesChecked()
 }
 
 //搜尋群組
@@ -264,30 +267,6 @@ let deviceTableProps = [
         minWidth: '130px'
     }
 ]
-let filterOptions = [
-    {
-        dataKey: 'healthStatus',
-        typeName: 'Status',
-        options: [
-            {
-                value: 'GOOD',
-                valName: 'Good'
-            },
-            {
-                value: 'WARNING',
-                valName: 'Warning'
-            },
-            {
-                value: 'ERROR',
-                valName: 'Error'
-            },
-            {
-                value: 'UNKNOWN',
-                valName: 'Unknown'
-            },
-        ]
-    },
-]
 
 const deviceTooltipContent = ref('Double click to edit.')
 let columnsExcept = [
@@ -306,14 +285,15 @@ let columnsExcept = [
 ]
 const deviceListActiveTab = computed(() => { return breadCrumbList.length ? breadCrumbList[0].data.slaveGroupName : "MAIN" })
 
-
-function getFilterParam(param) {
-    console.log(param);
-}
 const devicesChecked = ref([])
 const deviceListTable = ref()
 function getDeviceCheckedData() {
     devicesChecked.value = deviceListTable.value.getCheckedData()
+}
+function clearDevicesChecked(){
+    console.log("clearDevicesChecked");
+    devicesChecked.value = []
+    deviceListTable.value.clearChecked()
 }
 function canEdit(event, id) {
     // console.log(event);
@@ -399,7 +379,8 @@ watch(activeTab, () => {
 watch(addDeviceDialogOpen,(newVal)=>{
     if(!newVal){
         setTimeout(() => {
-            deviceTable.value.clearChecked()
+            deviceTable.value.clearChecked("INACTIVE")
+            deviceTable.value.clearChecked("UNASSIGNED")
         }, 500);
     }
 },{deewp:true})
@@ -417,14 +398,6 @@ let addDeviceTableProps = [
         width: 50,
     },
 ]
-
-//loading
-const loadingEnd = ref(false)
-
-setTimeout(()=>{
-    loadingEnd.value = true
-},1000)
-
 
 //RWD
 const windowWidth = ref(window.innerWidth);
@@ -585,7 +558,7 @@ watch(windowWidth, () => {
                 </el-dialog>
             </div>
         </div>
-        <BigCard class="flex-row" v-loading="!loadingEnd" element-loading-background="#fff">
+        <BigCard class="flex-row" v-loading="!loadingEnd">
             <el-drawer v-model="treeDrawerOpen" direction="btt" :show-close="false" :with-header="false" class="tree_drawer px-3" modal-class="tree_drawer_overlay" size="80%">
                 <el-scrollbar class="py-3 ps-2">
                     <el-tree :data="groupTreeData" :props="defaultProps" ref="treeRefMobile" :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="slaveGroupId">
@@ -704,8 +677,7 @@ watch(windowWidth, () => {
                                             tooltipTrigger="hover" :tooltipContent="deviceTooltipContent" tooltipRef="aliasName" 
                                             @haveCheckedData="getDeviceCheckedData" @noCheckedData="devicesChecked = []" 
                                             table-name="deviceListTable" :columnsExcept="columnsExcept" :activeTab="deviceListActiveTab" 
-                                            :customColumns="false" :filter="deviceListActiveTab == 'UNASSIGNED'" :filter-options="filterOptions" 
-                                            @filt="getFilterParam" :searchShow="false">
+                                            :searchShow="false">
                                                 <template #status="{ item }">
                                                     <div class="d-flex w-100 align-items-center justify-content-center">
                                                         <div class="status_dot" :class="{

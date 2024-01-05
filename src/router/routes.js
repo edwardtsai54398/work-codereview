@@ -136,5 +136,4 @@ const routes = [
         component: () => import("@/views/NotFoundView.vue"), // 404 页面组件
     },
 ];
-console.log("routes", routes);
 export default routes;

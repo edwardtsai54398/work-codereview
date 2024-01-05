@@ -1,78 +1,92 @@
-function setEmptyObjects(offset, allData, changeCount){
-    let emptyObjects = Array.from({ length:changeCount }, () => ({}));
-    if(offset>0){
-        console.log(emptyObjects);
-        allData.splice(
-            offset - changeCount,
-            changeCount,
-            ...emptyObjects
-        );
-    }
-}
-const mutations= {
+const mutations = {
     setProps(state, { getDataLen, keyField }) {
         state.getDataLen = getDataLen;
         state.keyField = keyField;
     },
     resetAllData(state) {
         state.offset = 0;
-        state.allData = [];
-        state.dataChangeCount = 0;
-        state.batchesTrustList = [];
+        if(state.filterOn){
+            state.filterData = [];
+            state.filterTrustList = [];
+        }else{
+            state.allData = [];
+            state.batchesTrustList = [];
+        }
         state.loadStart = false;
         state.totalDataCount = 0;
     },
+    resetLoadStart(state){
+        state.offset = 0;
+        state.loadStart = false;
+    },
     setNewData(state, data) {
-        state.totalDataCount = data.total
-        state.allData.push(...data.list);
-        console.log("setNewData",state.allData);
-        state.batchesTrustList.push(true);
+        state.totalDataCount = data.total;
+        if(state.filterOn){
+            state.filterData.push(...data.list);
+            state.filterTrustList.push(true);
+        }else{
+            state.allData.push(...data.list);
+            state.batchesTrustList.push(true);
+        }
     },
     setOffset(state, offset) {
         state.offset = offset;
     },
-    allTrustListFalse(state){
+    setFilterOn(state, value){
+        state.filterOn = value
+        if(!value){
+            state.filterData = []
+            state.filterTrustList = []
+        }
+    },
+    allTrustListFalse(state) {
+        if(state.filterOn){
+            for (let i = 0; i < state.filterTrustList.length; i++) {
+                state.filterTrustList[i] = false;
+            }
+        }
         for (let i = 0; i < state.batchesTrustList.length; i++) {
             state.batchesTrustList[i] = false;
         }
     },
-    setNextFalseData(state, data){
-        console.log("setNextFalseData",data);
-        data.forEach((newData, index) => {
-            state.allData[state.offset + index] = newData;
-        });
-        state.batchesTrustList[state.offset / state.getDataLen] = true;
-    },
-    setFormerFalseData(state, data) {
-        console.log("setFormerFalseData");
-        console.log(data);
-        let firstIndex = state.allData.findIndex(
-            (gotData) => gotData[state.keyField] === data[0][state.keyField]
+    setFalseData(state, data) {
+        console.log("setFalseData", data);
+        let formerDatas = state.allData.filter(
+            (obj, index) => index < state.offset
         );
-        console.log("firstIndex",firstIndex);
-        let endIndex = state.allData.findIndex(
-            (gotData) =>gotData[state.keyField] ===data[data.length - 1][state.keyField]
-            );
-        console.log("endIndex",endIndex);
-        let changeCount = state.getDataLen - (endIndex - firstIndex + 1);
-            console.log("changeCount",changeCount);
-        if (state.dataChangeCount > 0) {
-            state.dataChangeCount = state.dataChangeCount - changeCount;
-            console.log(state.dataChangeCount);
-        }
-
         data.forEach((newData, index) => {
+            if (formerDatas.length) {
+                let sameObjIndex = formerDatas.findIndex(
+                    (obj) => newData[state.keyField] == obj[state.keyField]
+                );
+                if (sameObjIndex >= 0) {
+                    state.allData[sameObjIndex] = {};
+                }
+            }
             state.allData[state.offset + index] = newData;
         });
+        console.log("setFalseData", state.allData);
+
         state.batchesTrustList[state.offset / state.getDataLen] = true;
-        if (state.dataChangeCount > 0) {
-            setEmptyObjects(state.offset, state.allData, state.dataChangeCount)
-            console.log("dataChangeCount",state.dataChangeCount,state.allData);
+    },
+    setEmptyObjects(state, data) {
+        let formerDatas = state.allData.filter((obj, index) => index < state.offset);
+        if(state.filterOn){
+            formerDatas = state.filterData.filter((obj, index) => index < state.offset);
         }
+        data.forEach((newData) => {
+            if (formerDatas.length) {
+                let sameObjIndex = formerDatas.findIndex((obj) => newData[state.keyField] == obj[state.keyField]);
+                if (sameObjIndex >= 0) {
+                    if(state.filterOn){
+                        state.filterData[sameObjIndex] = {};
+                    }else{
+                        state.allData[sameObjIndex] = {};
+                    }
+                }
+            }
+        });
+        // console.log("setEmptyObjects", state.allData);
     },
-    setEmptyObjects(state, length) {
-        setEmptyObjects(state.offset, state.allData, length)
-        console.log("setEmptyObjects", state.allData);
-    },
-}
-export default mutations
+};
+export default mutations;

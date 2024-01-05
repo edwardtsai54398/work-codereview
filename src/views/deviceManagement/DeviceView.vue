@@ -16,12 +16,7 @@ import TabsComponent from "@/components/TabsComponent.vue";
 
 //table
 const tableProps = [
-    {
-        columnName: "INDEX",
-        dataKey: "index",
-        width: "65px",
-        minWidth: "65px",
-    },
+   
     {
         columnName: "Status",
         dataKey: "healthStatus",

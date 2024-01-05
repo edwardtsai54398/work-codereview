@@ -1,5 +1,4 @@
 import routes from '@/router/routes'
-console.log(routes);
 let navArr = routes.find((route)=>route.name === 'main')
 const navList = navArr.children
 const device = navList.find((route)=>route.name === 'deviceManagement')
